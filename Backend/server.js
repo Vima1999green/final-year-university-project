@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const userRoutes  = require('./routes/userRoutes')
 
 const dbUrl = require('./key').mongoUrl
 
@@ -19,7 +20,7 @@ mongoose.connect(dbUrl)
 
 app.use(bodyParser.json())
 
-app.use('/user',require('./routes/userRoutes'))
+app.use('/users',userRoutes)
 
 app.listen(process.env.PORT||4000,()=>{
 

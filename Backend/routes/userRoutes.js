@@ -2,16 +2,16 @@ const express = require('express')
 
 const router  = express.Router()
 
-const user = require('../model/userModel')
+const User  = require('../model/usermodel')
 
 router.get('/',(req,res)=>{
-    user.find()
-        .then((users)=>{
-                res.send(users)
+    User.find()
+        .then((result)=>{
+                res.send({Users:result})
         })
 
-        .catch((error)=>{
-            console.log(error)
+        .catch((err)=>{
+            console.log(err)
         })
 })
 
