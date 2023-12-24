@@ -5,9 +5,6 @@ const userRoutes  = require('./routes/userRoutes')
 
 const dbUrl = require('./key').mongoUrl
 
-
-
-
 const app = express()
 
 mongoose.connect(dbUrl)
@@ -20,12 +17,10 @@ mongoose.connect(dbUrl)
 
 app.use(bodyParser.json())
 
-app.use('/users',userRoutes)
+app.use('/users',require('./routes/userRoutes'))
 
 app.listen(process.env.PORT||4000,()=>{
-
         console.log('listeneing to the server')
-
 })
 
 
