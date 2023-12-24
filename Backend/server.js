@@ -15,7 +15,7 @@ mongoose.connect(dbUrl)
         console.log('connected to the database')
     })
     .catch((error)=>{
-        console.log(error.message)
+        console.log(error)
     })
 
 app.use(bodyParser.json())

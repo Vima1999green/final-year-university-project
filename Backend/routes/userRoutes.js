@@ -4,14 +4,14 @@ const router  = express.Router()
 
 const User  = require('../model/usermodel')
 
-router.get('/',(req,res)=>{
+router.get('/getUsers',(req,res)=>{
     User.find()
         .then((result)=>{
                 res.send({Users:result})
         })
 
         .catch((err)=>{
-            console.log(err)
+             return res.status(400).json({message:err})
         })
 })
 
