@@ -1,4 +1,5 @@
 
 module.exports = {
-    mongoUrl : 'mongodb+srv://malithachamikara:test1234@sportsunitproject.k3im7b4.mongodb.net/?retryWrites=true&w=majority'
+    mongoUrl :'mongodb+srv://devLah:1234@sportsunitproject.k3im7b4.mongodb.net/sportunitdb?retryWrites=true&w=majority'
+    
 }
