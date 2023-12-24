@@ -16,7 +16,7 @@ mongoose.connect(dbUrl)
 
 app.use(bodyParser.json())
 
-app.use('/users',require('./routes/userRoutes'))
+app.use('/api/users',require('./routes/api/userRoutes'))
 
 app.listen(process.env.PORT||4000,()=>{
         console.log('listeneing to the server')
