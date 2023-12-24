@@ -23,10 +23,10 @@ const userSchema  = new Schema({
         required:[true,'User Type  must be required']
     },
     universityID:{
-        type:String  
+        type:String,
     },
     universityEmail:{
-        type:String   
+        type:String
     }
 })
 
