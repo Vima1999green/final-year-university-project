@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const validateRegisterData = require('../../validation/register')
 const isEmpty = require('../../validation/isEmpty')
 const validateLoginData = require('../../validation/login')
+const validateUpdateData = require('../../validation/update')
 
 const router = express.Router()
 
@@ -44,8 +45,8 @@ router.post('/register', (req, res) => {
                         })
                     })
                 }
-                else{
-                    res.status(400).send({msg:'User already exists'})
+                else {
+                    res.status(400).send({ msg: 'User already exists' })
                 }
 
             })
@@ -64,16 +65,38 @@ const checkPassword = (raw, hash) => {
 //@access Public
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
-    const {errors,isValid} = validateLoginData(req.body);
-    if (!isValid) res.status(400).json(errors); 
-    else{
+    const { errors, isValid } = validateLoginData(req.body);
+    if (!isValid) res.status(400).json(errors);
+    else {
         User.findOne({ email: email })
-        .then(user => {
-            return res.send({autheticate: checkPassword(password, user.password) })
-        })
-        .catch(error => res.send({ error: 'User cannot found' }))
+            .then(user => {
+                return res.send({ autheticate: checkPassword(password, user.password) })
+            })
+            .catch(error => res.send({ error: 'User cannot found' }))
     }
 })
-
-
+//@route DELETE api/users/delete/:id
+//@desc Remove a user
+//@access Public
+router.delete('/delete/:id', (req, res) => {
+    User.findByIdAndDelete({ _id: req.params.id })
+        .then(user => res.send(user))
+        .catch(error => res.send(error))
+})
+//@route PUT api/users/update/:id
+//@desc Remove a user
+//@access Public
+router.put('/update/:id', (req, res) => {
+    const { errors, isValid } = validateUpdateData(req.body);
+    if (!isValid) res.status(400).send(errors)
+    else {
+        User.findOneAndUpdate({ _id: req.params.id }, req.body)
+            .then(user => {
+                User.findById({ _id: user.id })
+                    .then(user => res.send(user))
+                    .catch(error => res.send(error))
+            })
+            .catch(error => res.send(error))
+    }
+})
 module.exports = router
