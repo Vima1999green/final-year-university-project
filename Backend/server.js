@@ -1,8 +1,9 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const passport=require('passport')
 
-const dbUrl = require('./key').mongoUrl
+const dbUrl = require('./config/keys').mongoUrl
 
 const app = express()
 
@@ -15,6 +16,10 @@ mongoose.connect(dbUrl)
     })
 
 app.use(bodyParser.json())
+//passport midleware
+app.use(passport.initialize());
+//passport config
+require('./config/passport')(passport);
 
 app.use('/api/users',require('./routes/api/userRoutes'))
 

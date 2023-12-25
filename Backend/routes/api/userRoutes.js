@@ -1,10 +1,13 @@
 const express = require('express')
 const User = require('../../model/userModel')
 const bcrypt = require('bcrypt')
-const validateRegisterData = require('../../validation/register')
+const validateRegisterData = require('../../validation/userRouteValidation/register')
 const isEmpty = require('../../validation/isEmpty')
-const validateLoginData = require('../../validation/login')
-const validateUpdateData = require('../../validation/update')
+const validateLoginData = require('../../validation/userRouteValidation/login')
+const validateUpdateData = require('../../validation/userRouteValidation/update')
+const jwt = require('jsonwebtoken')
+const secretOrKey = require('../../config/keys').secretOrKey
+const passport = require('passport')
 
 const router = express.Router()
 
@@ -16,8 +19,8 @@ router.get('/', async (req, res) => {
         .then((users) => {
             res.send(users)
         })
-        .catch((err) => {
-            res.json({ error: err })
+        .catch((error) => {
+            res.status(400).send(error)
         })
 })
 
@@ -66,37 +69,84 @@ const checkPassword = (raw, hash) => {
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
     const { errors, isValid } = validateLoginData(req.body);
-    if (!isValid) res.status(400).json(errors);
+    if (!isValid) res.status(401).json(errors);
     else {
         User.findOne({ email: email })
             .then(user => {
-                return res.send({ autheticate: checkPassword(password, user.password) })
+                const authMsg = checkPassword(password, user.password)
+                if (!authMsg) return res.status(401).send({ isAutheticate: authMsg, msg: 'Incorrect password' })
+                else {
+                    //create payload
+                    const payload = { id: user.id, email: user.email, firstName: user.firstName }
+                    //sign jwt
+                    jwt.sign(
+                        payload,
+                        secretOrKey,
+                        { expiresIn: 3600 },
+                        (error, token) => {
+                            return res.send({
+                                isAutheticate: authMsg,
+                                token: 'Bearer ' + token
+                            })
+                        }
+                    )
+                }
             })
-            .catch(error => res.send({ error: 'User cannot found' }))
+            .catch(error => {
+                res.status(404).send({ isAutheticate: false, msg: 'User cannot found' })
+            })
     }
 })
 //@route DELETE api/users/delete/:id
 //@desc Remove a user
-//@access Public
-router.delete('/delete/:id', (req, res) => {
-    User.findByIdAndDelete({ _id: req.params.id })
-        .then(user => res.send(user))
-        .catch(error => res.send(error))
-})
+//@access private
+router.delete(
+    '/delete/:id',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        if (req.user.id === req.params.id || req.user.userType === 'admin') {
+            User.findByIdAndDelete({ _id: req.params.id })
+                .then(user => res.send({ msg: 'sucess', user: user }))
+                .catch(error => res.send(error))
+        } else {
+            return res.status(401).send({ msg: 'unsucess', error: 'You are not autherized to delete this account' })
+        }
+    })
 //@route PUT api/users/update/:id
-//@desc Remove a user
+//@desc update a user
 //@access Public
-router.put('/update/:id', (req, res) => {
-    const { errors, isValid } = validateUpdateData(req.body);
-    if (!isValid) res.status(400).send(errors)
-    else {
-        User.findOneAndUpdate({ _id: req.params.id }, req.body)
-            .then(user => {
-                User.findById({ _id: user.id })
-                    .then(user => res.send(user))
+router.put(
+    '/update/:id',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        if (req.user.id === req.params.id || req.user.userType === 'admin') {
+            const { errors, isValid } = validateUpdateData(req.body);
+            if (!isValid) res.status(400).send(errors)
+            else {
+                User.findOneAndUpdate({ _id: req.params.id }, req.body)
+                    .then(user => {
+                        User.findById({ _id: user.id })
+                            .then(user => res.send(user))
+                            .catch(error => res.send(error))
+                    })
                     .catch(error => res.send(error))
-            })
-            .catch(error => res.send(error))
-    }
-})
+            }
+        }else {
+            return res.status(401).send({ msg: 'unsucess', error: 'You are not autherized to update this account' })
+        }
+    })
+//@route GET api/users/current
+//@desc Return current user
+//@access Private
+router.get(
+    '/current',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        res.send({
+            id: req.user.id,
+            email: req.user.email,
+            userType: req.user.userType
+
+        })
+    })
 module.exports = router
