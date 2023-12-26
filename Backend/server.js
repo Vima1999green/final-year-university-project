@@ -1,28 +1,28 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const userRoutes  = require('./routes/userRoutes')
+const passport = require('passport')
 
-const dbUrl = require('./key').mongoUrl
+const dbUrl = require('./config/keys').mongoUrl
 
 const app = express()
 
 mongoose.connect(dbUrl)
-    .then(()=>{
+    .then(() => {
         console.log('connected to the database')
     })
-    .catch((error)=>{
-        console.log(error)
+    .catch((error) => {
+        console.log(error.message)
     })
 
 app.use(bodyParser.json())
+//passport midleware
+app.use(passport.initialize());
+//passport config
+require('./config/passport')(passport);
 
-app.use('/users',require('./routes/userRoutes'))
+app.use('/api/users', require('./routes/api/userRoutes'))
 
-app.listen(process.env.PORT||4000,()=>{
-        console.log('listeneing to the server')
+app.listen(process.env.PORT || 4000, () => {
+    console.log('listeneing to the server')
 })
-
-
-
-
