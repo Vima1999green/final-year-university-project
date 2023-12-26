@@ -122,6 +122,10 @@ router.put(
         if (req.user.id === req.params.id || req.user.userType === 'admin') {
             const { errors, isValid } = validateUpdateData(req.body);
             if (!isValid) res.status(400).send(errors)
+            else if (
+                req.user.userType === 'guest' &&
+                (!isEmpty(req.body.universityEmail) || !isEmpty(req.body.universityID))
+            ) return res.status(400).send({ msg: 'unsucess', error: 'You have no university clearance' })
             else {
                 User.findOneAndUpdate({ _id: req.params.id }, req.body)
                     .then(user => {
@@ -131,7 +135,7 @@ router.put(
                     })
                     .catch(error => res.send(error))
             }
-        }else {
+        } else {
             return res.status(401).send({ msg: 'unsucess', error: 'You are not autherized to update this account' })
         }
     })
@@ -142,7 +146,7 @@ router.get(
     '/current',
     passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        
+
         res.send({
             id: req.user.id,
             email: req.user.email,
