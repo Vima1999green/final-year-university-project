@@ -5,26 +5,9 @@ const validateUpdateData = (data) => {
     let errors = {};
 
     //validating userType
-    if (!isEmpty(data.userType) || typeof (data.userType) === 'string') {
-        if (validator.isEmpty(data.userType))
-            errors.userType = 'User type is required'
-        else if (data.userType === 'university') {
-            //validating universityEmail and universityID
-            data.universityEmail = isEmpty(data.universityEmail) ? '' : data.universityEmail;
-            data.universityID = isEmpty(data.universityID) ? '' : data.universityID;
-            if (
-                validator.isEmpty(data.universityEmail) ||
-                validator.isEmpty(data.universityID))
-                errors.error = 'University details are required';
-            else if (!validator.isEmail(data.universityEmail))
-                errors.universityEmail = 'Invalid email'
-
-        }
-        else if (!['admin', 'director', 'DVC', 'guest'].includes(data.userType)) {
-            errors.userType = 'Not a valid userType'
-        }
+    if (!isEmpty(data.userType)) {
+        errors.userType = 'You can not change user type'
     }
-
     //validatin First Name
     if (!isEmpty(data.firstName) || typeof (data.firstName) === 'string') {
         if (validator.isEmpty(data.firstName))
@@ -59,6 +42,18 @@ const validateUpdateData = (data) => {
             errors.password = 'Password is required'
         else if (!validator.isLength(data.password, { min: 6, max: 12 }))
             errors.password = 'Password must be 6 and 12 characters';
+    }
+    //validating universityEmail
+    if (!isEmpty(data.unversityEmail) || typeof (data.unversityEmail) === 'string') {
+        if (validator.isEmpty(data.unversityEmail))
+            errors.email = 'University email is required'
+        else if (!validator.isEmail(data.unversityEmail))
+            errors.email = 'Invalid email';
+    }
+    //validating universityID
+    if (!isEmpty(data.unversityID) || typeof (data.unversityID) === 'string') {
+        if (validator.isEmpty(data.unversityID))
+            errors.email = 'University ID is required'
     }
 
     return {

@@ -9,7 +9,7 @@ const validateLoginData = (data) => {
 
     if (validator.isEmpty(data.email))
         errors.email = 'Email is required';
-    else if (!validator.isEmail(data.email))
+    else if(!validator.isEmail(data.email))
         errors.email = 'Invalid email';
     if (validator.isEmpty(data.password))
         errors.password = 'Password is required';
