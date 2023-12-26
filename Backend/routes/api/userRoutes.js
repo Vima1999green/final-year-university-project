@@ -142,6 +142,7 @@ router.get(
     '/current',
     passport.authenticate('jwt', { session: false }),
     (req, res) => {
+        
         res.send({
             id: req.user.id,
             email: req.user.email,
