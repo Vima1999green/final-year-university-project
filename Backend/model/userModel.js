@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 const userSchema = new Schema({
     firstName: {
@@ -14,6 +14,16 @@ const userSchema = new Schema({
         type: String,
         required: [true, 'Your email Name must be required']
     },
+
+    isEmailVerified: {
+        type: Boolean,
+        required: [true, 'your need to verified']
+    },
+    confirmationCode: {
+        type: String,
+        required: true
+
+    },
     password: {
         type: String,
         required: [true, 'please enter password']
@@ -24,15 +34,31 @@ const userSchema = new Schema({
     },
     universityID: {
         type: String,
+        required: function () {
+            return this.userType === 'university'
+        }
     },
     universityEmail: {
-        type: String
+        type: String,
+        required: function () {
+            return this.userType === 'university'
+        }
     }
 }
 )
 
-
+// Add a pre-save hook to exclude university data when userType is 'guest'
+userSchema.pre('save', function (next) {
+    if (this.userType === 'guest') {
+        this.universityID = undefined;
+        this.universityEmail = undefined;
+    }
+    next();
+});
 
 const userModel = mongoose.model('user', userSchema)
+
+
+
 
 module.exports = userModel

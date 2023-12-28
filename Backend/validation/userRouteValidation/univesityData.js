@@ -1,16 +1,10 @@
-const validator = require('validator');
 const isEmpty = require('../isEmpty');
 const mysql = require('mysql2/promise');
 
-
-let errors = {};
-
-//check university id and email are going to be matched with university database 
-const checkUniData = async (universityID, universityEmail) => {
-
+const validateUniversityData = async (universityID, universityEmail) => {
+    let errors = {};
 
     try {
-
         const connection = await mysql.createConnection({
             host: 'localhost',
             user: 'root',
@@ -18,51 +12,41 @@ const checkUniData = async (universityID, universityEmail) => {
             database: 'universitydatabase'
         });
 
-
-
-
         console.log('Connected to MySQL as id ' + connection.threadId);
 
-        const [rows] = await connection.execute('SELECT * FROM universitydatabase.unidata WHERE universityID=? AND universityEmail=?', [universityID, universityEmail]);
-
-
+        const [rows] = await connection.execute(
+            'SELECT * FROM unidata WHERE universityID=? AND universityEmail=?',
+            [universityID, universityEmail]
+        );
 
         console.log('Query results: ', rows);
-        if (rows.length === 0) {
-            errors.message = 'university ID or email cannot be found';
 
+        if (rows.length === 0) {
+            errors.status = 404;
+            errors.message = 'University ID or email cannot be found';
         }
 
+        await connection.end();
 
-        await connection.end((err) => {
-            if (err) {
-                console.error('Error closing the MySQL connection: ' + err.stack);
-            }
-            console.log('MySQL connection closed.');
-        });
+        console.log('Errors before returning: ', errors);
 
-
-        return (
-            {
-                errors,
-                isValid: isEmpty(errors)
-            }
-        );
-    }
-    catch (error) {
-        console.error('Error connecting to MySQL: ' + error.message);
         return {
-            errors: { message: 'Error connecting to the database' },
-            isValid: false
+            errors,
+            isValid: isEmpty(errors)
+        };
+    } catch (error) {
+        console.error('Error connecting to MySQL: ' + error.message);
+        errors.message = 'Error connecting to the database';
+        errors.error = error;
+        errors.status = 500;
+
+        console.log('Errors in catch block: ', errors);
+
+        return {
+            errors,
+            isValid: isEmpty(errors)
         };
     }
 };
 
-
-
-
-
-
-
-
-module.exports = checkUniData;
+module.exports = validateUniversityData;
