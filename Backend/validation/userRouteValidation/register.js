@@ -26,12 +26,12 @@ const validateRegisterData = async(data) => {
         else if (!validator.isEmail(data.universityEmail))
             errors.universityEmail = 'Invalid email';
         else {
-           // const { error, isValid } =await validateUniversityData(data.universityID,data.universityEmail);
-           // console.log(error)
-           // console.log(isValid)
-            // if (!isValid) {
-            //     errors.universityData = error;
-            // }
+        //    const { error, isValid } =await validateUniversityData(data.universityID,data.universityEmail);
+        //    console.log(error)
+        //    console.log(isValid)
+        //     if (!isValid) {
+        //         errors.universityData = error;
+        //     }
         }
     } else if (!['admin', 'director', 'DVC', 'guest'].includes(data.userType)) {
         errors.userType = 'Not a valid userType'
