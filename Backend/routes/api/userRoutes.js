@@ -27,35 +27,46 @@ router.get('/', async (req, res) => {
 //@route POST api/users/register
 //@desc Regitser a user
 //@access Public
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
     //validate register data
-    const { errors, isValid } = validateRegisterData(req.body);
-    if (!isValid) res.status(400).json(errors);
-    else {
-        User.findOne({ email: req.body.email })
-            .then(user => {
-                if (isEmpty(user)) {
-                    bcrypt.genSalt(10, (err, salt) => {
-                        bcrypt.hash(req.body.password, salt, (err, hash) => {
-                            User.create({
-                                firstName: req.body.firstName,
-                                lastName: req.body.lastName,
-                                email: req.body.email,
-                                password: hash,
-                                userType: req.body.userType
-                            }).then(user => res.send(user))
-                                .catch(error => res.json(error))
-                        })
-                    })
-                }
-                else {
-                    res.status(400).send({ msg: 'User already exists' })
-                }
+    try {
 
-            })
-            .catch(error => {
-                res.send(error)
-            })
+        const { errors, isValid } = await validateRegisterData(req.body);
+        if (!isValid) res.status(400).json(errors);
+        else {
+            User.findOne({ email: req.body.email })
+
+                .then(user => {
+                    if (isEmpty(user)) {
+                        bcrypt.genSalt(10, (err, salt) => {
+                            bcrypt.hash(req.body.password, salt, (err, hash) => {
+                                User.create({
+                                    firstName: req.body.firstName,
+                                    lastName: req.body.lastName,
+                                    email: req.body.email,
+                                    password: hash,
+                                    userType: req.body.userType,
+                                    universityID: req.body.universityID,
+                                    universityEmail: req.body.universityEmail
+
+                                }).then(user => res.send(user))
+                                    .catch(error => res.json(error))
+                            })
+                        })
+                    }
+                    else {
+                        res.status(400).send({ msg: 'User already exists' })
+                    }
+
+                })
+                .catch(error => {
+                    res.send(error)
+                })
+        }
+
+    } catch (error) {
+        console.error('error registering user', error)
+        res.status(500).json({ msg: "server error" })
     }
 
 })

@@ -1,6 +1,8 @@
 const validator = require('validator');
 const isEmpty = require('../isEmpty');
-const validateUniversityData = require('./univesityData');
+const checkUniData = require('./univesityData')
+
+
 
 const validateRegisterData = (data) => {
     let errors = {};
@@ -15,8 +17,11 @@ const validateRegisterData = (data) => {
     data.universityEmail = isEmpty(data.universityEmail) ? '' : data.universityEmail;
 
     //validating userType
+
     if (validator.isEmpty(data.userType))
         errors.userType = 'User type is required'
+
+
     else if (data.userType === 'university') {
         //validating universityEmail and universityID
         if (
@@ -24,13 +29,15 @@ const validateRegisterData = (data) => {
             validator.isEmpty(data.universityID))
             errors.error = 'University details are required';
         else if (!validator.isEmail(data.universityEmail))
-            errors.universityEmail = 'Invalid email';
+            errors.universityEmail = 'Invalid university email';
         else {
-            const { errors, isValid } = validateUniversityData(data);
-            if (!isValid) {
-                errors.universityData = errors;
-            }
+            ((!checkUniData(data.universityID, data.universityEmail)))
+            errors.uniData = 'University detalis are not matched'
         }
+
+
+
+
 
 
     } else if (!['admin', 'director', 'DVC', 'guest'].includes(data.userType)) {
