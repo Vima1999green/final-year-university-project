@@ -27,9 +27,9 @@ router.get('/', async (req, res) => {
 //@route POST api/users/register
 //@desc Regitser a user
 //@access Public
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
     //validate register data
-    const { errors, isValid } = validateRegisterData(req.body);
+    const { errors, isValid } = await validateRegisterData(req.body);
     if (!isValid) res.status(400).json(errors);
     else {
         User.findOne({ email: req.body.email })
@@ -42,7 +42,10 @@ router.post('/register', (req, res) => {
                                 lastName: req.body.lastName,
                                 email: req.body.email,
                                 password: hash,
-                                userType: req.body.userType
+                                userType: req.body.userType,
+                                universityID:req.body.universityID,
+                                universityEmail:req.body.universityEmail
+
                             }).then(user => res.send(user))
                                 .catch(error => res.json(error))
                         })

@@ -1,7 +1,8 @@
 const validator = require('validator');
 const isEmpty = require('../isEmpty');
+const validateUniversityData = require('./univesityData');
 
-const validateRegisterData = (data) => {
+const validateRegisterData = async(data) => {
     let errors = {};
 
     //replace empty,undifined,null objects with string
@@ -11,22 +12,29 @@ const validateRegisterData = (data) => {
     data.password = isEmpty(data.password) ? '' : data.password;
     data.userType = isEmpty(data.userType) ? '' : data.userType;
     data.universityID = isEmpty(data.universityID) ? '' : data.universityID;
-    data.universityEmail= isEmpty(data.universityEmail) ? '' : data.universityEmail;
+    data.universityEmail = isEmpty(data.universityEmail) ? '' : data.universityEmail;
 
     //validating userType
     if (validator.isEmpty(data.userType))
         errors.userType = 'User type is required'
-    else if(data.userType==='university'){
+    else if (data.userType === 'university') {
         //validating universityEmail and universityID
-        if(
+        if (
             validator.isEmpty(data.universityEmail) ||
             validator.isEmpty(data.universityID))
-                errors.error='University details are required';
-        else if(!validator.isEmail(data.universityEmail))
-                errors.universityEmail='Invalid email'
-        
-    }else if(!['admin','director','DVC','guest'].includes(data.userType)){
-        errors.userType='Not a valid userType'
+            errors.error = 'University details are required';
+        else if (!validator.isEmail(data.universityEmail))
+            errors.universityEmail = 'Invalid email';
+        else {
+           // const { error, isValid } =await validateUniversityData(data.universityID,data.universityEmail);
+           // console.log(error)
+           // console.log(isValid)
+            // if (!isValid) {
+            //     errors.universityData = error;
+            // }
+        }
+    } else if (!['admin', 'director', 'DVC', 'guest'].includes(data.userType)) {
+        errors.userType = 'Not a valid userType'
     }
     //validatin First Name
     if (validator.isEmpty(data.firstName))
