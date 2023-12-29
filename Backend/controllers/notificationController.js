@@ -25,7 +25,10 @@ const sendEmail = async (to, subject, heading, content) => {
             to: to, // list of receivers
             subject: subject,// Subject line
             html: `    
-            <div className="container">
+            <div className="container" 
+            style="
+            color:DodgerBlue;
+            text-align:center;">
               <div className="heading">
                 <h1>${heading}</h1>
               </div>
