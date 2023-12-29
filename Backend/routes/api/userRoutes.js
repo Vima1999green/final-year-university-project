@@ -6,24 +6,31 @@ const {
     loginUser,
     deleteUser,
     updateUser,
-    currentUser
-}=require('../../controllers/userControllers')
+    currentUser,
+    verifyUser
+} = require('../../controllers/userControllers')
 
 const router = express.Router()
 
 //@route GET api/users/
 //@desc Get all users
 //@access Public
-router.get('/',getAllUsers)
+router.get('/', getAllUsers)
 
 //@route POST api/users/register
 //@desc Regitser a user
 //@access Public
 router.post('/register', regiterUser)
 
+//@route POST api/users/verify-email
+//@desc verify user email
+//@access Public
+router.post('/verifyEmail', verifyUser)
+
 //@route POST api/users/login
 //@desc Login a user
 //@access Public
+
 router.post('/login', loginUser)
 
 //@route DELETE api/users/delete/:id
@@ -33,7 +40,7 @@ router.delete(
     '/delete/:id',
     passport.authenticate('jwt', { session: false }),
     deleteUser
-    )
+)
 
 //@route PUT api/users/update/:id
 //@desc update a user
@@ -42,8 +49,8 @@ router.put(
     '/update/:id',
     passport.authenticate('jwt', { session: false }),
     updateUser
-    )
-    
+)
+
 //@route GET api/users/current
 //@desc Return current user
 //@access Private

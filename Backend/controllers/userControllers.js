@@ -7,7 +7,7 @@ const validateLoginData = require('../validation/userRouteValidation/login')
 const validateUpdateData = require('../validation/userRouteValidation/update')
 const secretOrKey = require('../config/keys').secretOrKey
 const jwt = require('jsonwebtoken')
-const crypto=require('crypto')
+const crypto = require('crypto')
 
 //controller getAllUsers()
 //description get all user account details in the database
@@ -67,7 +67,7 @@ const regiterUser = async (req, res) => {
                     }
                 });
             } else {
-               return res.status(400).send({ msg: 'User already exists' });
+                return res.status(400).send({ msg: 'User already exists' });
             }
         } catch (error) {
             console.error("Error checking for existing user:", error);
@@ -79,6 +79,28 @@ const regiterUser = async (req, res) => {
 //password checking
 const checkPassword = (raw, hash) => {
     return bcrypt.compareSync(raw, hash);
+}
+
+//controller verifyuser
+//description verify user with confirmation code
+const verifyUser = async (req, res) => {
+    const { email, confirmationCode } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" })
+        }
+        if (confirmationCode !== user.confirmationCode) {
+            return res.status(400).json({ message: "Invalid confirmation code" });
+        }
+
+        return res.status(200).json({ message: "User verified succesfully" });
+    } catch (error) {
+
+        console.error(error);
+        return res.status(500).json({ message: "Error occured in  Verifying user" });
+    }
+
 }
 
 //controller loginUser()
@@ -154,7 +176,7 @@ const updateUser = async (req, res) => {
 }
 //controller currentUser()
 //description get information about the currently authenticated user 
-const currentUser= (req, res) => {
+const currentUser = (req, res) => {
     res.send({
         id: req.user.id,
         email: req.user.email,
@@ -164,11 +186,12 @@ const currentUser= (req, res) => {
 }
 
 
-module.exports={
+module.exports = {
     getAllUsers,
     regiterUser,
     loginUser,
     deleteUser,
     updateUser,
-    currentUser
+    currentUser,
+    verifyUser
 }

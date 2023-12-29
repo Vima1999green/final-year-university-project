@@ -9,10 +9,10 @@ const dbUrl = require('./config/keys').mongoUrl
 const app = express()
 
 mongoose.connect(dbUrl)
-    .then(()=>{
+    .then(() => {
         console.log('connected to the database')
     })
-    .catch((error)=>{
+    .catch((error) => {
         console.log(error.message)
     })
 
@@ -24,10 +24,6 @@ require('./config/passport')(passport);
 
 app.use('/api/users',userRoutes)
 
-app.listen(process.env.PORT||4000,()=>{
-        console.log('listeneing to the server')
+app.listen(process.env.PORT || 4000, () => {
+    console.log('listeneing to the server')
 })
-
-
-
-
