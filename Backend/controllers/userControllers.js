@@ -43,6 +43,8 @@ const regiterUser = async (req, res) => {
                             lastName: req.body.lastName,
                             email: req.body.email,
                             password: hash,
+                            isEmailVerified: false,
+                            confirmationCode: confirmationCode,
                             userType: req.body.userType,
                             universityID: req.body.universityID,
                             universityEmail: req.body.universityEmail
@@ -93,8 +95,12 @@ const verifyUser = async (req, res) => {
         if (confirmationCode !== user.confirmationCode) {
             return res.status(400).json({ message: "Invalid confirmation code" });
         }
-
-        return res.status(200).json({ message: "User verified succesfully" });
+        try {
+            await User.findOneAndUpdate({ _id: user.id }, { isEmailVerified: true })
+        } catch (error) {
+            return res.status(500).json({ message: "User not verified succesfully" }, error)
+        }
+        return res.redirect('http://localhost:4000/api/users/login')
     } catch (error) {
 
         console.error(error);
@@ -113,10 +119,15 @@ const loginUser = async (req, res) => {
         await User.findOne({ email: email })
             .then(user => {
                 const authMsg = checkPassword(password, user.password)
+               //redirect to verifyEmail if isEmailVeried is false
                 if (!authMsg) return res.status(401).send({ isAutheticate: authMsg, msg: 'Incorrect password' })
                 else {
                     //create payload
-                    const payload = { id: user.id, email: user.email, firstName: user.firstName }
+                    const payload = {
+                         id: user.id,
+                         email: user.email, 
+                         firstName: user.firstName,
+                        userType: user.userType }
                     //sign jwt
                     jwt.sign(
                         payload,
