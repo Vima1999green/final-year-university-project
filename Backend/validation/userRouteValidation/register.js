@@ -2,7 +2,7 @@ const validator = require('validator');
 const isEmpty = require('../isEmpty');
 const validateUniversityData = require('./univesityData');
 
-const validateRegisterData = async(data) => {
+const validateRegisterData = async (data) => {
     let errors = {};
 
     //replace empty,undifined,null objects with string
@@ -25,14 +25,14 @@ const validateRegisterData = async(data) => {
             validator.isEmpty(data.universityID))
             errors.error = 'University details are required';
         else if (!validator.isEmail(data.universityEmail))
-            errors.universityEmail = 'Invalid email';
+            errors.universityEmail = 'Invalid university email';
         else {
-        //    const { error, isValid } =await validateUniversityData(data.universityID,data.universityEmail);
-        //    console.log(error)
-        //    console.log(isValid)
-        //     if (!isValid) {
-        //         errors.universityData = error;
-        //     }
+            //    const { error, isValid } =await validateUniversityData(data.universityID,data.universityEmail);
+            //    console.log(error)
+            //    console.log(isValid)
+            //     if (!isValid) {
+            //         errors.universityData = error;
+            //     }
         }
     } else if (!['admin', 'director', 'DVC', 'guest'].includes(data.userType)) {
         errors.userType = 'Not a valid userType'
