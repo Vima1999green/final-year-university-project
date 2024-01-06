@@ -4,15 +4,13 @@
   color:#ffff;
  
 }
-.App{
-  background-color: #6F2121;
-}
+
 .navbar{
   padding: 20px;
   display:flex;
   align-items: center;
   width: auto;
- 
+  background-color: #6F2121;
   /*border-bottom: 1px solid #f2f2f2;*/
 }
 .navbar img{
@@ -50,23 +48,32 @@
   color: #f1356d;
 }
 
-.content {
+.content{
   
   /*margin: 40px auto;*/
   padding: 20px;
   background-color: #EEEBAD;
+  background-image: url("Images/home.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  position: absolute;
+  
 }
 .home img{
-  align-items: left;
-  max-width: 600px;
-  max-height: 300px;
+  align-items: center;
   position: absolute;
+  size:100%;
 }
-.home h1{
+.home p{
   position: relative;
   text-align: center;
-  color: #000000;
+  color: black;
+  font-size: 50px;
+  -webkit-text-stroke: 2px #c6d056;
+  font-weight: bold;
 }
+
 
 .events{
 position: relative;
@@ -78,7 +85,7 @@ position: relative;
 }
 
 .events img{
-  align-items: baseline;
+  align-items:center;
   width: 300px;
   height: 200px;
   border-radius: 20px;
@@ -94,8 +101,7 @@ position: relative;
   border-radius: 20px;
   background-color: lightgreen;
   padding: 50px;
-  margin:auto;
-  
+  margin:auto; 
 }
 
 .about h1{
@@ -109,18 +115,12 @@ position: relative;
   color: #000000;
 }
 .images{
-  align-items: center;
+  align-items: center;  
 }
 .img1 img,.img2 img,.img3 img,.img4 img,.img5 img,.img6 img{
   margin: 10px;
-  border-radius: 20px;
-  height: 200px;
-  width: 300px;
- 
-  
- 
+  border-radius: 20px;  
 }
-
 
 .map{
   height: auto;
@@ -131,14 +131,12 @@ position: relative;
 .map iframe{
   border-radius: 20px;
 }
-.footnote{
+
+.footer{
+ 
+  font-size:20px;
   background-color: #6F2121;
   padding: 20px;
-  
-}
-.footer{
-  margin-left: 20px;
-  font-size:20px;
   
 }
 
@@ -146,6 +144,7 @@ position: relative;
   width:30px;
   height: 30px;
   margin-right: 20px;
+  
 }
 
 
