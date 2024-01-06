@@ -1,48 +1,64 @@
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-const Schema =  mongoose.Schema
+const userSchema = new Schema({
+    firstName: {
+        type: String,
+        required: [true, 'Your First Name must be required']
+    },
+    lastName: {
+        type: String,
+        required: [true, 'Your Last Name must be required']
+    },
+    email: {
+        type: String,
+        required: [true, 'Your email Name must be required']
+    },
 
-const userSchema  = new Schema(
-    {
-        firstName:{
-            type:String,
-            required:[true,'Your First Name must be required']
-    
-    
-        },
-    
-        lastName:{
-            type:String,
-            required:[true,'Your Last Name must be required']
-        },
-    
-        email:{
-            type:String,
-            required:[true,'Your email Name must be required']
-        },
-    
-        password:{
-            type:String,
-            required:[true,'please enter password']
-        },
-    
-        userType:{
-            type:String,
-            required:[true,'User Type  must be required']
-        },
-    
-        universityID:{
-            type:String
-            
-        },
-        universityEmail:{
-            type:String
-            
+    isEmailVerified: {
+        type: Boolean,
+        required: [true, 'your need to verified']
+    },
+    confirmationCode: {
+        type: String,
+        required: true
+
+    },
+    password: {
+        type: String,
+        required: [true, 'please enter password']
+    },
+    userType: {
+        type: String,
+        required: [true, 'User Type  must be required']
+    },
+    universityID: {
+        type: String,
+        required: function () {
+            return this.userType === 'university'
         }
-
-    },{timestamps:true}
+    },
+    universityEmail: {
+        type: String,
+        required: function () {
+            return this.userType === 'university'
+        }
+    }
+}
 )
 
-const User  = mongoose.model('User',userSchema)
+// Add a pre-save hook to exclude university data when userType is 'guest'
+userSchema.pre('save', function (next) {
+    if (this.userType === 'guest') {
+        this.universityID = undefined;
+        this.universityEmail = undefined;
+    }
+    next();
+});
 
-module.exports = User
+const userModel = mongoose.model('user', userSchema)
+
+
+
+
+module.exports = userModel
