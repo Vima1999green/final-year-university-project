@@ -1,0 +1,49 @@
+.header{
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 500;
+    color: green;
+    padding: 10px;
+}
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+  }
+  
+  
+.login_container{
+    background-color: #fee6b4;
+    place-items: center;
+    border-radius: 9px;
+    outline: none;
+    border: none;
+    align-items: center;
+    padding: 20px;
+    float: right;
+    max-width: 500px;
+}
+
+.input{
+    color: #8a1538;
+    font-weight: 600;
+    gap: 20px;
+    padding: 15px;
+    width: 300px;
+}
+.input input{
+    border-color: #8a1538;
+    
+}
+.submit {
+    align-items: center;
+    padding-left: 40px;
+}
+.submit button{
+    background-color: #8a1538;
+    color: white;
+    width: 200px;
+   
+}
