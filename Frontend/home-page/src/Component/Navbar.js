@@ -1,9 +1,10 @@
 import logo from '../Images/logo.png';
+import header_css from "./header.module.css";
 
 const Navbar = () => {
   
     return ( 
-       < nav className="navbar">
+       < div className={header_css.navbar}>
         <div>
             <img src={logo} alt='logopic'></img>
         </div>
@@ -11,11 +12,11 @@ const Navbar = () => {
         Physical Education Unit<br></br>
         PlayGround and Gym Facility Scheduler
         </text>
-        <div className="links">
-           <button id="log"> Login</button>
-           <button id="signup">Sign Up</button>
+        <div className={header_css.links}>
+           <button id={header_css.log}> Login</button>
+           <button id={header_css.signup}>Sign Up</button>
         </div>
-       </nav>
+       </div>
      );
 }
  

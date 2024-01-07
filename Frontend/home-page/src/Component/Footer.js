@@ -2,11 +2,12 @@ import website from '../Images/website1.png';
 import email from '../Images/email.png';
 import facebook from '../Images/facebook.png';
 import address from '../Images/address.png';
+import footer_css from "./footer.module.css";
 const Footer = () =>{
     
     return(
         <>
-        <div className="footer">
+        <div className={footer_css.footer}>
 
             <img src={email} alt='email'></img><a href='mailto:physicaleducation81000@gmail.com?subject=Subject&body=Message Content'>physicaleducation81000@gmail.com</a><br></br>
             <img src={facebook} alt='facebook'></img><a href='https://www.facebook.com/profile.php?id=100075382467582'>Physical Education Unit UOR</a><br></br>
