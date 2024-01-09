@@ -44,7 +44,7 @@
   text-decoration: none;
   border-radius: 8px;
   margin-right: 5px;
-  width: 10px;
+  max-width: 400px;
 
 }
 

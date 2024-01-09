@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Component/Login';
 import FogotPWD from './Component/FogotPWD';
 import Form from './Component/Form';
+import './App.css';
 
 
 import ReactDOM from 'react-dom/client';

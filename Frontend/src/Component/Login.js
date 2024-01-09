@@ -81,10 +81,11 @@ function Login({ switchForm }) {
                   </p>
                 )}
               </div>
-              <div className={Login_css.submit_login}>
-                <button className="btn" type="submit" onClick={handleValidation}>
+              <div className={Login_css.submit_login} >
+                <button className="btn" type="submit" onClick={handleValidation} disabled={isLoading}>
                   Login
                 </button>
+                {error && <div className="error">{error}</div>}
               </div>
               <div className="remember me">
                 <input type="checkbox" title="remember_me" />
