@@ -15,7 +15,6 @@ const validateRegisterData = async (data) => {
     data.universityEmail = isEmpty(data.universityEmail) ? '' : data.universityEmail;
 
     //validating userType
-
     if (validator.isEmpty(data.userType))
         errors.userType = 'User type is required'
     else if (data.userType === 'university') {
@@ -34,7 +33,7 @@ const validateRegisterData = async (data) => {
             //         errors.universityData = error;
             //     }
         }
-    } else if (!['admin', 'director', 'DVC', 'guest'].includes(data.userType)) {
+    } else if (!['admin', 'director', 'DVC', 'Guest'].includes(data.userType)) {
         errors.userType = 'Not a valid userType'
     }
     //validatin First Name
