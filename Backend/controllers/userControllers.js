@@ -120,11 +120,13 @@ const verifyUser = async (req, res) => {
 //developer Lahiru Srimal
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
-    const { errors, isValid } = await validateLoginData(req.body);
+    console.log('In validator',email)
+    const { errors, isValid } = await validateLoginData({ email, password });
     if (!isValid) res.status(401).json(errors);
     else {
         await User.findOne({ email: email })
             .then(user => {
+                console.log('In the server loginUser',email)
                 //redirect to verifyEmail if isEmailVeried is false
                 if (!user.isEmailVerified)
                     return res.send({ error: "Email is not verified" })

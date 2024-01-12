@@ -33,7 +33,7 @@
 .label_names {
     margin-top: 1px;
     font-weight: bolder;
-    color: #8a1538;
+    
     font-size: 12px;
 
 }
@@ -47,6 +47,7 @@
     width: calc(100% - 0px);
     box-sizing: border-box;
     font-size: 10px;
+    color: black;
 }
 
 .U_type_selector {

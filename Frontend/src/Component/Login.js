@@ -3,13 +3,11 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login_css from './Login.module.css'
 import { Link } from "react-router-dom";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import validation from "./Validation.js";
-import ForgotPWD from './FogotPWD';
 import { useLogin } from '../hooks/useLogin.js'
 import isEmpty from "../isEmpty.js";
 
-function Login({ switchForm }) {
+function Login() {
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -21,13 +19,16 @@ function Login({ switchForm }) {
   const { login, error, isLoading } = useLogin()
   const handleInput = (e) => {
     setValues({ ...values, [e.target.name]: [e.target.value] });
+    if (e.target.type === 'email')
+      setEmail(e.target.value)
+    else (e.target.type === 'password')
+    setPassword(e.target.value)
   };
 
   function handleValidation(e) {
     e.preventDefault();
     setErrors(validation(values));
     if (isEmpty(errors)) {
-      console.log("No erros")
       handleSubmit()
     } else {
       console.log(errors)
@@ -38,7 +39,7 @@ function Login({ switchForm }) {
   }
 
   const handleSubmit = async () => {
-    await login(email, password)
+    await login(email,password)
   }
   return (
 
@@ -94,7 +95,7 @@ function Login({ switchForm }) {
               <br />
 
 
-              <a href="/pwdReset" onClick={() => switchForm("pwdReset")}>
+              <a href="/pwdReset">
                 Forgot Password
               </a>
               <p>
@@ -103,7 +104,7 @@ function Login({ switchForm }) {
 
 
 
-                <Link to="/Signup" className={Login_css.signup_link} onClick={switchForm}>
+                <Link to="/Signup" className={Login_css.signup_link}>
                   Click here to Create Account!</Link>
               </p>
             </form>
