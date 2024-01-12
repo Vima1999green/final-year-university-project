@@ -19,7 +19,8 @@
 }
 
 .login_container {
-    background-color: #fee6b4;
+    /* background-color: #fee6b4; */
+    background-color: rgb(228, 206, 174);
     place-items: center;
     border-radius: 9px;
     outline: none;
@@ -28,6 +29,7 @@
     padding: 20px;
     float: right;
     max-width: 500px;
+    color: #000;
 
 }
 

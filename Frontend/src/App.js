@@ -9,6 +9,7 @@ import './App.css';
 
 
 import ReactDOM from 'react-dom/client';
+import EmailVerification from './Component/EmailVerification';
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
             <Route path="/Signup" element={<Form />} />
 
             <Route path="pwdReset" element={<FogotPWD />} />
+
+            <Route path='emailVerify' element={<EmailVerification/>}/>
 
 
 
