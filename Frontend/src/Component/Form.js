@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Sign_css from './SignUpform.module.css'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
 // Hook for email and University ID validation
 const useEmailValidation = () => {
@@ -158,8 +159,8 @@ const Form = ({ switchForm }) => {
             return;
         }
 
-        // Check University ID validity only if the user type is "University User"
-        if (userType === "University User") {
+        // Check University ID validity only if the user type is "university"
+        if (userType === "university") {
             const isUniversityIdValid = validateUniversityId(Uid);
 
             if (!isUniversityIdValid) {
@@ -176,181 +177,199 @@ const Form = ({ switchForm }) => {
         // Additional logic for form submission if needed
 
         // Log submitted data
+        console.log('=====================================')
         console.log("Submitted data:", {
             UserType: userType,
             FirstName: Fname,
             lastName: Lname,
-            UniversityId: userType === "University User" ? Uid : undefined,
-            UniversityEmail: userType === "University User" ? Uemail : undefined,
+            UniversityId: userType === "university" ? Uid : undefined,
+            UniversityEmail: userType === "university" ? Uemail : undefined,
             PersonalEmail: email,
             Password: password,
             confPassword: confirmpassword,
         });
-
-        // Clear form and errors
-        handleClear();
+        console.log('=====================================')
+        //axios request for register data
+        axios.post('http://localhost:4000/api/users/register', {
+           firstName:Fname,
+           lastName:Lname,
+           email:email,
+           userType:userType,
+           password:password,
+           universityID:Uid,
+           universityEmail:Uemail
+        }
+        )
+        .then(res => {
+                console.log(res.data)
+            })
+    .catch(err => {
+        console.log(err.response.data)
+    })
+// Clear form and errors
+handleClear();
     };
 
-    // Clear form and errors
-    const handleClear = () => {
-        setFname("");
-        setLname("");
-        setUid("");
-        setUemail("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        setRequiredFieldError("");
-        resetEmailError();
-        resetUniversityIdError();
-    };
+// Clear form and errors
+const handleClear = () => {
+    setFname("");
+    setLname("");
+    setUid("");
+    setUemail("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setRequiredFieldError("");
+    resetEmailError();
+    resetUniversityIdError();
+};
 
-    // JSX for the form
-    return (
-        <div className={Sign_css.body_sign}>
-            <div className={Sign_css.register_form}>
-                <h2 className={Sign_css.signup_topic}>Sign Up</h2>
-                <form id="form01" className={Sign_css.signupform01} onSubmit={handleSubmit}>
-                    {/* User Type */}
-                    <label className={Sign_css.label_names}>User Type:</label>
-                    <select
-                        value={userType}
-                        onChange={handleUserTypeChange}
-                        className={Sign_css.U_type_selector}
-                        name="userType"
-                    >
-                        <option value="Guest">Guest</option>
-                        <option value="University User">University User</option>
-                    </select>
+// JSX for the form
+return (
+    <div className={Sign_css.body_sign}>
+        <div className={Sign_css.register_form}>
+            <h2 className={Sign_css.signup_topic}>Sign Up</h2>
+            <form id="form01" className={Sign_css.signupform01} onSubmit={handleSubmit}>
+                {/* User Type */}
+                <label className={Sign_css.label_names}>User Type:</label>
+                <select
+                    value={userType}
+                    onChange={handleUserTypeChange}
+                    className={Sign_css.U_type_selector}
+                    name="userType"
+                >
+                    <option value="Guest">Guest</option>
+                    <option value="university">University</option>
+                </select>
 
-                    {/* First Name */}
-                    <label className={Sign_css.label_names}>First Name:</label>
-                    <input
-                        type="text"
-                        value={Fname}
-                        placeholder="First Name"
-                        onChange={handleFnameChange}
-                        required
-                        className={Sign_css.inputFields}
-                        name="firstName"
-                    />
+                {/* First Name */}
+                <label className={Sign_css.label_names}>First Name:</label>
+                <input
+                    type="text"
+                    value={Fname}
+                    placeholder="First Name"
+                    onChange={handleFnameChange}
+                    required
+                    className={Sign_css.inputFields}
+                    name="firstName"
+                />
 
-                    {/* Last Name */}
-                    <label className={Sign_css.label_names}>Last Name:</label>
-                    <input
-                        type="text"
-                        value={Lname}
-                        placeholder="Last Name"
-                        onChange={handleLnameChange}
-                        required
-                        className={Sign_css.inputFields}
-                        name="LastName"
-                    />
+                {/* Last Name */}
+                <label className={Sign_css.label_names}>Last Name:</label>
+                <input
+                    type="text"
+                    value={Lname}
+                    placeholder="Last Name"
+                    onChange={handleLnameChange}
+                    required
+                    className={Sign_css.inputFields}
+                    name="LastName"
+                />
 
-                    {/* University User fields */}
-                    {userType === "University User" && (
-                        <>
-                            <div className="University Users">
+                {/* university fields */}
+                {userType === "university" && (
+                    <>
+                        <div className="universitys">
 
-                                <label className={Sign_css.label_names}>University ID:</label>
-                                <input
-                                    type="text"
-                                    value={Uid}
-                                    placeholder="University ID"
-                                    onChange={handleUidChange}
-                                    required
-                                    className={Sign_css.inputFields}
-                                    name="UniversityId"
-                                />
-                                {/* Display University ID error if exists */}
-                                {universityIdError && (
-                                    <p style={{ color: "red", fontSize: "10px" }}>
-                                        {universityIdError}
-                                    </p>
-                                )}
+                            <label className={Sign_css.label_names}>University ID:</label>
+                            <input
+                                type="text"
+                                value={Uid}
+                                placeholder="University ID"
+                                onChange={handleUidChange}
+                                required
+                                className={Sign_css.inputFields}
+                                name="UniversityId"
+                            />
+                            {/* Display University ID error if exists */}
+                            {universityIdError && (
+                                <p style={{ color: "red", fontSize: "10px" }}>
+                                    {universityIdError}
+                                </p>
+                            )}
 
-                                <label className={Sign_css.label_names}>University Email:</label>
-                                <input
-                                    type="email"
-                                    value={Uemail}
-                                    placeholder="University Email"
-                                    onChange={handleUemailChange}
-                                    required
-                                    className={Sign_css.inputFields}
-                                    name="universityEmail"
-                                />
-                            </div>
-                        </>
-                    )}
+                            <label className={Sign_css.label_names}>University Email:</label>
+                            <input
+                                type="email"
+                                value={Uemail}
+                                placeholder="University Email"
+                                onChange={handleUemailChange}
+                                required
+                                className={Sign_css.inputFields}
+                                name="universityEmail"
+                            />
+                        </div>
+                    </>
+                )}
 
-                    {/* Personal Email */}
-                    <label className={Sign_css.label_names}>Personal Email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        placeholder="Email..."
-                        onChange={handleEmailChange}
-                        required
-                        className={Sign_css.inputFields}
-                        name="personalEmail"
-                    />
-                    {/* Display email error if exists */}
-                    {emailError && (
-                        <p style={{ color: "red", fontSize: "10px" }}>{emailError}</p>
-                    )}
+                {/* Personal Email */}
+                <label className={Sign_css.label_names}>Personal Email:</label>
+                <input
+                    type="email"
+                    value={email}
+                    placeholder="Email..."
+                    onChange={handleEmailChange}
+                    required
+                    className={Sign_css.inputFields}
+                    name="personalEmail"
+                />
+                {/* Display email error if exists */}
+                {emailError && (
+                    <p style={{ color: "red", fontSize: "10px" }}>{emailError}</p>
+                )}
 
-                    {/* Password */}
-                    <label className={Sign_css.label_names}>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        placeholder="Password"
-                        onChange={handlePasswordChange}
-                        required
-                        className={Sign_css.inputFields}
-                        name="password"
-                    />
-                    {/* Password validation component */}
-                    <PasswordValidator
-                        password={password}
-                        confirmPassword={confirmpassword}
-                    />
+                {/* Password */}
+                <label className={Sign_css.label_names}>Password:</label>
+                <input
+                    type="password"
+                    value={password}
+                    placeholder="Password"
+                    onChange={handlePasswordChange}
+                    required
+                    className={Sign_css.inputFields}
+                    name="password"
+                />
+                {/* Password validation component */}
+                <PasswordValidator
+                    password={password}
+                    confirmPassword={confirmpassword}
+                />
 
-                    {/* Confirm Password */}
-                    <label className={Sign_css.label_names}>Confirm Password:</label>
-                    <input
-                        type="password"
-                        value={confirmpassword}
-                        placeholder="Confirm password"
-                        onChange={handleConfirmPasswordChange}
-                        required
-                        className={Sign_css.inputFields}
-                        name="confirmPassoword"
-                    />
-                    {/* Display required field error if exists */}
-                    {requiredFieldError && (
-                        <p style={{ color: "red", fontSize: "10px" }}>{requiredFieldError}</p>
-                    )}
+                {/* Confirm Password */}
+                <label className={Sign_css.label_names}>Confirm Password:</label>
+                <input
+                    type="password"
+                    value={confirmpassword}
+                    placeholder="Confirm password"
+                    onChange={handleConfirmPasswordChange}
+                    required
+                    className={Sign_css.inputFields}
+                    name="confirmPassoword"
+                />
+                {/* Display required field error if exists */}
+                {requiredFieldError && (
+                    <p style={{ color: "red", fontSize: "10px" }}>{requiredFieldError}</p>
+                )}
 
-                    {/* Form submission buttons */}
-                    <button className={Sign_css.submitBtn} type="submit" onClick={handleSubmit}>
-                        Submit
-                    </button>
-                    <button className={Sign_css.clearBtn} type="reset" onClick={handleClear}>
-                        Clear
-                    </button>
+                {/* Form submission buttons */}
+                <button className={Sign_css.submitBtn} type="submit" onClick={handleSubmit}>
+                    Submit
+                </button>
+                <button className={Sign_css.clearBtn} type="reset" onClick={handleClear}>
+                    Clear
+                </button>
 
-                    <p className={Sign_css.already_account}>
-                        Already have an Account?
-                        <Link to="/login" className={Sign_css.login_link} onClick={switchForm}>
-                            Click here to Login
-                        </Link>
-                    </p>
-                </form>
-            </div>
-
+                <p className={Sign_css.already_account}>
+                    Already have an Account?
+                    <Link to="/login" className={Sign_css.login_link} onClick={switchForm}>
+                        Click here to Login
+                    </Link>
+                </p>
+            </form>
         </div>
-    );
+
+    </div>
+);
 };
 
 export default Form;
