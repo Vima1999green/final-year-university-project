@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 //import Login_css from './Login.module.css';
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from 'react-router-dom'
 import Login_css from './Login.module.css'
 
 function FogotPWD({ switchForm }) {
@@ -84,6 +85,11 @@ function FogotPWD({ switchForm }) {
                   {message}
                 </p>
               )}
+              <Link to="/login" className={Login_css.login_link} onClick={switchForm}>
+                 Back to Login
+             </Link>
+
+
             </form>
           </div>
 

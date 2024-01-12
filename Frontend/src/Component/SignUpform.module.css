@@ -12,7 +12,8 @@
     height: 100%;
     margin: 15px;
     padding: 20px;
-    background-color: #fee6b4;
+    /* background-color: #fee6b4; */
+    background-color: rgb(228, 206, 174);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin: auto;

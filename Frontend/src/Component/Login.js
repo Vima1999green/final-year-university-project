@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login_css from './Login.module.css'
 import { Link } from "react-router-dom";
+//import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import validation from "./Validation.js";
+//import ForgotPWD from './FogotPWD';
 import { useLogin } from '../hooks/useLogin.js'
 import isEmpty from "../isEmpty.js";
 
@@ -88,13 +90,14 @@ function Login() {
                 </button>
                 {error && <div className="error">{error}</div>}
               </div>
-              <div className="remember me">
+              <div className="remember me" style={{color:'black'}}>
                 <input type="checkbox" title="remember_me" />
                 Remember me
               </div>
               <br />
 
 
+             
               <a href="/pwdReset">
                 Forgot Password
               </a>
