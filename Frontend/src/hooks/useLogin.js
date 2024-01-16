@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import useAuthContext from './useAuthContext'
 import axios from 'axios';
+import isEmpty from '../isEmpty';
+import { useNavigate } from 'react-router-dom';
 
 export const useLogin = () => {
-
+    const navigate = useNavigate();
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const { dispatch } = useAuthContext()
@@ -36,11 +38,19 @@ export const useLogin = () => {
             password: password
         }
         )
-        .then(res => {
+            .then(res => {
                 console.log(res.data)
+                if (isEmpty(res.data.error))
+                    alert('login succcesfulll');
+                else{
+                    alert(res.data.error)
+                    navigate(`/verifyEmail/${email}`)
+                }
             })
-        .catch(err => {
+            .catch(err => {
                 console.log(err.response.data)
+                //alert('error occured');
+                alert(err.response.data.msg)
             })
     }
 

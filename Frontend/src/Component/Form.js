@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Sign_css from './SignUpform.module.css'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import Alert from '@mui/material/Alert';
 
@@ -107,6 +108,7 @@ const Form = ({ switchForm }) => {
     const [password, setPassword] = useState("");
     const [confirmpassword, setConfirmPassword] = useState("");
     const [requiredFieldError, setRequiredFieldError] = useState("");
+    const navigate = useNavigate();
 
 
 
@@ -157,6 +159,7 @@ const Form = ({ switchForm }) => {
 
     // Form submission
     const handleSubmit = async (event) => {
+
         event.preventDefault();
 
         if (!Fname || !Lname || !email || !password || !confirmpassword) {
@@ -206,13 +209,16 @@ const Form = ({ switchForm }) => {
             universityEmail: Uemail
         }
         )
+
+
             .then(res => {
                 console.log(res.data)
-                alert( "Sucess" );
+                alert('regsitration succesfull')
+                navigate(`/verifyEmail/${email}`)
             })
             .catch(err => {
                 console.log(err.response.data)
-                alert( "Error" );
+                alert('error in registration')
             })
         // Clear form and errors
         handleClear();

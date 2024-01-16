@@ -1,30 +1,30 @@
 const nodemailer = require("nodemailer");
 //Real implementation
-// const transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//         user: 'lahiruprasangasrimal@gmail.com',
-//         pass: 'ifjk iakk umqp ebwl',
-//     },
-// });
-//Using mailtrap for testing
 const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
+    service: 'gmail',
     auth: {
-        user: "435dccc2f5f276",
-        pass: "2c7ba0d7b320e3"
-    }
+        user: 'lahiruprasangasrimal@gmail.com',
+        pass: 'gzrh lxue xmau pnaa',
+    },
 });
+//Using mailtrap for testing
+// const transport = nodemailer.createTransport({
+//   host: "sandbox.smtp.mailtrap.io",
+//   port: 2525,
+//   auth: {
+//     user: "fff1b55790b5a3",
+//     pass: "1d7bde7b551218"
+//   }
+// });
 
 // Sending email
 const sendEmail = async (to, subject, heading, content) => {
-    try {
-        const mailOptions = {
-            from: 'FacilityScheduler@gmail.com', // sender address
-            to: to, // list of receivers
-            subject: subject,// Subject line
-            html: `    
+  try {
+    const mailOptions = {
+      from: 'FacilityScheduler@gmail.com', // sender address
+      to: to, // list of receivers
+      subject: subject,// Subject line
+      html: `    
             <div className="container" 
             style="
             color:DodgerBlue;
@@ -35,15 +35,18 @@ const sendEmail = async (to, subject, heading, content) => {
               <div className="content">
                 ${content}
               </div>
+              <div className="verifyLink">
+                <a href="http://localhost:3000/api/users/verifyEmail">Verify your email here</a>
+              </div>
             </div> ` // html body
-        }
-        // send mail with defined transport object
-        const message = await transporter.sendMail(mailOptions);
-        return {mailStatus:true}
-
-    } catch (error) {
-        return {mailStatus:false,error}
     }
+    // send mail with defined transport object
+    const message = await transporter.sendMail(mailOptions);
+    return { mailStatus: true }
+
+  } catch (error) {
+    return { mailStatus: false, error }
+  }
 }
 
-module.exports=sendEmail;
+module.exports = sendEmail;

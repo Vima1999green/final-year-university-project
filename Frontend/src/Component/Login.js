@@ -2,12 +2,13 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login_css from './Login.module.css'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 //import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import validation from "./Validation.js";
 //import ForgotPWD from './FogotPWD';
 import { useLogin } from '../hooks/useLogin.js'
 import isEmpty from "../isEmpty.js";
+
 
 function Login() {
   const [values, setValues] = useState({
@@ -19,12 +20,14 @@ function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const { login, error, isLoading } = useLogin()
+
   const handleInput = (e) => {
     setValues({ ...values, [e.target.name]: [e.target.value] });
     if (e.target.type === 'email')
+
       setEmail(e.target.value)
-    else (e.target.type === 'password')
-    setPassword(e.target.value)
+    else if (e.target.type === 'password')
+      setPassword(e.target.value)
   };
 
   function handleValidation(e) {
@@ -41,7 +44,7 @@ function Login() {
   }
 
   const handleSubmit = async () => {
-    await login(email,password)
+    await login(email, password)
   }
   return (
 
@@ -90,14 +93,14 @@ function Login() {
                 </button>
                 {error && <div className="error">{error}</div>}
               </div>
-              <div className="remember me" style={{color:'black'}}>
+              <div className="remember me" style={{ color: 'black' }}>
                 <input type="checkbox" title="remember_me" />
                 Remember me
               </div>
               <br />
 
 
-             
+
               <a href="/pwdReset">
                 Forgot Password
               </a>

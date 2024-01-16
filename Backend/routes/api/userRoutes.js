@@ -89,7 +89,7 @@ router.post(
 //@access private
 //@developer Lahiru Srimal
 router.post(
-    '/resetPwd',
+    '/logout:token',
     passport.authenticate('jwt', { session: false }),
     logoutUser)
 
