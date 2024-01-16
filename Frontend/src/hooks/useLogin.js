@@ -36,11 +36,13 @@ export const useLogin = () => {
             password: password
         }
         )
-        .then(res => {
+            .then(res => {
                 console.log(res.data)
+                alert('login succcesfulll');
             })
-        .catch(err => {
+            .catch(err => {
                 console.log(err.response.data)
+                alert('error occured');
             })
     }
 

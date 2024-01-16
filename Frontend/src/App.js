@@ -28,9 +28,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/Signup" element={<Form />} />
 
-            <Route path="pwdReset" element={<FogotPWD />} />
+            <Route path="/pwdReset" element={<FogotPWD />} />
 
-            <Route path='emailVerify' element={<EmailVerification/>}/>
+            <Route path='/verifyEmail' element={<EmailVerification />} />
 
 
 

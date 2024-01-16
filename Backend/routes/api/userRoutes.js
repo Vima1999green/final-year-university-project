@@ -30,7 +30,7 @@ router.post('/register', regiterUser)
 //@desc verify user email
 //@access Public
 //@developer Malitha Chamikara
-router.post('/verifyEmail', verifyUser)
+router.post('/verifyEmail/:userEmail', verifyUser)
 
 //@route POST api/users/login
 //@desc Login a user

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Sign_css from './SignUpform.module.css'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 
 // Hook for email and University ID validation
@@ -104,6 +105,7 @@ const Form = ({ switchForm }) => {
     const [password, setPassword] = useState("");
     const [confirmpassword, setConfirmPassword] = useState("");
     const [requiredFieldError, setRequiredFieldError] = useState("");
+    const navigate = useNavigate();
 
     // Use email validation hook
     const {
@@ -152,6 +154,7 @@ const Form = ({ switchForm }) => {
 
     // Form submission
     const handleSubmit = async (event) => {
+
         event.preventDefault();
 
         if (!Fname || !Lname || !email || !password || !confirmpassword) {
@@ -201,11 +204,16 @@ const Form = ({ switchForm }) => {
             universityEmail: Uemail
         }
         )
+
+
             .then(res => {
                 console.log(res.data)
+                alert('regsitration succesfull')
+                navigate('/verifyEmail')
             })
             .catch(err => {
                 console.log(err.response.data)
+                alert('error in registration')
             })
         // Clear form and errors
         handleClear();

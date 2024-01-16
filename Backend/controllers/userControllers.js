@@ -8,7 +8,7 @@ const validateUpdateData = require('../validation/userRouteValidation/update')
 const secretOrKey = require('../config/keys').secretOrKey
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
-const validator=require('validator')
+const validator = require('validator')
 
 //controller getAllUsers()
 //description get all user account details in the database
