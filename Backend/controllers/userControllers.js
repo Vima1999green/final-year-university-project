@@ -1,4 +1,5 @@
 const User = require('../model/userModel')
+const Blacklist = require('../model/blacklistModel')
 const sendEmail = require('./notificationController')
 const bcrypt = require('bcrypt')
 const validateRegisterData = require('../validation/userRouteValidation/register')
@@ -284,6 +285,12 @@ const resetPwd = async (req, res) => {
 
 }
 
+//controller logoutUser()
+//description Logout user 
+//developer lahiru Srimal
+const logoutUser=async (req,res)=>{
+    
+}
 module.exports = {
     getAllUsers,
     regiterUser,
@@ -293,5 +300,6 @@ module.exports = {
     currentUser,
     verifyUser,
     reconfirmationEmail,
-    resetPwd
+    resetPwd,
+    logoutUser
 }

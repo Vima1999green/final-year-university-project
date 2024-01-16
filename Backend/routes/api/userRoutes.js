@@ -9,7 +9,8 @@ const {
     currentUser,
     verifyUser,
     reconfirmationEmail,
-    resetPwd
+    resetPwd,
+    logoutUser
 } = require('../../controllers/userControllers')
 
 const router = express.Router()
@@ -83,5 +84,14 @@ router.post(
 router.post(
     '/resetPwd',
     resetPwd)
+//@route post api/users/logout
+//@desc logout user
+//@access private
+//@developer Lahiru Srimal
+router.post(
+    '/resetPwd',
+    passport.authenticate('jwt', { session: false }),
+    logoutUser)
+
 
 module.exports = router
