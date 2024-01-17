@@ -32,14 +32,13 @@ function EmailVerification() {
   const handleSubmit = async () => {
 
     //const userEmail = "malithachamikara5@gmail.com"
-    console.log('Handleing email verify')
-    console.log(userEmail)
     await axios.post(`http://localhost:4000/api/users/verifyEmail`, {
       email: userEmail,
       confirmationCode: confirmationCode
     }).then(res => {
       console.log(res)
       alert('Email verified')
+      navigate('/login')
     })
       .catch(err => {
         console.log(err.responce)

@@ -265,17 +265,23 @@ const resetPwd = async (req, res) => {
         const user = await User.findOne({ email: email })
         if (user) {
             if (user.confirmationCode === confirmationCode) {
-                await User.findByIdAndUpdate({ _id: user.id }, { password: password })
-                    .then(updatedUser => {
-                        if (!isEmpty(updatedUser)) return res.send("password updated")
-                        else return res.status(500).send("Troble in updating password")
-                    })
-                    .catch(error => {
-                        return res.status(500).send(error)
-                    })
+                bcrypt.genSalt(10, async (err, salt) => {
+                    const hash = await bcrypt.hash(password, salt);
+
+
+                    await User.findByIdAndUpdate({ _id: user.id }, { password: hash })
+                        .then(updatedUser => {
+                            if (!isEmpty(updatedUser)) return res.send("password updated")
+                            else return res.status(500).send("Troble in updating password")
+                        })
+                        .catch(error => {
+                            return res.status(500).send(error)
+                        })
+                })
             } else {
                 return res.status(400).send("Invalid confirmation code")
             }
+
         } else {
             return res.status(404).send("User not found")
         }
@@ -288,8 +294,8 @@ const resetPwd = async (req, res) => {
 //controller logoutUser()
 //description Logout user 
 //developer lahiru Srimal
-const logoutUser=async (req,res)=>{
-    
+const logoutUser = async (req, res) => {
+
 }
 module.exports = {
     getAllUsers,
