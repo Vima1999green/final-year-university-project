@@ -1,11 +1,11 @@
 const nodemailer = require("nodemailer");
 //Real implementation
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'lahiruprasangasrimal@gmail.com',
-        pass: 'gzrh lxue xmau pnaa',
-    },
+  service: 'gmail',
+  auth: {
+    user: 'malithachamikara@gmail.com',
+    pass: 'NCroxmal@123',
+  },
 });
 //Using mailtrap for testing
 // const transport = nodemailer.createTransport({
