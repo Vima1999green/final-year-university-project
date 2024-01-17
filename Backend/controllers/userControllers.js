@@ -180,10 +180,10 @@ const updateUser = async (req, res) => {
         if (!isValid) return res.status(400).send(errors)
         else if (
             !isEmpty(req.body.universityEmail) ||
-            !isEmpty(req.body.universityID ||
-                !isEmpty(req.body.email) ||
-                !isEmpty(req.body.password)
-            )
+            !isEmpty(req.body.universityID) ||
+            !isEmpty(req.body.email) ||
+            !isEmpty(req.body.password)
+
         ) return res.status(400).send({ msg: 'unsucess', error: 'You can\'t update these data' })
         else {
             try {
