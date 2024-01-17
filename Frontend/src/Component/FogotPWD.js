@@ -3,12 +3,18 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from 'react-router-dom'
 import Login_css from './Login.module.css'
+import axios from 'axios'
+import { useNavigate, useParams } from 'react-router-dom';
+import isEmpty from "../isEmpty";
 
-function FogotPWD({ switchForm }) {
+function FogotPWD() {
 
+  const { userEmail } = useParams();
+  const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [confirmationCode, setconfirmationCode] = useState('');
   //const[message1,message2] = useState('')
   const handleNewPasswordChange = (e) => {
     setNewPassword(e.target.value);
@@ -17,21 +23,33 @@ function FogotPWD({ switchForm }) {
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
   };
-
-  const handleSubmit = (e) => {
+  const handleConfirmationCode = (e) => {
+    setconfirmationCode(e.target.value);
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-
-    if (newPassword === confirmPassword) {
-
-      setMessage('Password reset successfully !');
+    if (isEmpty(confirmationCode)) {
+      setMessage('Confirmation code required')
+    } else if (newPassword === confirmPassword) {
+      await axios.post('http://localhost:4000/api/users/resetPwd',
+        {
+          email: userEmail,
+          confirmationCode,
+          password: newPassword
+        })
+        .then(res => {
+          setMessage('Password reset successfully !');
+          alert('Password reset successfully')
+        })
+        .catch(err => {
+          setMessage('Password update fail')
+        })
     } else {
       setMessage('Passwords do not match');
     }
   };
 
   return (
-
     <div className={Login_css.body_sign}>
       <div className={Login_css.login_container}>
 
@@ -41,6 +59,20 @@ function FogotPWD({ switchForm }) {
 
               <div className={Login_css.header}>
                 <h2>Password Reset</h2>
+              </div>
+              <div className={Login_css.input_login}>
+                <label> Confirmation Code:</label>
+                <input
+                  type="text"
+                  id="confirmationCode"
+                  name="confirmationCode"
+                  value={confirmationCode}
+                  onChange={handleConfirmationCode}
+                  required
+                  placeholder="Enter confirmation code"
+                  className="form-control"
+                />
+
               </div>
 
               <div className={Login_css.input_login}>
@@ -85,9 +117,9 @@ function FogotPWD({ switchForm }) {
                   {message}
                 </p>
               )}
-              <Link to="/login" className={Login_css.login_link} onClick={switchForm}>
-                 Back to Login
-             </Link>
+              <Link to="/login" className={Login_css.login_link}>
+                Back to Login
+              </Link>
 
 
             </form>

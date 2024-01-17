@@ -48,7 +48,7 @@ const userSchema = new Schema({
 )
 
 // Add a pre-save hook to exclude university data when userType is 'guest'
-userSchema.pre('save', function (next) {
+userSchema.pre('save', next=> {
     if (this.userType === 'guest') {
         this.universityID = undefined;
         this.universityEmail = undefined;

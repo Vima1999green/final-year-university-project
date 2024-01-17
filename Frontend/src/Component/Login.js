@@ -8,6 +8,7 @@ import validation from "./Validation.js";
 //import ForgotPWD from './FogotPWD';
 import { useLogin } from '../hooks/useLogin.js'
 import isEmpty from "../isEmpty.js";
+import axios from 'axios'
 
 
 function Login() {
@@ -16,7 +17,7 @@ function Login() {
     password: "",
   });
   const [errors, setErrors] = useState({});
-
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const { login, error, isLoading } = useLogin()
@@ -39,8 +40,21 @@ function Login() {
       console.log(errors)
     }
   }
-  const handleforgorpwd = () => {
-
+  const handleforgorpwd = async () => {
+    console.log('hndle Forget pwd')
+    if (isEmpty(email))
+      alert('Email is empty')
+    else {
+      console.log('sending emaoil')
+      await axios.post('http://localhost:4000/api/users/reconfirmationEmail',{ email: email })
+            .then(res=>{
+              console.log(res.data)
+            })
+            .catch(err=>{
+              console.log(err.responce.data)
+            })
+      navigate(`/pwdReset/${email}`)
+    }
   }
 
   const handleSubmit = async () => {
@@ -101,7 +115,7 @@ function Login() {
 
 
 
-              <a href="/pwdReset">
+              <a onClick={handleforgorpwd} className="btn btn-outline-primary" >
                 Forgot Password
               </a>
               <p>

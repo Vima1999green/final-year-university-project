@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const passport = require('passport')
 const userRoutes = require('./routes/api/userRoutes')
+const facilityRoutes=require('./routes/api/facilityRoutes')
 const cors = require('cors')
 
 const dbUrl = require('./config/keys').mongoUrl
@@ -23,7 +24,12 @@ app.use(passport.initialize());
 //passport config
 require('./config/passport')(passport);
 
+app.use('',(req,res,next)=>{
+    console.log(req.url)
+    next()
+})
 app.use('/api/users', userRoutes)
+app.use('/api/facility', facilityRoutes)
 
 app.listen(process.env.PORT || 4000, () => {
     console.log('listeneing to the server')
