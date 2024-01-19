@@ -1,0 +1,50 @@
+.content {
+
+
+    background-image: url('../../Images/home.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    margin: auto;
+}
+
+.body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.topNav {
+    background-color: #9a2c2c;
+    height: 50px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.navLinks {
+    list-style-type: none;
+    padding: 0;
+}
+
+.navLinks li {
+    display: inline-block;
+    margin-right: 75px;
+    border: 1px solid white;
+    /* Adjust border color as needed */
+    border-radius: 8px;
+    /* Adjust border radius as needed */
+    padding: 3px;
+    /* Adjust padding as needed */
+}
+
+
+.navLinks li:hover {
+    background-color: #ddd;
+    /* Change as needed */
+    color: black;
+}
