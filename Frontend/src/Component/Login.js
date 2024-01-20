@@ -48,12 +48,13 @@ function Login() {
       console.log('sending emaoil')
       await axios.post('http://localhost:4000/api/users/reconfirmationEmail',{ email: email })
             .then(res=>{
-              console.log(res.data)
+              console.log(res)
+              navigate(`/pwdReset/${email}`)
             })
             .catch(err=>{
-              console.log(err.responce.data)
+              console.log(err.response.data)
+              alert(err.response.data)
             })
-      navigate(`/pwdReset/${email}`)
     }
   }
 

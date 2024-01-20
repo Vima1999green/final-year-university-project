@@ -26,6 +26,7 @@ function EmailVerification() {
   }
 
   const hanldeConfCode = (e) => {
+    console.log('handleConfCode')
     setconfirmationCode(e.target.value);
   }
 
@@ -41,8 +42,8 @@ function EmailVerification() {
       navigate('/login')
     })
       .catch(err => {
-        console.log(err.responce)
-        alert(err.responce.data)
+        console.log(err.response)
+        alert(err.response.data)
       })
   }
   return (

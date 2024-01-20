@@ -133,17 +133,19 @@ const loginUser = async (req, res) => {
             errorMsg += error + '\r\n'
         })
         errorMsg = errorMsg.trim()
-        res.status(400).send(errorMsg);
+        res.status(400).send({ isAutheticate: false, msg: errorMsg });
     }
     else {
         await User.findOne({ email: email })
             .then(user => {
                 //redirect to verifyEmail if isEmailVeried is false
                 if (!user.isEmailVerified)
-                    return res.send("Email is not verified")
+                    return res.send({ isAutheticate: false, msg:'Email is not verified'})
                 const authMsg = checkPassword(password, user.password)
-
-                if (!authMsg) return res.status(401).send({ isAutheticate: authMsg, msg: 'Incorrect password' })
+                if (!authMsg)
+                    return res
+                        .status(401)
+                        .send({ isAutheticate: authMsg, msg: 'Incorrect password' })
                 else {
                     //create payload
                     const payload = {
@@ -238,7 +240,9 @@ const currentUser = (req, res) => {
 //developer Lahiru Srimal
 const reconfirmationEmail = async (req, res) => {
     try {
-        const newConfirmationCode = crypto.randomBytes(16).toString('hex');
+        // Create confirmation code
+        const randomNumber = crypto.randomBytes(3).readUIntBE(0, 3) % 1000000;
+        const newConfirmationCode = randomNumber.toString().padStart(6, '0');
         const user = await User.findOneAndUpdate(
             { email: req.body.email },
             { confirmationCode: newConfirmationCode }
@@ -261,7 +265,7 @@ const reconfirmationEmail = async (req, res) => {
                 }
             }
         } else {
-            return res.status(500).send("Code updating failed")
+            return res.status(500).send("User does not exist")
         }
     } catch (error) {
         return res.status(500).send(error.message)

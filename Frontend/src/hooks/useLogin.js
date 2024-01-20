@@ -40,10 +40,10 @@
             )
                 .then(res => {
                     console.log(res.data)
-                    if (isEmpty(res.data.error))
+                    if (res.data.isAutheticate)
                         alert('login succcesfulll');
                     else {
-                        if (res.data.error === 'Email is not verified') {
+                        if (res.data.msg === 'Email is not verified') {
                             axios.post('http://localhost:4000/api/users/reconfirmationEmail', { email: email })
                                 .then(res => {
                                     console.log(res.data)
@@ -51,18 +51,18 @@
                                 .catch(err => {
                                     console.log(err.responce.data)
                                 })
-                            alert(res.data.error)
+                            alert('Login Failed\r\n'+res.data.msg)
                             navigate(`/verifyEmail/${email}`)
                         }
                         else {
-                            alert(res.data.error)
+                            alert('Login Failed\r\n'+res.data.msg)
                         }
                     }
                 })
                 .catch(err => {
                     console.log(err.response.data)
                     //alert('error occured');
-                    alert(err.response.data.msg)
+                    alert('Login Failed\r\n'+err.response.data.msg)
                 })
         }
     
