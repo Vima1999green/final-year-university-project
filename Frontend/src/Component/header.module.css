@@ -58,3 +58,7 @@
 .links link:hover {
   color: #f1356d;
 }
+
+.userProfileContainer {
+  margin-left: auto;
+}

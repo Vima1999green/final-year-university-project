@@ -10,6 +10,7 @@ import App_Css from './App.module.css';
 
 import ReactDOM from 'react-dom/client';
 import EmailVerification from './Component/EmailVerification';
+import LandPage from './Component/LandPage/LandPage';
 
 function App() {
   return (
@@ -27,10 +28,13 @@ function App() {
 
             <Route path="/login" element={<Login />} />
             <Route path="/Signup" element={<Form />} />
+            <Route path="/landpage" element={<LandPage />} />
+
 
             <Route path="/pwdReset/:userEmail" element={<FogotPWD />} />
 
             <Route path='/verifyEmail/:userEmail' element={<EmailVerification />} />
+
 
 
 

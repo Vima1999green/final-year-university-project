@@ -5,11 +5,13 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    margin: auto;
+    margin-left: 0;
 }
 
 .body {
     margin: 0;
+    padding: 0;
+    margin-left: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,16 +37,68 @@
     display: inline-block;
     margin-right: 75px;
     border: 1px solid white;
-    /* Adjust border color as needed */
     border-radius: 8px;
-    /* Adjust border radius as needed */
     padding: 3px;
-    /* Adjust padding as needed */
+
 }
 
 
 .navLinks li:hover {
     background-color: #ddd;
-    /* Change as needed */
     color: black;
+}
+
+
+.imageListContainer {
+    width: 800px;
+    height: 450px;
+    margin-left: 0;
+    margin-top: 5px;
+
+
+}
+
+.imageListItem {
+    height: 164px;
+    margin-right: 20px;
+
+}
+
+.buttonContainer {
+    margin-top: 50px;
+    margin-right: 0;
+    direction: column;
+
+
+
+}
+
+.overAllCalendarbtnConatiner {
+    margin-bottom: 30px;
+}
+
+.playgroundbtnConatiner {
+    margin-bottom: 30px;
+}
+
+.gymnasiumbtnConatiner {
+    margin-bottom: 30px;
+}
+
+.calendarContainer {
+    margin-bottom: 20px;
+    width: 700px;
+}
+
+.calendar {
+    background: gray;
+    border: 2px solid #a0a096;
+}
+
+.overallBtn,
+.playgroundBtn,
+.gymnasiumBtn {
+    margin-right: 0;
+
+
 }

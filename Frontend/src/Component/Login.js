@@ -8,7 +8,8 @@ import validation from "./Validation.js";
 //import ForgotPWD from './FogotPWD';
 import { useLogin } from '../hooks/useLogin.js'
 import isEmpty from "../isEmpty.js";
-import axios from 'axios'
+import axios from 'axios';
+import Navbar from './Navbar.js';
 
 
 function Login() {
@@ -46,19 +47,25 @@ function Login() {
       alert('Email is empty')
     else {
       console.log('sending emaoil')
-      await axios.post('http://localhost:4000/api/users/reconfirmationEmail',{ email: email })
-            .then(res=>{
-              console.log(res.data)
-            })
-            .catch(err=>{
-              console.log(err.responce.data)
-            })
+      await axios.post('http://localhost:4000/api/users/reconfirmationEmail', { email: email })
+        .then(res => {
+          console.log(res.data)
+        })
+        .catch(err => {
+          console.log(err.responce.data)
+        })
       navigate(`/pwdReset/${email}`)
     }
   }
 
+
+
   const handleSubmit = async () => {
     await login(email, password)
+
+    navigate('/landpage')
+
+
   }
   return (
 
@@ -132,6 +139,7 @@ function Login() {
         </div>
 
       </div>
+
     </div>
 
 
