@@ -217,7 +217,7 @@ const Form = ({ switchForm }) => {
                 alert(err.response.data + '\r\n'+'Registration failed')
             })
         // Clear form and errors
-        handleClear();
+        // handleClear();
     };
 
     // Clear form and errors
