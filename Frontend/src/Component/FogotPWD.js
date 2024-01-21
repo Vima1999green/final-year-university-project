@@ -30,6 +30,7 @@ function FogotPWD() {
     e.preventDefault();
     if (isEmpty(confirmationCode)) {
       setMessage('Confirmation code required')
+      alert('Confirmation code required')
     } else if (newPassword === confirmPassword) {
       await axios.post('http://localhost:4000/api/users/resetPwd',
         {
@@ -40,12 +41,15 @@ function FogotPWD() {
         .then(res => {
           setMessage('Password reset successfully !');
           alert('Password reset successfully')
+          navigate('/login')
         })
         .catch(err => {
           setMessage('Password update fail')
+          alert('Password update fail')
         })
     } else {
       setMessage('Passwords do not match');
+      alert('Passwords do not match')
     }
   };
 

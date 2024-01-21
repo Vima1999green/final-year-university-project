@@ -161,10 +161,10 @@ const Form = ({ switchForm }) => {
     const handleSubmit = async (event) => {
 
         event.preventDefault();
-
+        console.log('handle submit')
         if (!Fname || !Lname || !email || !password || !confirmpassword) {
             setRequiredFieldError("All fields are required");
-            return;
+            return false;
         }
 
         // Check University ID validity only if the user type is "university"
@@ -214,10 +214,10 @@ const Form = ({ switchForm }) => {
             })
             .catch(err => {
                 console.log(err.response.data)
-                alert(err.response.data.msg)
+                alert(err.response.data + '\r\n'+'Registration failed')
             })
         // Clear form and errors
-        handleClear();
+        // handleClear();
     };
 
     // Clear form and errors

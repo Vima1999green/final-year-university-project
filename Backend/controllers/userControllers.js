@@ -31,18 +31,23 @@ const regiterUser = async (req, res) => {
     // Validate register data
     const { errors, isValid } = await validateRegisterData(req.body);
     if (!isValid) {
-        res.status(400).json(errors);
+        var errorMsg = ''
+        Object.values(errors).forEach(error => {
+            errorMsg += error + '\r\n'
+        })
+        errorMsg = errorMsg.trim()
+        res.status(400).send(errorMsg);
     } else {
         try {
             const user = await User.findOne({ email: req.body.email });
             //check for isVerified
-
             if (isEmpty(user)) {
                 bcrypt.genSalt(10, async (err, salt) => {
                     try {
                         const hash = await bcrypt.hash(req.body.password, salt);
                         // Create confirmation code
-                        const confirmationCode = crypto.randomBytes(16).toString('hex');
+                        const randomNumber = crypto.randomBytes(3).readUIntBE(0, 3) % 1000000;
+                        const confirmationCode = randomNumber.toString().padStart(6, '0');
                         //create user
                         const newUser = await User.create({
                             firstName: req.body.firstName,
@@ -65,20 +70,20 @@ const regiterUser = async (req, res) => {
                             )
                         } catch (error) {
                             console.error("Error sending email verification:", error);
-                            return res.status(500).json({ error: "Error sending email verification:" });
+                            return res.status(500).send('Error sending email verification');
                         }
                         res.send(newUser);
                     } catch (error) {
                         console.error("Error generating hash or creating user:", error);
-                        return res.status(500).json({ error: "Error generating hash or creating user:" });
+                        return res.status(500).send('Error generating hash or creating user');
                     }
                 });
             } else {
-                return res.status(400).send({ msg: 'User already exists' });
+                return res.status(400).send('User already exists');
             }
         } catch (error) {
             console.error("Error checking for existing user:", error);
-            res.status(500).json({ error: "Error checking for existing user" });
+            res.status(500).send('Error checking for existing user');
         }
     }
 };
@@ -97,21 +102,21 @@ const verifyUser = async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: "User not found" })
+            return res.status(404).send("User not found")
         }
         if (confirmationCode !== user.confirmationCode) {
-            return res.status(400).json({ message: "Invalid confirmation code" });
+            return res.status(400).send("Invalid confirmation code");
         }
         try {
             await User.findOneAndUpdate({ _id: user.id }, { isEmailVerified: true })
         } catch (error) {
-            return res.status(500).json({ message: "User not verified succesfully" }, error)
+            return res.status(500).send("User not verified succesfully")
         }
         return res.send("User verified sucessfully")
     } catch (error) {
 
         console.error(error);
-        return res.status(500).json({ message: "Error occured in  Verifying user" });
+        return res.status(500).send("Error occured in  Verifying user");
     }
 
 }
@@ -122,16 +127,25 @@ const verifyUser = async (req, res) => {
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     const { errors, isValid } = await validateLoginData({ email, password });
-    if (!isValid) res.status(401).json(errors);
+    if (!isValid) {
+        var errorMsg = ''
+        Object.values(errors).forEach(error => {
+            errorMsg += error + '\r\n'
+        })
+        errorMsg = errorMsg.trim()
+        res.status(400).send({ isAutheticate: false, msg: errorMsg });
+    }
     else {
         await User.findOne({ email: email })
             .then(user => {
                 //redirect to verifyEmail if isEmailVeried is false
                 if (!user.isEmailVerified)
-                    return res.send({ error: "Email is not verified" })
+                    return res.send({ isAutheticate: false, msg:'Email is not verified'})
                 const authMsg = checkPassword(password, user.password)
-
-                if (!authMsg) return res.status(401).send({ isAutheticate: authMsg, msg: 'Incorrect password' })
+                if (!authMsg)
+                    return res
+                        .status(401)
+                        .send({ isAutheticate: authMsg, msg: 'Incorrect password' })
                 else {
                     //create payload
                     const payload = {
@@ -165,10 +179,10 @@ const loginUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     if (req.user.id === req.params.id || req.user.userType === 'admin') {
         await User.findByIdAndDelete({ _id: req.params.id })
-            .then(user => res.send({ msg: 'sucess', user: user }))
-            .catch(error => res.status(500).send(error))
+            .then(user => res.send('User deleted sucessfully'))
+            .catch(error => res.status(500).send(error.message))
     } else {
-        return res.status(401).send({ msg: 'unsucess', error: 'You are not autherized to delete this account' })
+        return res.status(401).send('You are not autherized to delete this account')
     }
 }
 //controller updateUser()
@@ -177,14 +191,21 @@ const deleteUser = async (req, res) => {
 const updateUser = async (req, res) => {
     if (req.user.id === req.params.id || req.user.userType === 'admin') {
         const { errors, isValid } = validateUpdateData(req.body);
-        if (!isValid) return res.status(400).send(errors)
+        if (!isValid) {
+            var errorMsg = ''
+            Object.values(errors).forEach(error => {
+                errorMsg += error + '\r\n'
+            })
+            errorMsg = errorMsg.trim()
+            res.status(400).send(errorMsg);
+        }
         else if (
             !isEmpty(req.body.universityEmail) ||
             !isEmpty(req.body.universityID) ||
             !isEmpty(req.body.email) ||
             !isEmpty(req.body.password)
 
-        ) return res.status(400).send({ msg: 'unsucess', error: 'You can\'t update these data' })
+        ) return res.status(400).send('You can\'t update these data')
         else {
             try {
                 const user = await User.findOneAndUpdate({ _id: req.params.id }, req.body)
@@ -195,11 +216,11 @@ const updateUser = async (req, res) => {
                 }
             } catch (error) {
                 console.error("Error updating or finding user:", error);
-                return res.status(500).json({ error: "Error updating or finding user" });
+                return res.status(500).send("Error updating or finding user");
             }
         }
     } else {
-        return res.status(401).send({ msg: 'unsucess', error: 'You are not autherized to update this account' })
+        return res.status(401).send('You are not autherized to update this account')
     }
 }
 //controller currentUser()
@@ -219,7 +240,9 @@ const currentUser = (req, res) => {
 //developer Lahiru Srimal
 const reconfirmationEmail = async (req, res) => {
     try {
-        const newConfirmationCode = crypto.randomBytes(16).toString('hex');
+        // Create confirmation code
+        const randomNumber = crypto.randomBytes(3).readUIntBE(0, 3) % 1000000;
+        const newConfirmationCode = randomNumber.toString().padStart(6, '0');
         const user = await User.findOneAndUpdate(
             { email: req.body.email },
             { confirmationCode: newConfirmationCode }
@@ -238,14 +261,14 @@ const reconfirmationEmail = async (req, res) => {
                     return res.send("Email sent sucessfully")
                 } catch (error) {
                     console.log(error)
-                    return res.status(500).json({ error: "Error sending email verification:" });
+                    return res.status(500).send('Error sending email verification');
                 }
             }
         } else {
-            return res.status(500).send("Code updating failed")
+            return res.status(500).send("User does not exist")
         }
     } catch (error) {
-        return res.status(500).send(error)
+        return res.status(500).send(error.message)
     }
 };
 
@@ -267,8 +290,6 @@ const resetPwd = async (req, res) => {
             if (user.confirmationCode === confirmationCode) {
                 bcrypt.genSalt(10, async (err, salt) => {
                     const hash = await bcrypt.hash(password, salt);
-
-
                     await User.findByIdAndUpdate({ _id: user.id }, { password: hash })
                         .then(updatedUser => {
                             if (!isEmpty(updatedUser)) return res.send("password updated")

@@ -47,14 +47,15 @@ function Login() {
       alert('Email is empty')
     else {
       console.log('sending emaoil')
-      await axios.post('http://localhost:4000/api/users/reconfirmationEmail', { email: email })
-        .then(res => {
-          console.log(res.data)
-        })
-        .catch(err => {
-          console.log(err.responce.data)
-        })
-      navigate(`/pwdReset/${email}`)
+      await axios.post('http://localhost:4000/api/users/reconfirmationEmail',{ email: email })
+            .then(res=>{
+              console.log(res)
+              navigate(`/pwdReset/${email}`)
+            })
+            .catch(err=>{
+              console.log(err.response.data)
+              alert(err.response.data)
+            })
     }
   }
 
