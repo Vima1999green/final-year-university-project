@@ -40,8 +40,10 @@
             )
                 .then(res => {
                     console.log(res.data)
-                    if (res.data.isAutheticate)
+                    if (res.data.isAutheticate){
+                        localStorage.setItem('facilityUser',JSON.stringify(res.data))
                         alert('login succcesfulll');
+                    }
                     else {
                         if (res.data.msg === 'Email is not verified') {
                             axios.post('http://localhost:4000/api/users/reconfirmationEmail', { email: email })
