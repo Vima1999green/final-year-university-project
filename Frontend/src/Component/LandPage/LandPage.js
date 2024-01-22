@@ -17,7 +17,7 @@ import dayjs from 'dayjs';
 const LandPage = () => {
     const [value, setValue] = useState(new Date())
     return (
-        <div className={landPage_css.content}>
+        <div>
             <div className={landPage_css.topNav}>
                 <nav>
                     <ul className={landPage_css.navLinks}>
@@ -29,50 +29,59 @@ const LandPage = () => {
                     </ul>
                 </nav>
             </div>
+            <div className={landPage_css.content}>
+                <div className={landPage_css.contentImage}>
 
-            <div className={landPage_css.body}>
-                <Grid container spacing={0} direction="column">
-                    <Grid container spacing={3} direction="raw">
-                        <Grid item xs={12} md={8} >
-                            <ImageList className={landPage_css.imageListContainer} cols={3} rowHeight={160}>
-                                {itemData.map((item) => (
-                                    <ImageListItem key={item.img} className={landPage_css.ImageListItem}>
-                                        <img src={`${item.img}`} />
-                                    </ImageListItem>
-                                ))}
-                            </ImageList>
+
+
+
+                    <div className={landPage_css.body}>
+                        <Grid container spacing={0} direction="column">
+                            <Grid container spacing={3} direction="raw">
+                                <Grid item xs={12} md={8} >
+                                    <ImageList className={landPage_css.imageListContainer} cols={3} rowHeight={160}>
+                                        {itemData.map((item) => (
+                                            <ImageListItem key={item.img} className={landPage_css.ImageListItem}>
+                                                <img src={`${item.img}`} />
+                                            </ImageListItem>
+                                        ))}
+                                    </ImageList>
+                                </Grid>
+                                <Grid className={landPage_css.buttonContainer} >
+
+                                    <Grid className={landPage_css.overAllCalendarbtnConatiner} >
+                                        <Button className={landPage_css.overallBtn} variant="contained" size='large' fullWidth>Overall Calendar</Button>
+                                    </Grid>
+                                    <Grid className={landPage_css.playgroundbtnConatiner} >
+                                        <Button className={landPage_css.playgroundBtn} variant="contained" size='large' fullWidth>Playground</Button>
+                                    </Grid>
+                                    <Grid className={landPage_css.gymnasiumbtnConatiner}>
+                                        <Button className={landPage_css.gymnasiumBtn} variant="contained" size='large' fullWidth>Gymnasium</Button>
+                                    </Grid>
+                                </Grid>
+
+                            </Grid>
+
+
+                            <Grid item xs={12} lg={6} className={landPage_css.calendarContainer} >
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DateCalendar
+                                        className={landPage_css.calendar}
+                                        minDate={dayjs('2024-01-01').startOf('day')}
+                                        style={{ width: '100%', fontSize: '30px' }}
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
                         </Grid>
-                        <Grid className={landPage_css.buttonContainer}>
-
-                            <Grid className={landPage_css.overAllCalendarbtnConatiner} >
-                                <Button className={landPage_css.overallBtn} variant="contained" size='large' fullWidth>Overall Calendar</Button>
-                            </Grid>
-                            <Grid className={landPage_css.playgroundbtnConatiner} >
-                                <Button className={landPage_css.playgroundBtn} variant="contained" size='large' fullWidth>Playground</Button>
-                            </Grid>
-                            <Grid className={landPage_css.gymnasiumbtnConatiner}>
-                                <Button className={landPage_css.gymnasiumBtn} variant="contained" size='large' fullWidth>Gymnasium</Button>
-                            </Grid>
-                        </Grid>
-
-                    </Grid>
 
 
-                    <Grid item xs={12} md={8} className={landPage_css.calendarContainer}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DateCalendar
-                                className={landPage_css.calendar}
-                                minDate={dayjs('2024-01-01').startOf('day')}
-                                maxDate={dayjs('2024-12-31').endOf('day')}
-                            />
-                        </LocalizationProvider>
-                    </Grid>
-                </Grid>
-
-
+                    </div>
+                </div>
             </div>
         </div>
+
     );
+
 }
 
 const itemData = [

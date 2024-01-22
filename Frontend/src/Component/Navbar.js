@@ -12,7 +12,7 @@ const Navbar = () => {
     const location = useLocation();
     //const navigate = useNavigate();
     const { isAutheticate } = useLogin();
-    const showAuthLinks = location.pathname === "/login" || location.pathname === "/Signup" || location.pathname === "/pwdReset/:userEmail" || location.pathname === "/verifyEmail/:userEmail" || location.pathname === "/";
+    const showAuthLinks = location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/pwdReset/:userEmail" || location.pathname === "/verifyEmail/:userEmail" || location.pathname === "/";
 
 
     return (

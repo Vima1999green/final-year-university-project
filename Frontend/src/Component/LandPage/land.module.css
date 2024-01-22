@@ -1,11 +1,15 @@
 .content {
 
-
+    padding: 20px;
     background-image: url('../../Images/home.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
     margin-left: 0;
+}
+
+.contentImage {
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .body {
@@ -71,6 +75,7 @@
 
 
 
+
 }
 
 .overAllCalendarbtnConatiner {
@@ -93,12 +98,14 @@
 .calendar {
     background: gray;
     border: 2px solid #a0a096;
+
+
 }
 
 .overallBtn,
 .playgroundBtn,
 .gymnasiumBtn {
-    margin-right: 0;
+    margin-right: 10px;
 
 
 }

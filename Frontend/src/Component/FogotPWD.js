@@ -54,86 +54,90 @@ function FogotPWD() {
   };
 
   return (
-    <div className={Login_css.body_sign}>
-      <div className={Login_css.login_container}>
+    <div className={Login_css.content}>
+      <div className={Login_css.contentImage}>
+        <div className={Login_css.body_sign}>
+          <div className={Login_css.login_container}>
 
-        <div className={Login_css.login_form}>
-          <div className="form">
-            <form className="border p-3" onSubmit={handleSubmit}>
+            <div className={Login_css.login_form}>
+              <div className="form">
+                <form className="border p-3" onSubmit={handleSubmit}>
 
-              <div className={Login_css.header}>
-                <h2>Password Reset</h2>
-              </div>
-              <div className={Login_css.input_login}>
-                <label> Confirmation Code:</label>
-                <input
-                  type="text"
-                  id="confirmationCode"
-                  name="confirmationCode"
-                  value={confirmationCode}
-                  onChange={handleConfirmationCode}
-                  required
-                  placeholder="Enter confirmation code"
-                  className="form-control"
-                />
+                  <div className={Login_css.header}>
+                    <h2>Password Reset</h2>
+                  </div>
+                  <div className={Login_css.input_login}>
+                    <label> Confirmation Code:</label>
+                    <input
+                      type="text"
+                      id="confirmationCode"
+                      name="confirmationCode"
+                      value={confirmationCode}
+                      onChange={handleConfirmationCode}
+                      required
+                      placeholder="Enter confirmation code"
+                      className="form-control"
+                    />
 
-              </div>
+                  </div>
 
-              <div className={Login_css.input_login}>
-                <label> New Password:</label>
-                <input
-                  type="password"
-                  id="newPassword"
-                  name="newPassword"
-                  value={newPassword}
-                  onChange={handleNewPasswordChange}
-                  required
-                  placeholder="Enter new Password"
-                  className="form-control"
+                  <div className={Login_css.input_login}>
+                    <label> New Password:</label>
+                    <input
+                      type="password"
+                      id="newPassword"
+                      name="newPassword"
+                      value={newPassword}
+                      onChange={handleNewPasswordChange}
+                      required
+                      placeholder="Enter new Password"
+                      className="form-control"
 
-                />
-                {/* {message && (
+                    />
+                    {/* {message && (
             <p style={{ color: "red", fontSize: "13px" }}>
               {message}
             </p>
           )} */}
+                  </div>
+                  <div className={Login_css.input_login}>
+                    <label> Confirm Password:</label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      value={confirmPassword}
+                      onChange={handleConfirmPasswordChange}
+                      required
+                      placeholder="Re Enter new password"
+                      className="form-control"
+                    />
+
+                  </div>
+
+                  <div className={Login_css.submit_login}>
+                    <button className="btn">Reset Password</button>
+                  </div>
+                  {message && (
+                    <p style={{ color: "red", fontSize: "13px" }}>
+                      {message}
+                    </p>
+                  )}
+                  <Link to="/login" className={Login_css.login_link}>
+                    Back to Login
+                  </Link>
+
+
+                </form>
               </div>
-              <div className={Login_css.input_login}>
-                <label> Confirm Password:</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={confirmPassword}
-                  onChange={handleConfirmPasswordChange}
-                  required
-                  placeholder="Re Enter new password"
-                  className="form-control"
-                />
 
-              </div>
+            </div>
 
-              <div className={Login_css.submit_login}>
-                <button className="btn">Reset Password</button>
-              </div>
-              {message && (
-                <p style={{ color: "red", fontSize: "13px" }}>
-                  {message}
-                </p>
-              )}
-              <Link to="/login" className={Login_css.login_link}>
-                Back to Login
-              </Link>
-
-
-            </form>
           </div>
 
+
         </div>
-
       </div>
-
-
     </div>
 
 

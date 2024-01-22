@@ -7,6 +7,14 @@
     align-items: center;
     height: 100vh;
   }*/
+.content {
+    padding: 20px;
+}
+
+.contentImage {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
 .register_form {
     width: 500px;
     height: 100%;
@@ -34,7 +42,7 @@
 .label_names {
     margin-top: 1px;
     font-weight: bolder;
-    
+
     font-size: 12px;
 
 }
