@@ -1,15 +1,11 @@
 .content {
 
-    padding: 30px;
+    padding: 35px;
     background-image: url('../../Images/home.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
     margin-left: 0;
-}
-
-.contentImage {
-    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .body {
@@ -69,59 +65,30 @@ li:hover .sublinks {
 }
 
 
-.imageListContainer {
-    width: 800px;
-    height: 450px;
-    margin-left: 0;
-    margin-top: 5px;
 
+.contentImage {
+    background-color: rgba(255, 255, 255, 0.5);
 
 }
 
-.imageListItem {
-    height: 164px;
-    margin-right: 20px;
+.selectBoxContainer {
 
+    height: 50px;
+    width: 100%;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
-.buttonContainer {
-    margin-top: 50px;
-    margin-right: 0;
-    direction: column;
 
-
-
-
+.card {
+    transition: transform 0.3s ease-in-out;
 }
 
-.overAllCalendarbtnConatiner {
-    margin-bottom: 30px;
+.card :hover {
+    transform: scale(1.05);
 }
 
-.playgroundbtnConatiner {
-    margin-bottom: 30px;
-}
-
-.gymnasiumbtnConatiner {
-    margin-bottom: 30px;
-}
-
-.calendarContainer {
-    margin-bottom: 20px;
-    width: 700px;
-}
-
-.calendar {
-    background: gray;
-    border: 2px solid #a0a096;
-
-
-}
-
-.overallBtn,
-.playgroundBtn,
-.gymnasiumBtn {
-    margin-right: 10px;
-
-
+.cardText {
+    color: black;
+    font-style: italic;
 }
