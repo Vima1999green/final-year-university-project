@@ -18,7 +18,9 @@ mongoose.connect(dbUrl)
         console.log(error.message)
     })
 app.use(cors())
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 //passport midleware
 app.use(passport.initialize());
 //passport config

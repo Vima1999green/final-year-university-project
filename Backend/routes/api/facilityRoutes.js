@@ -7,6 +7,7 @@ const {
   deleteSingleFacility,
   deleteAllFacilities,
   updateFacility,
+  uploadPhotos
 } = require("../../controllers/faciltyControllers");
 
 const router = express.Router();
@@ -18,6 +19,7 @@ const router = express.Router();
 router.post(
   "/register",
   passport.authenticate("jwt", { session: false }),
+  uploadPhotos,
   addFacility
 );
 
