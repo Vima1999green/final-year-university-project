@@ -50,6 +50,7 @@ function Login() {
       await axios.post('http://localhost:4000/api/users/reconfirmationEmail', { email: email })
         .then(res => {
           console.log(res)
+          alert(res.data)
           navigate(`/pwdReset/${email}`)
         })
         .catch(err => {

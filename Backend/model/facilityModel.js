@@ -21,6 +21,18 @@ const facilitySchema = new Schema({
     capacity:{
         type:String,
         required: [true, 'Facility capacity is required']
+    },
+    images: {
+      type: [String],
+      required: false,
+    },
+    rules:{
+        type:String,
+        required: [true, 'Facility rules is required']
+    },
+    address:{
+        type:String,
+        required: [true, 'Facility address is required']
     }
 });
 
