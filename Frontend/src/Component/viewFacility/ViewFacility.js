@@ -16,15 +16,65 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import gym_image from '../../Images/gym9.jpg'
 import playground_image from '../../Images/playground1.jpeg';
-import add_facility_image from '../../Images/add_facility.png';
-import { Link, useParams } from 'react-router-dom';
+import add_facility_image from '../../Images/facility.jpg';
+import { Link } from 'react-router-dom';
 
 const ViewFacility = () => {
 
-    const [facility, setFacility] = useState('');
+    const user = JSON.parse(localStorage.getItem('facilityUser'));
+    const userRole = user.userDetails.userType;
+
     const [options, setOptions] = useState([]);//to fill  menu items in the select Box component
+    const [selectedOption, setSelectedOption] = useState('');
     const [open, setOpen] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedCard, setSelectedCard] = useState(null);
+    const [facName, setFacName] = useState('');
+    const [facDesc, setFacDesc] = useState('');
+    const [facCost, setFacCost] = useState('');
+    const [facLocation, setFacLocation] = useState('');
+    const [facCapacity, setFacCapacity] = useState('');
+    const [facAddress, setFacAddress] = useState('');
+    const [facRules, setFacRules] = useState('');
+    const [values, setValues] = useState({
+        facName: "",
+        description: "",
+        cost: "",
+        location: "",
+        capacity: "",
+        address: "",
+        rules: ""
+    })
+
+
+    const handleInput = (event) => {
+        event.preventDefault();
+        setValues({ ...values, [event.target.name]: [event.target.value] });
+
+        if (event.target.name === 'facName')
+            setFacName(event.target.value)
+        if (event.target.name === 'description')
+            setFacDesc(event.target.value)
+
+        if (event.target.name === 'cost')
+            setFacCost(event.target.value)
+
+        if (event.target.location === 'location')
+            setFacLocation(event.target.value)
+
+        if (event.target.name === 'capacity')
+            setFacCapacity(event.target.value)
+
+        if (event.target.name === 'address')
+            setFacAddress(event.target.value)
+
+        if (event.target.name === 'rules')
+            setFacRules(event.target.value)
+
+
+    };
+
+
 
 
     //get AllFacilities from backend api endpoint
@@ -40,7 +90,10 @@ const ViewFacility = () => {
     }, []);
 
     const handleChange = (event) => {
-        setFacility(event.target.value)
+        event.preventDefault();
+        setSelectedOption(event.target.value)
+        setSelectedCard(event.target.value)
+
     }
 
     const handleClickOpen = () => {
@@ -52,6 +105,7 @@ const ViewFacility = () => {
 
 
     const handleFileChange = (event) => {
+        event.preventDefault();
         if (event.target.files.length > 5) {
             alert('You can only upload maximum of 5 images')
         } else {
@@ -61,6 +115,59 @@ const ViewFacility = () => {
 
     const handleRemove = (indexToRemove) => {
         setSelectedFiles(prevFiles => prevFiles.filter((file, index) => index !== indexToRemove));
+    }
+
+    const hanldeSubmit = async (event) => {
+        event.preventDefault();
+        console.log('hanlde submit');
+        console.log('==================');
+        console.log('submitted data', {
+            FacilityName: facName,
+            Description: facDesc,
+            Cost: facCost,
+            location: facLocation,
+            Capacity: facCapacity,
+            Address: facAddress,
+            Rules: facRules
+
+        })
+
+
+        console.log('===================');
+        // Create a FormData object to append the image files
+        const formData = new FormData();
+
+        // Append facility data to the FormData object
+        formData.append('FacilityName', facName);
+        formData.append('Description', facDesc);
+        formData.append('Cost', facCost);
+        formData.append('location', facLocation);
+        formData.append('Capacity', facCapacity);
+        formData.append('Address', facAddress);
+        formData.append('Rules', facRules);
+
+        // Append each image file to the FormData object
+        for (const file of selectedFiles) {
+            formData.append('images', file);
+        }
+
+        await axios.post('http://localhost:4000/api/facility/regsiter', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+            },
+
+        })
+            .then(response => {
+                console.log(response.data)
+                alert('Facility created succesfully');
+
+            })
+
+            .catch(error => {
+                console.log(error.response.data);
+                alert(error.response.data + '\r\n' + 'Fcaility creation failed')
+            })
+
     }
 
 
@@ -98,7 +205,7 @@ const ViewFacility = () => {
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={facility}
+                                    value={selectedOption}
                                     label="Select Facility"
                                     onChange={handleChange}
                                     fullWidth
@@ -109,6 +216,7 @@ const ViewFacility = () => {
                                 </Select>
                             </FormControl>
                         </Box>
+
                         <Grid container spacing={2} sx={{ margin: 0, padding: 0, marginTop: '20px' }}>
                             <Grid item xs={12} lg={6}>
 
@@ -157,32 +265,36 @@ const ViewFacility = () => {
                                 </Card>
                             </Grid>
 
+
                             <Grid item xs={12} lg={6}>
-                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} onClick={handleClickOpen} >
-                                    <CardActionArea>
+                                {userRole === 'admin' && (
+                                    <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} onClick={handleClickOpen} >
+                                        <CardActionArea>
 
-                                        <CardMedia className={viewFacility_css.cardMedia}
-                                            component="img"
-                                            image={add_facility_image}
-                                            alt="Add Facility here"
-                                        />
+                                            <CardMedia className={viewFacility_css.cardMedia}
+                                                component="img"
+                                                image={add_facility_image}
+                                                alt="Add Facility here"
+                                            />
 
-                                        <CardContent>
+                                            <CardContent>
 
-                                            <h2 className={viewFacility_css.cardText}>
-                                                Add a Facility
-                                            </h2>
-                                        </CardContent>
+                                                <h2 className={viewFacility_css.cardText}>
+                                                    Add a Facility
+                                                </h2>
+                                            </CardContent>
 
 
-                                    </CardActionArea>
+                                        </CardActionArea>
 
-                                </Card>
+                                    </Card>
+                                )}
                             </Grid>
 
 
 
                         </Grid>
+
 
 
 
@@ -209,7 +321,10 @@ const ViewFacility = () => {
                             </Grid>
                         ))}
                     </Grid>
- */}                <Dialog open={open} onClose={handleClose}>
+                    
+ */}
+
+                        <Dialog open={open} onClose={handleClose} className={viewFacility_css.dialogBox}>
                             <DialogTitle>Add Facility</DialogTitle>
                             <DialogContent>
                                 <div className={viewFacility_css.formContainer}>
@@ -218,10 +333,14 @@ const ViewFacility = () => {
                                     <div>
                                         <label>Facility Name : </label>
                                         <TextField
+
                                             fullWidth
+                                            name='facName'
                                             label=""
                                             variant="filled"
                                             color="primary"
+                                            value={values.facName}
+                                            onChange={handleInput}
                                         />
 
                                     </div>
@@ -230,9 +349,12 @@ const ViewFacility = () => {
                                         <label>Facility Description : </label>
                                         <TextField
                                             fullWidth
+                                            name='description'
                                             label=""
                                             variant="filled"
                                             color="primary"
+                                            value={values.facDesc}
+                                            onChange={handleInput}
                                         />
 
                                     </div>
@@ -242,9 +364,13 @@ const ViewFacility = () => {
                                         <label>Cost : </label>
                                         <TextField
                                             fullWidth
+                                            name='cost'
                                             label=""
                                             variant="filled"
                                             color="primary"
+                                            type='number'
+                                            value={values.facCost}
+                                            onChange={handleInput}
                                         />
 
                                     </div>
@@ -253,9 +379,12 @@ const ViewFacility = () => {
                                         <label>Location : </label>
                                         <TextField
                                             fullWidth
+                                            name='location'
                                             label=""
                                             variant="filled"
                                             color="primary"
+                                            value={values.facLocation}
+                                            onChange={handleInput}
                                         />
 
                                     </div>
@@ -264,19 +393,54 @@ const ViewFacility = () => {
                                         <label>Capacity : </label>
                                         <TextField
                                             fullWidth
+                                            name='capacity'
                                             label=""
                                             variant="filled"
                                             color="primary"
+                                            type='number'
+                                            value={values.facCapacity}
+                                            onChange={handleInput}
                                         />
 
                                     </div>
+
+                                    <div>
+                                        <label>Address : </label>
+                                        <TextField
+                                            fullWidth
+                                            name='address'
+                                            label=""
+                                            variant="filled"
+                                            color="primary"
+                                            value={values.facAddress}
+                                            onChange={handleInput}
+
+                                        />
+
+                                    </div>
+
+                                    <div>
+                                        <label>Rules : </label>
+                                        <TextField
+                                            fullWidth
+                                            name='rules'
+                                            label=""
+                                            variant="filled"
+                                            color="primary"
+                                            value={values.facRules}
+                                            onChange={handleInput}
+
+                                        />
+
+                                    </div>
+
                                 </div>
                                 <br></br>
                                 {/*handle image uploads*/}
                                 <div>
 
                                     <label>Images :</label>
-                                    <input accept="image/*" type="file" multiple onChange={handleFileChange} />
+                                    <input accept="image/*" type="file" multiple onChange={handleFileChange} name='img' />
                                 </div>
                                 <br></br>
                                 {/*prview selected images*/}
@@ -292,7 +456,7 @@ const ViewFacility = () => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}>Cancel</Button>
-                                <Button onClick={handleClose}>Add</Button>
+                                <Button onClick={hanldeSubmit}>Add</Button>
                             </DialogActions>
                         </Dialog>
 
