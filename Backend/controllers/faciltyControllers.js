@@ -97,10 +97,53 @@ const deleteAllFacilities = async (req, res) => {
   }
 };
 
+//controller updateFacility()
+//description update facility data in the database based on id
+//developer primalsha chamodi
+
+const updateFacility=async(req,res)=>{
+    try{
+        if(req.user.userType!=='admin'){
+            console.log(req.user.userType)
+            console.log('user is not admin')
+            return res.status(401).send('Unauthrized')
+        }
+
+        const facilityId = req.params.id;
+        const updatedData = req.body; 
+
+        //validation
+        const { errors, isValid } = validate_UpdateFacilityData(updatedData);
+
+        if (!isValid) {
+            return res.status(400).json(errors);
+        }
+
+        // Update the database
+        const updatedFacility = await Facility.findByIdAndUpdate(
+            facilityId,
+            updatedData,
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedFacility) {
+            return res.status(404).send('Facility not found');
+        }
+
+        // Send the updated data to the frontend
+        res.send(updatedFacility);
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
 module.exports = {
   addFacility,
   getSingleFacilty,
   getAllfacilities,
   deleteSingleFacility,
   deleteAllFacilities,
+  updateFacility,
 };
