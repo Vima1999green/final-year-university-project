@@ -11,6 +11,9 @@ import App_Css from './App.module.css';
 import ReactDOM from 'react-dom/client';
 import EmailVerification from './Component/EmailVerification';
 import LandPage from './Component/LandPage/LandPage';
+import ViewFacility from './Component/viewFacility/ViewFacility';
+import Facility from './Component/viewFacility/facility/Facility';
+
 
 function App() {
   return (
@@ -28,12 +31,16 @@ function App() {
 
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Form />} />
-            <Route path="/landpage" element={<LandPage />} />
+
 
 
             <Route path="/pwdReset/:userEmail" element={<FogotPWD />} />
 
             <Route path='/verifyEmail/:userEmail' element={<EmailVerification />} />
+            <Route path="/landpage" element={<LandPage />} />
+            <Route path="/viewFacilities" element={<ViewFacility />} />
+            <Route path="/facility" element={<Facility />} />
+
 
 
 

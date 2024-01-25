@@ -21,11 +21,20 @@ const LandPage = () => {
             <div className={landPage_css.topNav}>
                 <nav>
                     <ul className={landPage_css.navLinks}>
-                        <li><Link to="#facility" style={{ textDecoration: "none", color: "white" }}>Facility</Link></li>
-                        <li><Link to="#service" style={{ textDecoration: "none", color: "white" }}>Service</Link></li>
-                        <li><Link to="#profile" style={{ textDecoration: "none", color: "white" }}>Profile</Link></li>
-                        <li><Link to="#history" style={{ textDecoration: "none", color: "white" }}>History</Link></li>
-                        <li><Link to="#logout" style={{ textDecoration: "none", color: "white" }}>Logout</Link></li>
+                        <li><Link to="/viewFacilities" style={{ textDecoration: "none", color: "white" }}>Facility</Link></li>
+                        <li><Link to="/service" style={{ textDecoration: "none", color: "white" }}>Service</Link>
+                            <ul className={landPage_css.sublinks}>
+                                <li>
+                                    <Link to="/booking" style={{ textDecoration: "none", color: "white" }}>Booking</Link>
+                                </li>
+                                <li>
+                                    <Link to="/membership" style={{ textDecoration: "none", color: "white" }}>Membership</Link>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><Link to="/profile" style={{ textDecoration: "none", color: "white" }}>Profile</Link></li>
+                        <li><Link to="/history" style={{ textDecoration: "none", color: "white" }}>History</Link></li>
+                        <li><Link to="/logout" style={{ textDecoration: "none", color: "white" }}>Logout</Link></li>
                     </ul>
                 </nav>
             </div>

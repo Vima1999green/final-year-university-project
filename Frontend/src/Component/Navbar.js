@@ -2,8 +2,8 @@ import logo from '../Images/logo.png';
 import header_css from "./header.module.css";
 import { Link, useLocation } from 'react-router-dom';
 import UserProfile from './UserProfile';
-import { useEffect, useState } from 'react';
-import { useLogin } from '../hooks/useLogin';
+
+
 //import { useState } from 'react';
 //import { useNavigate } from "react-router-dom";
 //import { Button } from "@mui/material";
@@ -11,8 +11,9 @@ import { useLogin } from '../hooks/useLogin';
 const Navbar = () => {
     const location = useLocation();
     //const navigate = useNavigate();
-    const { isAutheticate } = useLogin();
-    const showAuthLinks = location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/pwdReset/:userEmail" || location.pathname === "/verifyEmail/:userEmail" || location.pathname === "/";
+
+
+    const showAuthLinks = location.pathname === "/login" || location.pathname === "/signup" || location.pathname.startsWith("/pwdReset") || location.pathname.startsWith("/verifyEmail") || location.pathname === "/";
 
 
     return (
@@ -40,7 +41,7 @@ const Navbar = () => {
             } */}
 
             <div className={header_css.userProfileContainer}><UserProfile /></div>
-            {!isAutheticate && showAuthLinks && (
+            {showAuthLinks && (
                 <div className={header_css.links}>
                     <Link to="/login" className="btn btn-light">Login</Link>&nbsp;
                     <Link to="/signup" className="btn btn-warning">Sign Up</Link>
