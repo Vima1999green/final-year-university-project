@@ -164,7 +164,6 @@ const loginUser = async (req, res) => {
                                 isAutheticate: authMsg,
                                 token: 'Bearer ' + token,
                                 userDetails: payload
-
                             })
                         }
                     )

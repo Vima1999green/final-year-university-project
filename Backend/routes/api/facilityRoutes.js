@@ -6,6 +6,8 @@ const {
   getAllfacilities,
   deleteSingleFacility,
   deleteAllFacilities,
+  updateFacility,
+  uploadPhotos
 } = require("../../controllers/faciltyControllers");
 
 const router = express.Router();
@@ -17,6 +19,7 @@ const router = express.Router();
 router.post(
   "/register",
   passport.authenticate("jwt", { session: false }),
+  uploadPhotos,
   addFacility
 );
 
@@ -43,5 +46,16 @@ router.delete("/deleteSingleFacility/:id", deleteSingleFacility);
 //@access public
 //@developer Vimukthi Nuwan
 router.delete("/deleteAllFacilities", deleteAllFacilities);
+
+
+//@route POST api/updateFacility/:id
+//@desc update single facility
+//@access private
+//@developer Primalsha Chamodi
+router.post(
+    "/updateFacility/:id",
+    passport.authenticate("jwt", { session: false }),
+    updateFacility
+  );
 
 module.exports = router;

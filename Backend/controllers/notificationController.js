@@ -1,11 +1,11 @@
 const nodemailer = require("nodemailer");
 //Real implementation
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'malithachamikara27@gmail.com',
-    pass: 'fwxo aehz gprw ggkp',
-  },
+    service: 'gmail',
+    auth: {
+        user: 'lahiruprasangasrimal@gmail.com',
+        pass: 'gzrh lxue xmau pnse',
+    },
 });
 //Using mailtrap for testing
 // const transport = nodemailer.createTransport({
@@ -19,12 +19,12 @@ const transporter = nodemailer.createTransport({
 
 // Sending email
 const sendEmail = async (to, subject, heading, content) => {
-  try {
-    const mailOptions = {
-      from: 'FacilityScheduler@gmail.com', // sender address
-      to: to, // list of receivers
-      subject: subject,// Subject line
-      html: `    
+    try {
+        const mailOptions = {
+            from: 'FacilityScheduler@gmail.com', // sender address
+            to: to, // list of receivers
+            subject: subject,// Subject line
+            html: `    
             <div className="container" 
             style="
             color:DodgerBlue;
@@ -39,14 +39,14 @@ const sendEmail = async (to, subject, heading, content) => {
                 <a href="http://localhost:3000/api/users/verifyEmail">Verify your email here</a>
               </div>
             </div> ` // html body
-    }
-    // send mail with defined transport object
-    const message = await transporter.sendMail(mailOptions);
-    return { mailStatus: true }
+        }
+        // send mail with defined transport object
+        const message = await transporter.sendMail(mailOptions);
+        return { mailStatus: true }
 
-  } catch (error) {
-    return { mailStatus: false, error }
-  }
+    } catch (error) {
+        return { mailStatus: false, error }
+    }
 }
 
 module.exports = sendEmail;
