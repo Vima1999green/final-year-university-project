@@ -19,8 +19,18 @@ const router = express.Router();
 router.post(
   "/register",
   passport.authenticate("jwt", { session: false }),
-  uploadPhotos,
   addFacility
+);
+
+
+//@route POST api/facility/uploadImages
+//@desc Upload facility images to the server
+//@access private
+//@developer Lahiru Srimal
+router.post(
+  "/register",
+  passport.authenticate("jwt", { session: false }),
+  uploadPhotos
 );
 
 //@route GET api/getFacility/:id

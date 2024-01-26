@@ -79,16 +79,16 @@ const ViewFacility = () => {
 
 
     //get AllFacilities from backend api endpoint
-    useEffect(() => {
-        axios.get('http://localhost:4000/api/facility/getAllFacilities')
-            .then(response =>
-                setOptions(response.data)
-            )
+    // useEffect(() => {
+    //     axios.get('http://localhost:4000/api/facility/getAllFacilities')
+    //         .then(response =>
+    //             setOptions(response.data)
+    //         )
 
-            .catch(error =>
-                console.error(error)
-            )
-    }, []);
+    //         .catch(error =>
+    //             console.error(error)
+    //         )
+    // }, []);
 
     const handleChange = (event) => {
         event.preventDefault();
@@ -183,21 +183,24 @@ const ViewFacility = () => {
         //         alert(error.response.data + '\r\n' + 'Fcaility creation failed')
         //     })
         try {
-            const registrationResponse = await axios.post('http://localhost:4000/api/facility/regsiter', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
-                },
-
-            })
+            const registrationResponse = await axios.post(
+                'http://localhost:4000/api/facility/register',
+                formData,
+                {
+                    headers: {
+                        Authorization:localStorage.getItem('faciltyUser').token
+                    }
+                }
+            )
 
             console.log('Facility creaed succesfulyy', registrationResponse.data)
 
-            const facilityId = registrationResponse.data._id;
+            // const facilityId = registrationResponse.data._id;
 
-            await uploadImages(facilityId, selectedFiles);
-            console.log('images uploaded succesfully');
+            // await uploadImages(facilityId, selectedFiles);
+            // console.log('images uploaded succesfully');
 
-            alert('Facility created succesfully');
+            // alert('Facility created succesfully');
         } catch (error) {
             console.log(error.response.data)
             alert(error.response.data + '\r\n' + 'Fcaility creation failed');
