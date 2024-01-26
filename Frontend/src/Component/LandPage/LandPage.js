@@ -46,8 +46,8 @@ const LandPage = () => {
 
                     <div className={landPage_css.body}>
                         <Grid container spacing={0} direction="column">
-                            <Grid container spacing={3} direction="raw">
-                                <Grid item xs={12} md={8} >
+                            <Grid container spacing={3} direction="raw" >
+                                <Grid item xs={12} md={8}  >
                                     <ImageList className={landPage_css.imageListContainer} cols={3} rowHeight={160}>
                                         {itemData.map((item) => (
                                             <ImageListItem key={item.img} className={landPage_css.ImageListItem}>
@@ -56,7 +56,7 @@ const LandPage = () => {
                                         ))}
                                     </ImageList>
                                 </Grid>
-                                <Grid className={landPage_css.buttonContainer} >
+                                <Grid className={landPage_css.buttonContainer} lg={3} md={6}  >
 
                                     <Grid className={landPage_css.overAllCalendarbtnConatiner} >
                                         <Button className={landPage_css.overallBtn} variant="contained" size='large' fullWidth>Overall Calendar</Button>

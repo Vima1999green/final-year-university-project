@@ -6,13 +6,12 @@ import Login from './Component/Login';
 import FogotPWD from './Component/FogotPWD';
 import Form from './Component/Form';
 import App_Css from './App.module.css';
-
-
-import ReactDOM from 'react-dom/client';
 import EmailVerification from './Component/EmailVerification';
 import LandPage from './Component/LandPage/LandPage';
 import ViewFacility from './Component/viewFacility/ViewFacility';
-import Facility from './Component/viewFacility/facility/Facility';
+
+import UserProfile from './Component/UserProfile';
+
 
 
 function App() {
@@ -39,7 +38,8 @@ function App() {
             <Route path='/verifyEmail/:userEmail' element={<EmailVerification />} />
             <Route path="/landpage" element={<LandPage />} />
             <Route path="/viewFacilities" element={<ViewFacility />} />
-            <Route path="/facility" element={<Facility />} />
+
+            <Route path='/userProfile' element={<UserProfile />} />
 
 
 

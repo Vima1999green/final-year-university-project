@@ -13,7 +13,13 @@ const Navbar = () => {
     //const navigate = useNavigate();
 
 
+    const user = JSON.parse(localStorage.getItem('facilityUser'));
+    const isAuthenticated = user && user.isAutheticate;
+
+
     const showAuthLinks = location.pathname === "/login" || location.pathname === "/signup" || location.pathname.startsWith("/pwdReset") || location.pathname.startsWith("/verifyEmail") || location.pathname === "/";
+
+    const showUserProfile = isAuthenticated && !showAuthLinks;
 
 
     return (
@@ -29,6 +35,12 @@ const Navbar = () => {
                 <h4>Physical Education Unit<br></br>
                     PLAYGROUND & GYM FACILITY SCHEDULER</h4>
             </text>
+
+            {showUserProfile && (
+                <div className={header_css.userProfileContainer}>
+                    <UserProfile />
+                </div>
+            )}
             {/* {isAuthenticated ? (
                 (<div className={header_css.userProfileContainer}><UserProfile /></div>)
 
@@ -40,8 +52,8 @@ const Navbar = () => {
             ))
             } */}
 
-            <div className={header_css.userProfileContainer}><UserProfile /></div>
-            {showAuthLinks && (
+
+            {isAuthenticated && showAuthLinks && (
                 <div className={header_css.links}>
                     <Link to="/login" className="btn btn-light">Login</Link>&nbsp;
                     <Link to="/signup" className="btn btn-warning">Sign Up</Link>
