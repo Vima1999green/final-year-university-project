@@ -18,8 +18,7 @@ const addFacility = async (req, res) => {
       // Form data
       data = req.body.facilityData;
   }
-  req.body=JSON.parse(data)
-
+  data=JSON.parse(data)
 
   if (req.user.userType !== "admin") {
     console.log(req.user.userType);
@@ -27,7 +26,7 @@ const addFacility = async (req, res) => {
     return res.status(401).send("Unauthrized");
   }
   // Validate facility data
-  const { errors, isValid } = await validateFacilityData(req.body);
+  const { errors, isValid } = await validateFacilityData(data);
   if (!isValid) {
     var errorMsg = "";
     Object.values(errors).forEach((error) => {
@@ -37,7 +36,7 @@ const addFacility = async (req, res) => {
     return res.status(400).send(errorMsg);
   }
   //create facility in the database
-  await Facility.create(req.body)
+  await Facility.create(data)
     .then((newFacility) => {
       res.send(newFacility);
     })
