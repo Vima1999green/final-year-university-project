@@ -6,7 +6,7 @@ import sport4 from '../Images/sports4.jpg';
 import sport5 from '../Images/sports5.jpg';
 import sport6 from '../Images/sports6.jpg';
 import home_css from "./home.module.css";
-
+import React, { useState, useEffect } from 'react';
 //import { useWindowSize } from 'react-use';
 
 
