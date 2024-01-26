@@ -17,12 +17,13 @@ import axios from 'axios';
 import gym_image from '../../Images/gym9.jpg'
 import playground_image from '../../Images/playground1.jpeg';
 import add_facility_image from '../../Images/facility.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ViewFacility = () => {
 
     const user = JSON.parse(localStorage.getItem('facilityUser'));
     const userRole = user.userDetails.userType;
+    const navigate = useNavigate();
 
     const [options, setOptions] = useState([]);//to fill  menu items in the select Box component
     const [selectedOption, setSelectedOption] = useState('');
@@ -115,6 +116,10 @@ const ViewFacility = () => {
 
     const handleRemove = (indexToRemove) => {
         setSelectedFiles(prevFiles => prevFiles.filter((file, index) => index !== indexToRemove));
+    }
+
+    const handleCardClick = (facilityId) => {
+        navigate(`facility/${facilityId}`)
     }
 
     const hanldeSubmit = async (event) => {
@@ -220,7 +225,7 @@ const ViewFacility = () => {
                         <Grid container spacing={2} sx={{ margin: 0, padding: 0, marginTop: '20px' }}>
                             <Grid item xs={12} lg={6}>
 
-                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card}>
+                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} onClick={() => handleCardClick('gymnasium')}>
                                     <CardActionArea>
 
                                         <CardMedia className={viewFacility_css.cardMedia}
@@ -243,7 +248,7 @@ const ViewFacility = () => {
                             </Grid>
 
                             <Grid item xs={12} lg={6}>
-                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card}>
+                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} onClick={() => handleCardClick('playground')}>
                                     <CardActionArea>
 
                                         <CardMedia className={viewFacility_css.cardMedia}

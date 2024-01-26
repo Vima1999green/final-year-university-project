@@ -1,45 +1,44 @@
+
 import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
-import axios from 'axios';
 
 const UserProfile = () => {
-    const [user, setUser] = useState(null);
     useEffect(() => {
-        const fetchCurrentUser = async () => {
-            try {
-                const response = await axios.get('http://localhost:4000/api/users/current')
-                setUser(response.data)
+        // Retrieve user details from local storage
+        const storedUser = JSON.parse(localStorage.getItem('facilityUser'));
 
-            } catch (error) {
-                console.error('error fetching user data', error)
-            }
-        };
-        fetchCurrentUser();
+        if (storedUser) {
+            const avatarColor = getEmailAvatarColor(storedUser.userDetails.email);
+            localStorage.setItem('facilityUser', JSON.stringify({ ...storedUser, avatarColor }));
+        }
     }, []);
-    const getEmailAvatar = (email) => {
-        // Use the email to generate a hash (or any unique identifier)
-        const hash = email.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        const avatarColor = `#${hash.toString(16).slice(0, 6)}`;
 
-        return (
-            <Avatar style={{ backgroundColor: avatarColor }}>
-                {email.charAt(0).toUpperCase()}
-            </Avatar>
-        );
+    const getEmailAvatarColor = (email) => {
+        if (!email) {
+            return null;
+        }
+        // Use the email to generate a hash (or any unique identifier)
+        const hash = email.split('').reduce((acc, char) => acc + char.charCodeAt(0, 1), 0);
+        return `#${hash.toString(16).slice(0, 6)}`;
     };
+
     return (
         <div>
-            {user && (
+            {/* Retrieve and display the user details from local storage */}
+            {localStorage.getItem('facilityUser') && (
                 <div>
-                    {/* Display the user's email */}
-                    <p>Email: {user.email}</p>
 
-                    {/* Display the user's avatar */}
-                    {getEmailAvatar(user.email)}
+                    {/* Display the user's avatar from local storage */}
+                    <Avatar style={{ backgroundColor: JSON.parse(localStorage.getItem('facilityUser')).avatarColor }}>
+                        {JSON.parse(localStorage.getItem('facilityUser')).userDetails.email.slice(0, 2).toUpperCase()}
+                    </Avatar>
+
+                    {/* Display the user's email */}
+                    <p> {JSON.parse(localStorage.getItem('facilityUser')).userDetails.email}</p>
+
                 </div>
             )}
         </div>
-
     );
 }
 
