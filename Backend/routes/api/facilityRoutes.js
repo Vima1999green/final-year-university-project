@@ -55,6 +55,7 @@ router.delete("/deleteAllFacilities", deleteAllFacilities);
 router.post(
     "/updateFacility/:id",
     passport.authenticate("jwt", { session: false }),
+    uploadPhotos,
     updateFacility
   );
 
