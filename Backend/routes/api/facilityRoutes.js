@@ -19,7 +19,6 @@ const router = express.Router();
 router.post(
   "/register",
   passport.authenticate("jwt", { session: false }),
-  uploadPhotos,
   addFacility
 );
 
@@ -53,10 +52,10 @@ router.delete("/deleteAllFacilities", deleteAllFacilities);
 //@access private
 //@developer Primalsha Chamodi
 router.post(
-    "/updateFacility/:id",
-    passport.authenticate("jwt", { session: false }),
-    uploadPhotos,
-    updateFacility
-  );
+  "/updateFacility/:id",
+  passport.authenticate("jwt", { session: false }),
+  uploadPhotos,
+  updateFacility
+);
 
 module.exports = router;

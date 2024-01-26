@@ -60,7 +60,7 @@ const ViewFacility = () => {
         if (event.target.name === 'cost')
             setFacCost(event.target.value)
 
-        if (event.target.location === 'location')
+        if (event.target.name === 'location')
             setFacLocation(event.target.value)
 
         if (event.target.name === 'capacity')
@@ -79,16 +79,16 @@ const ViewFacility = () => {
 
 
     //get AllFacilities from backend api endpoint
-    useEffect(() => {
-        axios.get('http://localhost:4000/api/facility/getAllFacilities')
-            .then(response =>
-                setOptions(response.data)
-            )
+    // useEffect(() => {
+    //     axios.get('http://localhost:4000/api/facility/getAllFacilities')
+    //         .then(response =>
+    //             setOptions(response.data)
+    //         )
 
-            .catch(error =>
-                console.error(error)
-            )
-    }, []);
+    //         .catch(error =>
+    //             console.error(error)
+    //         )
+    // }, []);
 
     const handleChange = (event) => {
         event.preventDefault();
@@ -141,13 +141,13 @@ const ViewFacility = () => {
         console.log('===================');
         // Create a FormData object to append the image files
         const formData = {
-            FacilityName: facName,
-            Description: facDesc,
-            Cost: facCost,
+            name: facName,
+            description: facDesc,
+            cost: facCost,
             location: facLocation,
-            Capacity: facCapacity,
-            Address: facAddress,
-            Rules: facRules
+            capacity: facCapacity,
+            address: facAddress,
+            rules: facRules
         }
 
 
@@ -182,25 +182,27 @@ const ViewFacility = () => {
         //         console.log(error.response.data);
         //         alert(error.response.data + '\r\n' + 'Fcaility creation failed')
         //     })
+        const token = JSON.parse(localStorage.getItem('facilityUser')).token
+        console.log('Token:', token);
         try {
-            const registrationResponse = await axios.post('http://localhost:4000/api/facility/regsiter', formData, {
+            const registrationResponse = await axios.post('http://localhost:4000/api/facility/register', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+                    Authorization: token
                 },
 
             })
 
             console.log('Facility creaed succesfulyy', registrationResponse.data)
 
-            const facilityId = registrationResponse.data._id;
+            // const facilityId = registrationResponse.data._id;
 
-            await uploadImages(facilityId, selectedFiles);
-            console.log('images uploaded succesfully');
+            // await uploadImages(facilityId, selectedFiles);
+            // console.log('images uploaded succesfully');
 
-            alert('Facility created succesfully');
+            // alert('Facility created succesfully');
         } catch (error) {
             console.log(error.response.data)
-            alert(error.response.data + '\r\n' + 'Fcaility creation failed');
+            alert(error.response.data + '\r\n' + 'Facility creation failed');
 
         }
 

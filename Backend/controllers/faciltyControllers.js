@@ -2,23 +2,14 @@ const multer = require('multer');
 const path = require('path');
 const Facility = require("../model/facilityModel");
 const validateFacilityData = require("../validation/facitityRouteValidation/addFacility");
-const checkFileType=require('../validation/facitityRouteValidation/checkFileType');
+const checkFileType = require('../validation/facitityRouteValidation/checkFileType');
 
 
 //controller addFacilty()
 //description add facility to database
 //developer Lahiru Srimal
 const addFacility = async (req, res) => {
-  let data;
-  // Check Content-Type header to determine the type of data
-  if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
-    // JSON data
-    data = req.body;
-  } else {
-    // Form data
-    data = req.body.facilityData;
-  }
-  data=JSON.parse(data)
+
 
   if (req.user.userType !== "admin") {
     console.log(req.user.userType);
@@ -26,7 +17,7 @@ const addFacility = async (req, res) => {
     return res.status(401).send("Unauthrized");
   }
   // Validate facility data
-  const { errors, isValid } = await validateFacilityData(data);
+  const { errors, isValid } = await validateFacilityData(req.body);
   if (!isValid) {
     var errorMsg = "";
     Object.values(errors).forEach((error) => {
@@ -36,7 +27,7 @@ const addFacility = async (req, res) => {
     return res.status(400).send(errorMsg);
   }
   //create facility in the database
-  await Facility.create(data)
+  await Facility.create(req.body)
     .then((newFacility) => {
       res.send(newFacility);
     })
