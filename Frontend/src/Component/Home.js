@@ -11,13 +11,24 @@ import home_css from "./home.module.css";
 
 
 const Home = () => {
-    
-    // const imageStyle = {
-    //     width: '100%',
-    //     height: '100%',
-    //     maxWidth:'300px',
-    //     maxHeight: '200px' // Optional: Limit image width if needed
-    //   };
+
+    const [currentEventIndex, setCurrentEventIndex] = useState(0);
+    const [eventImages, setEventImages] = useState([sport1, sport2, sport3]);
+    const [eventDescriptions, setEventDescriptions] = useState([
+        'Description for Event 1',
+        'Description for Event 2',
+        'Description for Event 3',
+      ]);
+    useEffect(() => {
+      const eventIntervalId = setInterval(() => {
+        setCurrentEventIndex((prevIndex) => (prevIndex + 1) % eventImages.length);
+      }, 5000);
+  
+      // Clear the interval when the component unmounts
+      return () => {
+        clearInterval(eventIntervalId);
+      };
+    }, [eventImages]);
    
     
     return ( 
@@ -34,15 +45,17 @@ const Home = () => {
                             PlayGround and Gym Facility Scheduler</p>
                     
                 </td>
-                <div className={home_css.events}>
-                    <td style={{ width: '25%' }}>
-
+                <td style={{ width: '25%' }}>
+                    <div className={home_css.events}>
                         <h3>Up coming Events</h3>
-                            <div>
-                            <img src={sport1} alt='upcoming_event_pic' ></img>
+                            
+                            {/* <img src={sport1} alt='upcoming_event_pic' ></img> */}
+                            <img src={eventImages[currentEventIndex]} alt='upcoming_event_pic'></img>
+                            <h5>{eventDescriptions[currentEventIndex]}</h5>
+                        
                             </div>
                     </td>
-                </div>
+                
             </tr>
             </table>
         </div>
