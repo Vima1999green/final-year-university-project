@@ -2,7 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const Facility = require("../model/facilityModel");
 const validateFacilityData = require("../validation/facitityRouteValidation/addFacility");
-const checkFileType=require('../validation/facitityRouteValidation/checkFileType')
+const checkFileType=require('../validation/facitityRouteValidation/checkFileType');
 
 
 //controller addFacilty()
