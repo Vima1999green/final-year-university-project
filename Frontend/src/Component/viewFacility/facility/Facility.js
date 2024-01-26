@@ -7,7 +7,9 @@ import Button from "@mui/material/Button";
 import ImageSlider01 from "./ImageSlider";
 
 
+
 const Facility = () => {
+
     const [data, setData] = useState({
         _id: "",
         name: "",
@@ -118,6 +120,7 @@ const Facility = () => {
 
     return (
         <div className={Facility_css.content}>
+<<<<<<< HEAD
             <div className={Facility_css.container}>
         <div className={Facility_css.left}>
           {/* 1. Name field */}
@@ -269,6 +272,231 @@ const Facility = () => {
           <br />
         </div>
       </div>
+=======
+            <div className={Facility_css.contentImage}>
+                <div className={Facility_css.container}>
+                    <div className={Facility_css.left}>
+                        {/* 1 .  Name field */}
+                        <div>
+                            <label>Name : </label>
+                            <TextField
+                                fullWidth
+                                label=""
+                                variant="standard"
+                                color="warning"
+                                value={data.name}
+                                onChange={(e) => handleInputChange("name", e.target.value)}
+                                disabled={!editableFields.name}
+                                InputProps={{
+                                    endAdornment: (
+                                        <>
+                                            {editableFields.name ? (
+                                                <>
+                                                    <Button onClick={() => handleSave("name")} size="small">
+                                                        Save
+                                                    </Button>{" "}
+                                                    <Button onClick={() => handleEdit("name")} size="small">
+                                                        Cancel
+                                                    </Button>
+                                                </>
+                                            ) : (
+                                                <Button onClick={() => handleEdit("name")} size="small">
+                                                    Edit
+                                                </Button>
+                                            )}
+                                        </>
+                                    ),
+                                }}
+                            />
+                        </div>
+                        {/* 2 .  Location field */}
+                        <div>
+                            <label>Location : </label>
+                            <TextField
+                                fullWidth
+                                label=""
+                                variant="standard"
+                                color="warning"
+                                value={data.location}
+                                onChange={(e) => handleInputChange("location", e.target.value)}
+                                disabled={!editableFields.location}
+                                InputProps={{
+                                    endAdornment: (
+                                        <>
+                                            {editableFields.location ? (
+                                                <>
+                                                    <Button
+                                                        onClick={() => handleSave("location")}
+                                                        size="small"
+                                                    >
+                                                        Save
+                                                    </Button>{" "}
+                                                    <Button
+                                                        onClick={() => handleEdit("location")}
+                                                        size="small"
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                </>
+                                            ) : (
+                                                <Button
+                                                    onClick={() => handleEdit("location")}
+                                                    size="small"
+                                                >
+                                                    Edit
+                                                </Button>
+                                            )}
+                                        </>
+                                    ),
+                                }}
+                            />
+                        </div>
+                        {/* 3.  Description field*/}
+                        <div>
+                            <label>Description : </label>
+                            <TextField
+                                fullWidth
+                                multiline
+                                variant="standard"
+                                color="warning"
+                                value={data.description}
+                                onChange={(e) => handleInputChange("description", e.target.value)}
+                                disabled={!editableFields.description}
+                                InputProps={{
+                                    endAdornment: (
+                                        <>
+                                            {editableFields.description ? (
+                                                <>
+                                                    <Button
+                                                        onClick={() => handleSave("description")}
+                                                        size="small"
+                                                    >
+                                                        Save
+                                                    </Button>{" "}
+                                                    <Button
+                                                        onClick={() => handleEdit("description")}
+                                                        size="small"
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                </>
+                                            ) : (
+                                                <Button
+                                                    onClick={() => handleEdit("description")}
+                                                    size="small"
+                                                >
+                                                    Edit
+                                                </Button>
+                                            )}
+                                        </>
+                                    ),
+                                }}
+                            />
+                        </div>
+                        {/* 4 . Cost field */}
+                        <div>
+                            <label>Cost : </label>
+                            <TextField
+                                fullWidth
+                                variant="standard"
+                                color="warning"
+                                value={data.cost}
+                                onChange={(e) => handleInputChange("cost", e.target.value)}
+                                disabled={!editableFields.cost}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">Rs </InputAdornment>
+                                    ),
+
+                                    endAdornment: (
+                                        <>
+                                            {editableFields.cost ? (
+                                                <>
+                                                    <Button onClick={() => handleSave("cost")} size="small">
+                                                        Save
+                                                    </Button>{" "}
+                                                    <Button onClick={() => handleEdit("cost")} size="small">
+                                                        Cancel
+                                                    </Button>
+                                                </>
+                                            ) : (
+                                                <Button onClick={() => handleEdit("cost")} size="small">
+                                                    Edit
+                                                </Button>
+                                            )}
+                                        </>
+                                    ),
+                                }}
+                            />
+                        </div>
+                        {/*  5. Capacity field */}
+                        <div>
+                            <label>Capcity : </label>
+                            <TextField
+                                fullWidth
+                                label=""
+                                variant="standard"
+                                color="warning"
+                                value={data.capacity}
+                                onChange={(e) => handleInputChange("capacity", e.target.value)}
+                                disabled={!editableFields.capacity}
+                                InputProps={{
+                                    endAdornment: (
+                                        <>
+                                            {editableFields.capacity ? (
+                                                <>
+                                                    <Button
+                                                        onClick={() => handleSave("capacity")}
+                                                        size="small"
+                                                    >
+                                                        Save
+                                                    </Button>{" "}
+                                                    <Button
+                                                        onClick={() => handleEdit("capacity")}
+                                                        size="small"
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                </>
+                                            ) : (
+                                                <Button
+                                                    onClick={() => handleEdit("capacity")}
+                                                    size="small"
+                                                >
+                                                    Edit
+                                                </Button>
+                                            )}
+                                        </>
+                                    ),
+                                }}
+                            />
+                        </div>
+
+                        <div className={Facility_css.booking_btn}>
+                            <Button variant="contained" color="warning">
+                                Booking
+                            </Button>
+                        </div>
+                    </div>
+
+
+                    <div className={Facility_css.right}>
+                        <div className={Facility_css.gym_header}>GYMNASIUM</div>
+                        <div className={Facility_css.gym_img_box}>
+
+                            <img
+                                src={Gymnasium01}
+                                className="img-thumbnail"
+                                alt="A sample image"
+                            />
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+>>>>>>> 2e21ecd863f60d7ed9e5b1e4af69ba49b6a6bb78
         </div>
     );
 }

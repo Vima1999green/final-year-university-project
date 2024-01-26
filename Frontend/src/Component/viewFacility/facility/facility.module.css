@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .content{
     margin: 0;
     display: flex;
@@ -8,6 +9,23 @@
 
 }
 .container{
+=======
+.content {
+    padding: 35px;
+    background-image: url('../../../Images/home.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    margin-left: 0;
+
+}
+
+.contentImage {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.container {
+>>>>>>> 2e21ecd863f60d7ed9e5b1e4af69ba49b6a6bb78
 
     background-color: aliceblue;
     padding: 15px;
