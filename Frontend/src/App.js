@@ -11,6 +11,9 @@ import LandPage from './Component/LandPage/LandPage';
 import ViewFacility from './Component/viewFacility/ViewFacility';
 
 import UserProfile from './Component/UserProfile';
+import Facility from './Component/viewFacility/facility/Facility';
+import UserHistory from './Component/History/UserHistory';
+
 
 
 
@@ -38,6 +41,10 @@ function App() {
             <Route path='/verifyEmail/:userEmail' element={<EmailVerification />} />
             <Route path="/landpage" element={<LandPage />} />
             <Route path="/viewFacilities" element={<ViewFacility />} />
+            <Route path="/facility" element={<Facility />} />
+            <Route path="/history" element={<UserHistory />} />
+
+
 
             <Route path='/userProfile' element={<UserProfile />} />
 

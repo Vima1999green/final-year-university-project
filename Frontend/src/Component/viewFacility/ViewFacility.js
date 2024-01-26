@@ -140,40 +140,98 @@ const ViewFacility = () => {
 
         console.log('===================');
         // Create a FormData object to append the image files
+        const formData = {
+            FacilityName: facName,
+            Description: facDesc,
+            Cost: facCost,
+            location: facLocation,
+            Capacity: facCapacity,
+            Address: facAddress,
+            Rules: facRules
+        }
+
+
+
+        // // Append facility data to the FormData object
+        // formData.append('FacilityName', facName);
+        // formData.append('Description', facDesc);
+        // formData.append('Cost', facCost);
+        // formData.append('location', facLocation);
+        // formData.append('Capacity', facCapacity);
+        // formData.append('Address', facAddress);
+        // formData.append('Rules', facRules);
+
+        // // Append each image file to the FormData object
+        // for (const file of selectedFiles) {
+        //     formData.append('images', file);
+        // }
+
+        // await axios.post('http://localhost:4000/api/facility/regsiter', formData, {
+        //     headers: {
+        //         'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+        //     },
+
+        // })
+        //     .then(response => {
+        //         console.log(response.data)
+        //         alert('Facility created succesfully');
+
+        //     })
+
+        //     .catch(error => {
+        //         console.log(error.response.data);
+        //         alert(error.response.data + '\r\n' + 'Fcaility creation failed')
+        //     })
+        try {
+            const registrationResponse = await axios.post('http://localhost:4000/api/facility/regsiter', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+                },
+
+            })
+
+            console.log('Facility creaed succesfulyy', registrationResponse.data)
+
+            const facilityId = registrationResponse.data._id;
+
+            await uploadImages(facilityId, selectedFiles);
+            console.log('images uploaded succesfully');
+
+            alert('Facility created succesfully');
+        } catch (error) {
+            console.log(error.response.data)
+            alert(error.response.data + '\r\n' + 'Fcaility creation failed');
+
+        }
+
+
+    };
+
+    const uploadImages = async (facilityId, imageFiles) => {
         const formData = new FormData();
 
-        // Append facility data to the FormData object
-        formData.append('FacilityName', facName);
-        formData.append('Description', facDesc);
-        formData.append('Cost', facCost);
-        formData.append('location', facLocation);
-        formData.append('Capacity', facCapacity);
-        formData.append('Address', facAddress);
-        formData.append('Rules', facRules);
+        // Append facility ID to the FormData object
+        formData.append('facilityId', facilityId);
 
         // Append each image file to the FormData object
-        for (const file of selectedFiles) {
+        for (const file of imageFiles) {
             formData.append('images', file);
         }
 
-        await axios.post('http://localhost:4000/api/facility/regsiter', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
-            },
+        try {
+            // Perform the image upload
+            return await axios.post('http://localhost:4000/api/facility/uploadImages', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+                },
+            });
+        } catch (error) {
+            console.log(error.response.data)
+            alert(error.response.data + '\r\n' + 'Image upload failed');
+        }
+    };
 
-        })
-            .then(response => {
-                console.log(response.data)
-                alert('Facility created succesfully');
 
-            })
-
-            .catch(error => {
-                console.log(error.response.data);
-                alert(error.response.data + '\r\n' + 'Fcaility creation failed')
-            })
-
-    }
 
 
     return (
