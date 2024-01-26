@@ -2,7 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const Facility = require("../model/facilityModel");
 const validateFacilityData = require("../validation/facitityRouteValidation/addFacility");
-const checkFileType=require('../validation/facitityRouteValidation/checkFileType')
+const checkFileType=require('../validation/facitityRouteValidation/checkFileType');
 
 
 //controller addFacilty()
@@ -12,11 +12,11 @@ const addFacility = async (req, res) => {
   let data;
   // Check Content-Type header to determine the type of data
   if (req.headers['content-type'] && req.headers['content-type'].includes('application/json')) {
-      // JSON data
-      data = req.body;
+    // JSON data
+    data = req.body;
   } else {
-      // Form data
-      data = req.body.facilityData;
+    // Form data
+    data = req.body.facilityData;
   }
   data=JSON.parse(data)
 
@@ -52,10 +52,10 @@ const addFacility = async (req, res) => {
 // Set up storage for Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, "./uploads/"); // specify the destination folder
+    cb(null, "./uploads/"); // specify the destination folder
   },
   filename: (req, file, cb) => {
-      cb(null, Date.now() + "-" + file.originalname); // generate a unique filename
+    cb(null, Date.now() + "-" + file.originalname); // generate a unique filename
   },
 });
 
@@ -63,7 +63,7 @@ const storage = multer.diskStorage({
 const uploadImages = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
-      checkFileType(file, cb);
+    checkFileType(file, cb);
   }
 })
 
@@ -73,15 +73,15 @@ const uploadPhotos = (req, res, next) => {
   const uploadPhotoData = uploadImages.array('photos', 5);
 
   uploadPhotoData(req, res, (err) => {
-      if (err instanceof multer.MulterError) {
-          return res.status(400).send('Multer error: ' + err);
-      } else if (err) {
-          return res.status(500).send('Internal server error: ' + err);
-      }
+    if (err instanceof multer.MulterError) {
+      return res.status(400).send('Multer error: ' + err);
+    } else if (err) {
+      return res.status(500).send('Internal server error: ' + err);
+    }
 
-      // Files were successfully uploaded
-      // console.log('Files uploaded:', req.files);
-      next();
+    // Files were successfully uploaded
+    // console.log('Files uploaded:', req.files);
+    next();
   });
 }
 

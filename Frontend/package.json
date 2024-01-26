@@ -17,7 +17,13 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1",
     "react-scripts": "5.0.1",
+<<<<<<< HEAD
+    "react-slick": "^0.30.0",
+=======
+    "react-slick": "^0.29.0",
+>>>>>>> 2e21ecd863f60d7ed9e5b1e4af69ba49b6a6bb78
     "react-use": "^17.4.2",
+    "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
