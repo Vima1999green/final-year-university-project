@@ -140,7 +140,7 @@ const loginUser = async (req, res) => {
             .then(user => {
                 //redirect to verifyEmail if isEmailVeried is false
                 if (!user.isEmailVerified)
-                    return res.send({ isAutheticate: false, msg:'Email is not verified'})
+                    return res.send({ isAutheticate: false, msg: 'Email is not verified' })
                 const authMsg = checkPassword(password, user.password)
                 if (!authMsg)
                     return res
@@ -163,7 +163,7 @@ const loginUser = async (req, res) => {
                             return res.send({
                                 isAutheticate: authMsg,
                                 token: 'Bearer ' + token,
-                                userDetails:payload
+                                userDetails: payload
                             })
                         }
                     )

@@ -1,0 +1,98 @@
+<<<<<<< HEAD
+.content{
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+
+}
+.container{
+=======
+.content {
+    padding: 35px;
+    background-image: url('../../../Images/home.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    margin-left: 0;
+
+}
+
+.contentImage {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.container {
+>>>>>>> 2e21ecd863f60d7ed9e5b1e4af69ba49b6a6bb78
+
+    background-color: aliceblue;
+    padding: 15px;
+    width: auto;
+    height: auto;
+    color: black;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+    
+    
+}
+.header{
+   
+    color: black;
+    font-size: 40px;
+   text-align: center;
+}
+.gym_img_box{
+    width: 600px;
+    height: 450px;
+    align-items: center;
+    padding-left: 60px;
+    padding-top: 5px;
+}
+
+.right{
+    float: right;
+    width: 700px;
+    background-color: antiquewhite;
+    padding: 10px;
+   
+    
+}
+.left{
+    float: left;
+    width: 450px;
+    align-items: center;
+    padding: 10px;
+    padding-top: 60px;
+    padding-left: 40px;
+}
+.booking_btn{
+    float:right;
+    padding-top: 20px;
+}
+label{
+    font-size: 17px;
+    font-family:Arial, Helvetica, sans-serif;
+    font-weight: 600;
+}
+.txt_field{
+    color: black;
+    font-size: 50px;
+}
+
+.img_galary{
+    float: right;
+}
+
+.buttonGroup{
+    align-items: center;
+    float:right;
+}
+
+
+  .gym_img_slider {
+    width: 100%; 
+    margin: auto; 
+  }  
+
