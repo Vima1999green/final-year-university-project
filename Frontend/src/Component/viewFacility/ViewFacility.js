@@ -189,7 +189,7 @@ const ViewFacility = () => {
         //         alert(error.response.data + '\r\n' + 'Fcaility creation failed')
         //     })
         const token = JSON.parse(localStorage.getItem('facilityUser')).token
-        const facilityId = '';
+        let facilityId = '';
         await axios
             .post(
                 'http://localhost:4000/api/facility/register', formData,
