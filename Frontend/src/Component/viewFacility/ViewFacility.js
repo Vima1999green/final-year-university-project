@@ -379,27 +379,30 @@ const ViewFacility = () => {
 
 
                         <Grid container spacing={2} sx={{ margin: 0, padding: 0 }}>
-                            {options.map((facility, index) => (
-                                <Grid item xs={6} key={index}>
-                                    <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card}>
-                                        <Link to={'/facility/playground'} className={viewFacility_css.cardLink}>
-                                            <CardActionArea>
-                                                <CardMedia
-                                                    className={viewFacility_css.cardMedia}
-                                                    component="img"
-                                                    image={facility.images[0]} // Assuming the facility object has an 'image' property
-                                                    alt={facility.label}
-                                                />
-                                                <CardContent>
-                                                    <h2 className={viewFacility_css.cardText}>
-                                                        {facility.name}
-                                                    </h2>
-                                                </CardContent>
-                                            </CardActionArea>
-                                        </Link>
-                                    </Card>
-                                </Grid>
-                            ))}
+                            {options.map((facility, index) => {
+                                console.log('facility', facility)
+                                return (
+                                    <Grid item xs={6} key={index}>
+                                        <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card}>
+                                            <Link to={`/facility/${facility._id}`} className={viewFacility_css.cardLink}>
+                                                <CardActionArea>
+                                                    <CardMedia
+                                                        className={viewFacility_css.cardMedia}
+                                                        component="img"
+                                                        alt={facility.name}
+                                                        src={facility.images[0] ? `data:image/jpg;base64,${facility.images[0].toString('base64')}` : ''}
+                                                    />
+                                                    <CardContent>
+                                                        <h2 className={viewFacility_css.cardText}>
+                                                            {facility.name}
+                                                        </h2>
+                                                    </CardContent>
+                                                </CardActionArea>
+                                            </Link>
+                                        </Card>
+                                    </Grid>
+                                )
+                            })}
                         </Grid>
 
 
