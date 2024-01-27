@@ -18,6 +18,7 @@ import gym_image from '../../Images/gym9.jpg'
 import playground_image from '../../Images/playground1.jpeg';
 import add_facility_image from '../../Images/facility.jpg';
 import { Link, useNavigate } from 'react-router-dom';
+import isEmpty from '../../isEmpty';
 
 const ViewFacility = () => {
 
@@ -78,17 +79,18 @@ const ViewFacility = () => {
 
 
 
-    //get AllFacilities from backend api endpoint
-    // useEffect(() => {
-    //     axios.get('http://localhost:4000/api/facility/getAllFacilities')
-    //         .then(response =>
-    //             setOptions(response.data)
-    //         )
+    // get AllFacilities from backend api endpoint
+    useEffect(() => {
+        axios.get('http://localhost:4000/api/facility/getAllFacilities')
+            .then(response =>{
+                console.log(response.data)
+                setOptions(response.data)}
+            )
 
-    //         .catch(error =>
-    //             console.error(error)
-    //         )
-    // }, []);
+            .catch(error =>
+                console.error(error)
+            )
+    }, []);
 
     const handleChange = (event) => {
         event.preventDefault();
@@ -182,7 +184,7 @@ const ViewFacility = () => {
         //         alert(error.response.data + '\r\n' + 'Fcaility creation failed')
         //     })
         const token = JSON.parse(localStorage.getItem('facilityUser')).token
-        const facilityId = '';
+        let facilityId = '';
         await axios
             .post(
                 'http://localhost:4000/api/facility/register', formData,
@@ -202,16 +204,19 @@ const ViewFacility = () => {
                 if (error.response) {
                     console.log(error.response.data)
                     alert(error.response.data)
+                    console.log('Error alert')
+                    return
                 }
             })
         //uploading photos
-        try {
-            await uploadImages(facilityId, selectedFiles);
-            console.log('images uploaded succesfully');
-            alert('Facility created succesfully');
-        } catch (error) {
-            console.log(error.message)
-            alert(error.message + '\r\n' + 'Uploading images failed');
+        if (!isEmpty(facilityId)) {
+            try {
+                await uploadImages(facilityId, selectedFiles);
+                console.log('images uploaded succesfully');
+            } catch (error) {
+                console.log(error.message)
+                alert(error.message + '\r\n' + 'Uploading images failed');
+            }
         }
 
 
@@ -227,9 +232,10 @@ const ViewFacility = () => {
         for (const file of imageFiles) {
             formData.append('photos', file);
         }
+
         const token = JSON.parse(localStorage.getItem('facilityUser')).token
         await axios
-            .post('http://localhost:4000/api/facility/uploadPhotos',
+            .post(`http://localhost:4000/api/facility/uploadPhotos/${facilityId}`,
                 formData,
                 {
                     headers: {
@@ -374,29 +380,29 @@ const ViewFacility = () => {
 
 
 
-                        {/* <Grid container spacing={2} sx={{ margin: 0, padding: 0 }}>
-                        {options.map((facility, index) => (
-                            <Grid item xs={6} key={index}>
-                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            className={viewFacility_css.cardMedia}
-                                            component="img"
-                                            image={facility.image[0]} // Assuming the facility object has an 'image' property
-                                            alt={facility.label}
-                                        />
-                                        <CardContent>
-                                            <h2 className={viewFacility_css.cardText}>
-                                                {facility.label}
-                                            </h2>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
-                    
- */}
+                        <Grid container spacing={2} sx={{ margin: 0, padding: 0 }}>
+                            {options.map((facility, index) => (
+                                <Grid item xs={6} key={index}>
+                                    <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card}>
+                                        <CardActionArea>
+                                            <CardMedia
+                                                className={viewFacility_css.cardMedia}
+                                                component="img"
+                                                image={facility.images[0]} // Assuming the facility object has an 'image' property
+                                                alt={facility.label}
+                                            />
+                                            <CardContent>
+                                                <h2 className={viewFacility_css.cardText}>
+                                                    {facility.name}
+                                                </h2>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                </Grid>
+                            ))}
+                        </Grid>
+
+
 
                         <Dialog open={open} onClose={handleClose} className={viewFacility_css.dialogBox}>
                             <DialogTitle>Add Facility</DialogTitle>

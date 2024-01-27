@@ -23,12 +23,12 @@ router.post(
 );
 
 
-//@route POST api/facility/uploadImages
+//@route POST api/facility/uploadPhotos
 //@desc Upload facility images to the server
 //@access private
 //@developer Lahiru Srimal
 router.post(
-  "/uploadPhotos",
+  "/uploadPhotos/:facilityId",
   passport.authenticate("jwt", { session: false }),
   uploadPhotos
 );
