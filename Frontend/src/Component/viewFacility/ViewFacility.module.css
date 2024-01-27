@@ -94,3 +94,7 @@ li:hover .sublinks {
     color: black;
     font-style: italic;
 }
+
+.cardLink {
+    text-decoration: none;
+}

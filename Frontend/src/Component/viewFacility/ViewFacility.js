@@ -79,16 +79,16 @@ const ViewFacility = () => {
 
 
     //get AllFacilities from backend api endpoint
-    // useEffect(() => {
-    //     axios.get('http://localhost:4000/api/facility/getAllFacilities')
-    //         .then(response =>
-    //             setOptions(response.data)
-    //         )
+    useEffect(() => {
+        axios.get('http://localhost:4000/api/facility/getAllFacilities')
+            .then(response =>
+                setOptions(response.data)
+            )
 
-    //         .catch(error =>
-    //             console.error(error)
-    //         )
-    // }, []);
+            .catch(error =>
+                console.error(error)
+            )
+    }, []);
 
     const handleChange = (event) => {
         event.preventDefault();
@@ -118,9 +118,16 @@ const ViewFacility = () => {
         setSelectedFiles(prevFiles => prevFiles.filter((file, index) => index !== indexToRemove));
     }
 
-    const handleCardClick = (facilityId) => {
-        navigate(`facility/${facilityId}`)
-    }
+
+    const handleClear = () => {
+        setFacName('')
+        setFacDesc('')
+        setFacCapacity('')
+        setFacCost('')
+        setFacLocation('')
+        setFacAddress('')
+        setFacRules('')
+    };
 
     const hanldeSubmit = async (event) => {
         event.preventDefault();
@@ -192,19 +199,22 @@ const ViewFacility = () => {
 
             })
 
-            console.log('Facility creaed succesfulyy', registrationResponse.data)
+            console.log('Facility created succesfulyy', registrationResponse.data)
 
-            // const facilityId = registrationResponse.data._id;
 
-            // await uploadImages(facilityId, selectedFiles);
-            // console.log('images uploaded succesfully');
+            const facilityId = registrationResponse.data._id;
 
-            // alert('Facility created succesfully');
+            await uploadImages(facilityId, selectedFiles);
+            console.log('images uploaded succesfully');
+
+            alert('Facility created succesfully');
+            handleClear();
         } catch (error) {
-            console.log(error.response.data)
-            alert(error.response.data + '\r\n' + 'Facility creation failed');
+            console.log(error.response)
+            alert(error.response + '\r\n' + 'Facility creation failed');
 
         }
+
 
 
     };
@@ -228,10 +238,11 @@ const ViewFacility = () => {
                 },
             });
         } catch (error) {
-            console.log(error.response.data)
-            alert(error.response.data + '\r\n' + 'Image upload failed');
+            console.log(error.response)
+            alert(error.response + '\r\n' + 'Image upload failed');
         }
     };
+
 
 
 
@@ -284,50 +295,53 @@ const ViewFacility = () => {
 
                         <Grid container spacing={2} sx={{ margin: 0, padding: 0, marginTop: '20px' }}>
                             <Grid item xs={12} lg={6}>
+                                <Link to={'/facility/gymnasium'} className={viewFacility_css.cardLink}>
+                                    <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
+                                        <CardActionArea>
 
-                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} onClick={() => handleCardClick('gymnasium')}>
-                                    <CardActionArea>
+                                            <CardMedia className={viewFacility_css.cardMedia}
+                                                component="img"
+                                                image={gym_image}
+                                                alt="gymnasium university of ruhuna"
+                                            />
 
-                                        <CardMedia className={viewFacility_css.cardMedia}
-                                            component="img"
-                                            image={gym_image}
-                                            alt="gymnasium university of ruhuna"
-                                        />
+                                            <CardContent>
 
-                                        <CardContent>
-
-                                            <h2 className={viewFacility_css.cardText}>
-                                                Gymnasium
-                                            </h2>
-                                        </CardContent>
+                                                <h2 className={viewFacility_css.cardText}>
+                                                    Gymnasium
+                                                </h2>
+                                            </CardContent>
 
 
-                                    </CardActionArea>
+                                        </CardActionArea>
 
-                                </Card>
+                                    </Card>
+                                </Link>
                             </Grid>
 
                             <Grid item xs={12} lg={6}>
-                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} onClick={() => handleCardClick('playground')}>
-                                    <CardActionArea>
+                                <Link to={'/facility/playground'} className={viewFacility_css.cardLink}>
+                                    <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
+                                        <CardActionArea>
 
-                                        <CardMedia className={viewFacility_css.cardMedia}
-                                            component="img"
-                                            image={playground_image}
-                                            alt="playground university of ruhuna"
-                                        />
+                                            <CardMedia className={viewFacility_css.cardMedia}
+                                                component="img"
+                                                image={playground_image}
+                                                alt="playground university of ruhuna"
+                                            />
 
-                                        <CardContent>
+                                            <CardContent>
 
-                                            <h2 className={viewFacility_css.cardText}>
-                                                Playground
-                                            </h2>
-                                        </CardContent>
+                                                <h2 className={viewFacility_css.cardText}>
+                                                    Playground
+                                                </h2>
+                                            </CardContent>
 
 
-                                    </CardActionArea>
+                                        </CardActionArea>
 
-                                </Card>
+                                    </Card>
+                                </Link>
                             </Grid>
 
 
@@ -365,29 +379,32 @@ const ViewFacility = () => {
 
 
 
-                        {/* <Grid container spacing={2} sx={{ margin: 0, padding: 0 }}>
-                        {options.map((facility, index) => (
-                            <Grid item xs={6} key={index}>
-                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            className={viewFacility_css.cardMedia}
-                                            component="img"
-                                            image={facility.image[0]} // Assuming the facility object has an 'image' property
-                                            alt={facility.label}
-                                        />
-                                        <CardContent>
-                                            <h2 className={viewFacility_css.cardText}>
-                                                {facility.label}
-                                            </h2>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
-                    
- */}
+                        <Grid container spacing={2} sx={{ margin: 0, padding: 0 }}>
+                            {options.map((facility, index) => (
+                                <Grid item xs={6} key={index}>
+                                    <Link to={`/facility/${facility._id}`} className={viewFacility_css.cardLink}>
+                                        <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
+                                            <CardActionArea>
+                                                <CardMedia
+                                                    className={viewFacility_css.cardMedia}
+                                                    component="img"
+                                                    image={facility.image[0]} // Assuming the facility object has an 'image' property
+                                                    alt={facility.name}
+
+                                                />
+                                                <CardContent>
+                                                    <h2 className={viewFacility_css.cardText}>
+                                                        {facility.name}
+                                                    </h2>
+                                                </CardContent>
+                                            </CardActionArea>
+                                        </Card>
+                                    </Link>
+                                </Grid>
+                            ))}
+                        </Grid>
+
+
 
                         <Dialog open={open} onClose={handleClose} className={viewFacility_css.dialogBox}>
                             <DialogTitle>Add Facility</DialogTitle>
