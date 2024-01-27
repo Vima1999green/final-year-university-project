@@ -33,32 +33,32 @@ const validateFacilityData = (data) => {
         errors.location = 'Location is required';
     // else if (!googleMapsPattern.test(data.location))
     //     errors.location = 'Not a valid google map link';
-    else {
-        const trimmedLocation = data.location.trim().toLowerCase();
-        // Check if it starts with a valid protocol
-        const isValidProtocol = trimmedLocation.startsWith('http://') || trimmedLocation.startsWith('https://');
+    // else {
+    //     const trimmedLocation = data.location.trim().toLowerCase();
+    //     // Check if it starts with a valid protocol
+    //     const isValidProtocol = trimmedLocation.startsWith('http://') || trimmedLocation.startsWith('https://');
 
-        // Check if it contains a valid Google Maps domain
-        const isGoogleMapsLink = trimmedLocation.includes('maps.google.com') || trimmedLocation.includes('maps.app.goo.gl');
+    //     // Check if it contains a valid Google Maps domain
+    //     const isGoogleMapsLink = trimmedLocation.includes('maps.google.com') || trimmedLocation.includes('maps.app.goo.gl');
 
-        if (!isValidProtocol || !isGoogleMapsLink) {
-            errors.location = 'Not a valid Google Maps link';
-        }
+    //     if (!isValidProtocol || !isGoogleMapsLink) {
+    //         errors.location = 'Not a valid Google Maps link';
+    //     }
+    // }
+
+    //validating cost
+    if (isEmpty(data.cost))
+        errors.cost = 'Cost is required';
+    else if (!validator.isNumeric(data.cost))
+        errors.cost = 'Cost must be a number';
+    else if (data.cost < 0)
+        errors.cost = 'Cost cannot be less than zero';
+
+
+    return {
+        errors,
+        isValid: isEmpty(errors)
     }
+}
 
-        //validating cost
-        if (isEmpty(data.cost))
-            errors.cost = 'Cost is required';
-        else if (typeof (data.cost) !== 'number')
-            errors.cost = 'Cost must be a number';
-        else if (data.cost < 0)
-            errors.cost = 'Cost cannot be less than zero';
-
-
-        return {
-            errors,
-            isValid: isEmpty(errors)
-        }
-    }
-
-    module.exports = validateFacilityData;
+module.exports = validateFacilityData;

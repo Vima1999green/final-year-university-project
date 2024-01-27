@@ -60,7 +60,7 @@ const ViewFacility = () => {
         if (event.target.name === 'cost')
             setFacCost(event.target.value)
 
-        if (event.target.location === 'location')
+        if (event.target.name === 'location')
             setFacLocation(event.target.value)
 
         if (event.target.name === 'capacity')
@@ -137,17 +137,16 @@ const ViewFacility = () => {
 
         })
 
-
         console.log('===================');
         // Create a FormData object to append the image files
         const formData = {
-            FacilityName: facName,
-            Description: facDesc,
-            Cost: facCost,
+            name: facName,
+            description: facDesc,
+            cost: facCost,
             location: facLocation,
-            Capacity: facCapacity,
-            Address: facAddress,
-            Rules: facRules
+            capacity: facCapacity,
+            address: facAddress,
+            rules: facRules
         }
 
 
@@ -182,29 +181,37 @@ const ViewFacility = () => {
         //         console.log(error.response.data);
         //         alert(error.response.data + '\r\n' + 'Fcaility creation failed')
         //     })
-        try {
-            const registrationResponse = await axios.post(
-                'http://localhost:4000/api/facility/register',
-                formData,
+        const token = JSON.parse(localStorage.getItem('facilityUser')).token
+        const facilityId = '';
+        await axios
+            .post(
+                'http://localhost:4000/api/facility/register', formData,
                 {
                     headers: {
-                        Authorization:localStorage.getItem('faciltyUser').token
+                        Authorization: token
                     }
+                })
+            .then(res => {
+                facilityId = res.data._id
+                console.log('facilityId', facilityId)
+                alert('Facility created succesfully')
+                console.log('Facility created succesfully')
+                console.log('Facility created succesfully ALERT Finished')
+            })
+            .catch(error => {
+                if (error.response) {
+                    console.log(error.response.data)
+                    alert(error.response.data)
                 }
-            )
-
-            console.log('Facility creaed succesfulyy', registrationResponse.data)
-
-            // const facilityId = registrationResponse.data._id;
-
-            // await uploadImages(facilityId, selectedFiles);
-            // console.log('images uploaded succesfully');
-
-            // alert('Facility created succesfully');
+            })
+        //uploading photos
+        try {
+            await uploadImages(facilityId, selectedFiles);
+            console.log('images uploaded succesfully');
+            alert('Facility created succesfully');
         } catch (error) {
-            console.log(error.response.data)
-            alert(error.response.data + '\r\n' + 'Fcaility creation failed');
-
+            console.log(error.message)
+            alert(error.message + '\r\n' + 'Uploading images failed');
         }
 
 
@@ -218,24 +225,25 @@ const ViewFacility = () => {
 
         // Append each image file to the FormData object
         for (const file of imageFiles) {
-            formData.append('images', file);
+            formData.append('photos', file);
         }
-
-        try {
-            // Perform the image upload
-            return await axios.post('http://localhost:4000/api/facility/uploadImages', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
-                },
-            });
-        } catch (error) {
-            console.log(error.response.data)
-            alert(error.response.data + '\r\n' + 'Image upload failed');
-        }
+        const token = JSON.parse(localStorage.getItem('facilityUser')).token
+        await axios
+            .post('http://localhost:4000/api/facility/uploadPhotos',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+                        Authorization: token
+                    },
+                })
+            .then(res => {
+                alert(res.data)
+            })
+            .catch(error => {
+                alert(error.response.data)
+            })
     };
-
-
-
 
     return (
 

@@ -2,13 +2,15 @@ const multer = require('multer');
 const path = require('path');
 const Facility = require("../model/facilityModel");
 const validateFacilityData = require("../validation/facitityRouteValidation/addFacility");
-const checkFileType=require('../validation/facitityRouteValidation/checkFileType');
+const checkFileType = require('../validation/facitityRouteValidation/checkFileType');
 
 
 //controller addFacilty()
 //description add facility to database
 //developer Lahiru Srimal
 const addFacility = async (req, res) => {
+
+
   if (req.user.userType !== "admin") {
     console.log(req.user.userType);
     console.log("user is not admin");
@@ -58,6 +60,11 @@ const uploadImages = multer({
 
 // Middleware function to handle file uploads
 const uploadPhotos = (req, res, next) => {
+  if (req.user.userType !== "admin") {
+    console.log(req.user.userType);
+    console.log("user is not admin");
+    return res.status(401).send("Unauthrized");
+  }
   // 'photos' should be the name attribute in your HTML form for the file input
   const uploadPhotoData = uploadImages.array('photos', 5);
 
@@ -69,7 +76,7 @@ const uploadPhotos = (req, res, next) => {
     }
 
     // Files were successfully uploaded
-    console.log('Files uploaded:', req.files);
+    console.log('Files uploaded');
     res.status(200).send('Files uploaded');
     // next();
   });

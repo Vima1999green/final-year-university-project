@@ -28,7 +28,7 @@ router.post(
 //@access private
 //@developer Lahiru Srimal
 router.post(
-  "/register",
+  "/uploadPhotos",
   passport.authenticate("jwt", { session: false }),
   uploadPhotos
 );
@@ -63,10 +63,10 @@ router.delete("/deleteAllFacilities", deleteAllFacilities);
 //@access private
 //@developer Primalsha Chamodi
 router.post(
-    "/updateFacility/:id",
-    passport.authenticate("jwt", { session: false }),
-    uploadPhotos,
-    updateFacility
-  );
+  "/updateFacility/:id",
+  passport.authenticate("jwt", { session: false }),
+  uploadPhotos,
+  updateFacility
+);
 
 module.exports = router;

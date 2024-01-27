@@ -30,8 +30,8 @@ const UserHistory = () => {
                     <div className={userHistory_css.body}>
 
                         <Grid item xs={12}>
-                            <main>
-                                <Typography variant="h4">My Booking List</Typography>
+                            <Grid>
+                                <h4>My booking List</h4>
                                 <TableContainer component={Paper}>
                                     <Table>
                                         <TableHead>
@@ -44,7 +44,7 @@ const UserHistory = () => {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                            </main>
+                            </Grid>
                         </Grid>
 
 
