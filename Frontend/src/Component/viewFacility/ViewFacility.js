@@ -144,7 +144,6 @@ const ViewFacility = () => {
 
         })
 
-
         console.log('===================');
         // Create a FormData object to append the image files
         const formData = {
@@ -190,32 +189,39 @@ const ViewFacility = () => {
         //         alert(error.response.data + '\r\n' + 'Fcaility creation failed')
         //     })
         const token = JSON.parse(localStorage.getItem('facilityUser')).token
-        console.log('Token:', token);
-        try {
-            const registrationResponse = await axios.post('http://localhost:4000/api/facility/register', formData, {
-                headers: {
-                    Authorization: token
-                },
-
+        const facilityId = '';
+        await axios
+            .post(
+                'http://localhost:4000/api/facility/register', formData,
+                {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+            .then(res => {
+                facilityId = res.data._id
+                console.log('facilityId', facilityId)
+                alert('Facility created succesfully')
+                console.log('Facility created succesfully')
+                console.log('Facility created succesfully ALERT Finished')
             })
-
-            console.log('Facility created succesfulyy', registrationResponse.data)
-
-
-            const facilityId = registrationResponse.data._id;
-
+            .catch(error => {
+                if (error.response) {
+                    console.log(error.response.data)
+                    alert(error.response.data)
+                }
+            })
+        //uploading photos
+        try {
             await uploadImages(facilityId, selectedFiles);
             console.log('images uploaded succesfully');
-
             alert('Facility created succesfully');
-            handleClear();
         } catch (error) {
-            console.log(error.response)
-            alert(error.response + '\r\n' + 'Facility creation failed');
-
+            console.log(error.message)
+            alert(error.message + '\r\n' + 'Uploading images failed');
         }
 
-
+        handleClear();
 
     };
 
@@ -227,24 +233,25 @@ const ViewFacility = () => {
 
         // Append each image file to the FormData object
         for (const file of imageFiles) {
-            formData.append('images', file);
+            formData.append('photos', file);
         }
-
-        try {
-            // Perform the image upload
-            return await axios.post('http://localhost:4000/api/facility/uploadImages', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
-                },
-            });
-        } catch (error) {
-            console.log(error.response)
-            alert(error.response + '\r\n' + 'Image upload failed');
-        }
+        const token = JSON.parse(localStorage.getItem('facilityUser')).token
+        await axios
+            .post('http://localhost:4000/api/facility/uploadPhotos',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+                        Authorization: token
+                    },
+                })
+            .then(res => {
+                alert(res.data)
+            })
+            .catch(error => {
+                alert(error.response.data)
+            })
     };
-
-
-
 
 
     return (
@@ -287,7 +294,7 @@ const ViewFacility = () => {
                                     fullWidth
                                 >
                                     {options.map((option, index) => (
-                                        <MenuItem key={index} value={option.value}>{option.label}</MenuItem>
+                                        <MenuItem key={index} value={option.value} style={{ color: 'black' }}>{option.name}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -295,8 +302,9 @@ const ViewFacility = () => {
 
                         <Grid container spacing={2} sx={{ margin: 0, padding: 0, marginTop: '20px' }}>
                             <Grid item xs={12} lg={6}>
-                                <Link to={'/facility/gymnasium'} className={viewFacility_css.cardLink}>
-                                    <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
+
+                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
+                                    <Link to={'/facility/gymnasium'} className={viewFacility_css.cardLink}>
                                         <CardActionArea>
 
                                             <CardMedia className={viewFacility_css.cardMedia}
@@ -314,14 +322,16 @@ const ViewFacility = () => {
 
 
                                         </CardActionArea>
+                                    </Link>
 
-                                    </Card>
-                                </Link>
+                                </Card>
+
                             </Grid>
 
                             <Grid item xs={12} lg={6}>
-                                <Link to={'/facility/playground'} className={viewFacility_css.cardLink}>
-                                    <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
+
+                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
+                                    <Link to={'/facility/playground'} className={viewFacility_css.cardLink}>
                                         <CardActionArea>
 
                                             <CardMedia className={viewFacility_css.cardMedia}
@@ -339,9 +349,10 @@ const ViewFacility = () => {
 
 
                                         </CardActionArea>
+                                    </Link>
 
-                                    </Card>
-                                </Link>
+                                </Card>
+
                             </Grid>
 
 
@@ -382,13 +393,14 @@ const ViewFacility = () => {
                         <Grid container spacing={2} sx={{ margin: 0, padding: 0 }}>
                             {options.map((facility, index) => (
                                 <Grid item xs={6} key={index}>
-                                    <Link to={`/facility/${facility._id}`} className={viewFacility_css.cardLink}>
-                                        <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
+
+                                    <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
+                                        <Link to={`/facility/${facility._id}`} className={viewFacility_css.cardLink}>
                                             <CardActionArea>
                                                 <CardMedia
                                                     className={viewFacility_css.cardMedia}
                                                     component="img"
-                                                    image={facility.image[0]} // Assuming the facility object has an 'image' property
+                                                    // Assuming the facility object has an 'image' property
                                                     alt={facility.name}
 
                                                 />
@@ -398,8 +410,9 @@ const ViewFacility = () => {
                                                     </h2>
                                                 </CardContent>
                                             </CardActionArea>
-                                        </Card>
-                                    </Link>
+                                        </Link>
+                                    </Card>
+
                                 </Grid>
                             ))}
                         </Grid>

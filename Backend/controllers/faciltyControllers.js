@@ -60,6 +60,11 @@ const uploadImages = multer({
 
 // Middleware function to handle file uploads
 const uploadPhotos = (req, res, next) => {
+  if (req.user.userType !== "admin") {
+    console.log(req.user.userType);
+    console.log("user is not admin");
+    return res.status(401).send("Unauthrized");
+  }
   // 'photos' should be the name attribute in your HTML form for the file input
   const uploadPhotoData = uploadImages.array('photos', 5);
 
@@ -71,8 +76,9 @@ const uploadPhotos = (req, res, next) => {
     }
 
     // Files were successfully uploaded
-    // console.log('Files uploaded:', req.files);
-    next();
+    console.log('Files uploaded');
+    res.status(200).send('Files uploaded');
+    // next();
   });
 }
 

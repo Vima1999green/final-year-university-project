@@ -22,6 +22,17 @@ router.post(
   addFacility
 );
 
+
+//@route POST api/facility/uploadImages
+//@desc Upload facility images to the server
+//@access private
+//@developer Lahiru Srimal
+router.post(
+  "/uploadPhotos",
+  passport.authenticate("jwt", { session: false }),
+  uploadPhotos
+);
+
 //@route GET api/getFacility/:id
 //@desc Get single facility
 //@access public
