@@ -1,7 +1,8 @@
 const validator = require('validator');
 const isEmpty = require('../isEmpty');
+const Facility = require('../../model/facilityModel');
 
-const validateFacilityData = (data) => {
+const validateFacilityData = async (data) => {
     let errors = {};
     data.name = isEmpty(data.name) ? '' : data.name
     data.description = isEmpty(data.description) ? '' : data.description
@@ -13,6 +14,11 @@ const validateFacilityData = (data) => {
     //validating name
     if (validator.isEmpty(data.name))
         errors.name = 'Facility name is required';
+    else{
+        const existingFacility=await Facility.find({name:data.name})
+        if(!isEmpty(existingFacility))
+            errors.name='Facility is already exists'
+    }
     //validating description
     if (validator.isEmpty(data.description))
         errors.description = 'Description is required';

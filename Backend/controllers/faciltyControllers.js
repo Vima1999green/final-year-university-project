@@ -32,7 +32,7 @@ const addFacility = async (req, res) => {
       res.send(newFacility);
     })
     .catch((error) => {
-      res.send(error);
+      res.status(400).send(error);
     });
 };
 
@@ -59,15 +59,16 @@ const uploadImages = multer({
 })
 
 // Middleware function to handle file uploads
-const uploadPhotos = (req, res, next) => {
+const uploadPhotos = async (req, res, next) => {
+
   if (req.user.userType !== "admin") {
     console.log(req.user.userType);
     console.log("user is not admin");
     return res.status(401).send("Unauthrized");
   }
-  // 'photos' should be the name attribute in your HTML form for the file input
+  //update images array in the database
+  const facilityId = req.params.facilityId
   const uploadPhotoData = uploadImages.array('photos', 5);
-
   uploadPhotoData(req, res, (err) => {
     if (err instanceof multer.MulterError) {
       return res.status(400).send('Multer error: ' + err);
@@ -75,6 +76,15 @@ const uploadPhotos = (req, res, next) => {
       return res.status(500).send('Internal server error: ' + err);
     }
 
+    const facility = Facility.findOneAndUpdate(
+      { _id: facilityId },
+      { $push: { images: req.files.map(file => file.filename) } },
+      { new: true }
+    ).then(res => {
+      console.log('Database updated')
+    }).catch(error => {
+      return res.status(500).send('Error updating facility: ', error.response.data);
+    })
     // Files were successfully uploaded
     console.log('Files uploaded');
     res.status(200).send('Files uploaded');
@@ -102,7 +112,17 @@ const getSingleFacilty = (req, res) => {
 const getAllfacilities = (req, res) => {
   Facility.find()
     .then((facilities) => {
-      res.send(facilities);
+      // console.log(facilities)
+      const baseUrl = 'uploads/';
+      const facilitiesWithUrls = facilities.map((facility) => {
+        const imagesWithUrls = facility.images.map((image) => baseUrl + image);
+        console.log({ ...facility._doc, images: imagesWithUrls })
+        return { ...facility._doc, images: imagesWithUrls };
+      });
+
+      // console.log(facilitiesWithUrls);
+      res.send(facilitiesWithUrls);
+      // res.send(facilities);
     })
     .catch((error) => {
       res.status(500).send(error);
