@@ -216,9 +216,9 @@ const ViewFacility = () => {
             } catch (error) {
                 console.log(error.message)
                 alert(error.message + '\r\n' + 'Uploading images failed');
+                return
             }
         }
-
 
     };
 

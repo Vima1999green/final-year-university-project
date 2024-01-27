@@ -2,8 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const Facility = require("../model/facilityModel");
 const validateFacilityData = require("../validation/facitityRouteValidation/addFacility");
-const checkFileType = require('../validation/facitityRouteValidation/checkFileType');
-
+const uploadImages=require('./uploadImages')
 
 //controller addFacilty()
 //description add facility to database
@@ -40,25 +39,6 @@ const addFacility = async (req, res) => {
 //description upload photos to server
 //developer Lahiru Srimal
 
-// Set up storage for Multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads/"); // specify the destination folder
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname); // generate a unique filename
-  },
-});
-
-// Create the Multer instance
-const uploadImages = multer({
-  storage: storage,
-  fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
-  }
-})
-
-// Middleware function to handle file uploads
 const uploadPhotos = async (req, res, next) => {
 
   if (req.user.userType !== "admin") {
@@ -113,10 +93,10 @@ const getAllfacilities = (req, res) => {
   Facility.find()
     .then((facilities) => {
       // console.log(facilities)
-      const baseUrl = 'uploads/';
+      const baseUrl = 'http://localhost:4000/uploads/';
       const facilitiesWithUrls = facilities.map((facility) => {
         const imagesWithUrls = facility.images.map((image) => baseUrl + image);
-        console.log({ ...facility._doc, images: imagesWithUrls })
+        // console.log({ ...facility._doc, images: imagesWithUrls })
         return { ...facility._doc, images: imagesWithUrls };
       });
 
