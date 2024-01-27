@@ -72,10 +72,8 @@ const ViewFacility = () => {
     };
 
 
-
-
-    // get AllFacilities from backend api endpoint
-    useEffect(() => {
+    const reloadPage = () => {
+        console.log('reloadPage')
         axios.get('http://localhost:4000/api/facility/getAllFacilities')
             .then(response => {
                 console.log(response.data)
@@ -86,7 +84,9 @@ const ViewFacility = () => {
             .catch(error =>
                 console.error(error)
             )
-    }, []);
+    }
+    // get AllFacilities from backend api endpoint
+    useEffect(reloadPage, []);
 
 
 
@@ -113,6 +113,7 @@ const ViewFacility = () => {
 
 
     const handleClear = () => {
+        console.log('handleClear')
         setFacName('')
         setFacDesc('')
         setFacCapacity('')
@@ -214,10 +215,13 @@ const ViewFacility = () => {
             } catch (error) {
                 console.log(error.message)
                 alert(error.message + '\r\n' + 'Uploading images failed');
+                return
             }
         }
-
         handleClear();
+        reloadPage()
+
+
 
     };
 
@@ -279,33 +283,18 @@ const ViewFacility = () => {
                 <div className={viewFacility_css.contentImage}>
                     <div className={viewFacility_css.body}>
 
-                        <Grid item xs={12} lg={6}>
+                        <Grid item xs={12} lg={6} >
                             {userRole === 'admin' && (
                                 <Button
                                     variant="contained"
-                                    sx={{ maxWidth: 550 }}
-                                    className={viewFacility_css.card}
+                                    sx={{ width: '100%' }}
+                                    className={viewFacility_css.button}
                                     onClick={handleClickOpen}
-                                >
-
-                                    <CardActionArea>
-
-                                        <CardMedia className={viewFacility_css.cardMedia}
-                                            component="img"
-                                            image={add_facility_image}
-                                            alt="Add Facility here"
-                                        />
-
-                                        <CardContent>
-
-                                            <h2>Add a Facility</h2>
+                                >Add Facility </Button>
 
 
-                                        </CardContent>
 
-                                    </CardActionArea>
 
-                                </Button>
                             )}
                         </Grid>
 
@@ -390,7 +379,7 @@ const ViewFacility = () => {
                                                         className={viewFacility_css.cardMedia}
                                                         component="img"
                                                         alt={facility.name}
-                                                        src={facility.images[0] ? `data:image/jpg;base64,${facility.images[0].toString('base64')}` : ''}
+                                                        image={facility.images[0]}
                                                     />
                                                     <CardContent>
                                                         <h2 className={viewFacility_css.cardText}>
