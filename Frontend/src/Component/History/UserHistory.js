@@ -1,6 +1,6 @@
 import userHistory_css from './userHistory.module.css';
 import { Link } from 'react-router-dom';
-import { Typography, Table, TableBody, TableContainer, TableHead, TableRow, Paper, Grid } from '@mui/material';
+import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Grid } from '@mui/material';
 const UserHistory = () => {
     return (
         <div>

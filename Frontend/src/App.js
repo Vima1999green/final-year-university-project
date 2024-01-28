@@ -41,7 +41,7 @@ function App() {
             <Route path='/verifyEmail/:userEmail' element={<EmailVerification />} />
             <Route path="/landpage" element={<LandPage />} />
             <Route path="/viewFacilities" element={<ViewFacility />} />
-            <Route path="/facility" element={<Facility />} />
+            <Route path="/facility/:id" element={<Facility />} />
             <Route path="/history" element={<UserHistory />} />
 
 
