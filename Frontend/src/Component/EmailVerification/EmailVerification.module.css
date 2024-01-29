@@ -1,0 +1,89 @@
+.header {
+    text-align: inherit;
+    /* text-align: -webkit-match-parent; */
+    font-family: "Times New Roman", Times, serif;
+    font-weight: 500;
+    color: green;
+    padding: 10px;
+    text-align: center;
+
+}
+
+.content {
+    padding: 20px;
+}
+
+.contentImage {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.body_sign {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.login_container {
+    /* background-color: #fee6b4; */
+    background-color: rgb(228, 206, 174);
+    place-items: center;
+    border-radius: 9px;
+    outline: none;
+    border: none;
+    align-items: center;
+    padding: 20px;
+    float: right;
+    max-width: 500px;
+    color: #000;
+
+}
+
+.input_login {
+    color: #8a1538;
+    font-weight: 600;
+    gap: 20px;
+    padding: 15px;
+    width: 300px;
+}
+
+.input_login input {
+    border-color: #8a1538;
+}
+
+.submit_login {
+    align-items: center;
+    padding-left: 40px;
+}
+
+.submit_login button {
+    background-color: #8a1538;
+    color: white;
+    width: 200px;
+}
+
+.signup_link {
+    font-size: 12px;
+    color: blue;
+    margin: 0;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: underline;
+}
+
+label {
+    margin-top: 1px;
+    font-weight: bolder;
+    color: #8a1538;
+    font-size: 14px;
+}
+
+/* .login-link{
+    font-size: 20px;
+    color: blue;
+    margin: auto;
+    cursor: pointer;
+    text-decoration: underline;
+  } */
