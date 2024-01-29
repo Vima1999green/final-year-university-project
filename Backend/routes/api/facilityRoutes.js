@@ -5,7 +5,6 @@ const {
   getSingleFacilty,
   getAllfacilities,
   deleteSingleFacility,
-  deleteAllFacilities,
   updateFacility,
   uploadPhotos
 } = require("../../controllers/faciltyControllers");
@@ -50,13 +49,6 @@ router.get("/getAllFacilities", getAllfacilities);
 //@access public
 //@developer Vimukthi Nuwan
 router.delete("/deleteSingleFacility/:id", deleteSingleFacility);
-
-//@route DELETE api/deleteAllFacilities
-//@desc delete all facilities
-//@access public
-//@developer Vimukthi Nuwan
-router.delete("/deleteAllFacilities", deleteAllFacilities);
-
 
 //@route POST api/updateFacility/:id
 //@desc update single facility

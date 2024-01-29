@@ -79,8 +79,16 @@ const uploadPhotos = async (req, res, next) => {
 const getSingleFacilty = (req, res) => {
   Facility.findById(req.params.id)
     .then((facility) => {
-      res.send(facility);
+
+      const baseUrl = 'http://localhost:4000/uploads/';
+
+      const imagesWithUrls = facility.images.map((image) => baseUrl + image);
+      // console.log({ ...facility._doc, images: imagesWithUrls })
+      const result = { ...facility._doc, images: imagesWithUrls };
+      res.send(result)
+
     })
+
     .catch((error) => {
       res.status(404).send(error);
     });
@@ -121,34 +129,15 @@ const deleteSingleFacility = async (req, res) => {
     }
 
     const faciltyId = req.params.id;
-    const deletedFacility = await facility.findbyIdAndDelete(faciltyId);
+    const deletedFacility = await Facility.findbyIdAndDelete(faciltyId);
 
     if (!deletedFacility) {
       return res.status(404).send("Facility not Found");
-    }
-    res.send(deletedFacility);
+    } else
+      return res.send('Facility deleted sucessfully');
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server Error");
-  }
-};
-
-const deleteAllFacilities = async (req, res) => {
-  try {
-    if (req.user.userType !== "admin") {
-      console.log(req.user.userType);
-      console.log("user is not admin");
-      return res.status(401).send("Unauthorized");
-    }
-    const deletionResult = await Facility.deleteMany({});
-
-    if (deletionResult.deletedCount === 0) {
-      return res.status(404).send("No facilities found to delete");
-    }
-    res.send(`Successfully deleted ${deletionResult.deletedCount} facilities`);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -199,7 +188,6 @@ module.exports = {
   getSingleFacilty,
   getAllfacilities,
   deleteSingleFacility,
-  deleteAllFacilities,
   updateFacility,
   uploadPhotos
 };
