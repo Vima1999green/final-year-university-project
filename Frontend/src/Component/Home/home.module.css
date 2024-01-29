@@ -28,12 +28,15 @@
 
 
 .events {
-  position: relative;
+  /* position: relative; */
+  margin-top: 20px;
   margin-right: 20px;
-  width: 300px;
+  width: 350px;
   height: 300px;
   background-color: lightgray;
   border-radius: 20px;
+  padding: 25px;
+ padding-top: 30px;
 }
 
 .events img {
@@ -46,6 +49,12 @@
 .home h3 {
   text-align: center;
   color: #000000;
+}
+
+.events h5{
+  text-align:center;
+  color: #000000;
+  margin-top: 210px;
 }
 
 .about {
@@ -65,7 +74,7 @@
 
 .about p {
   text-align: center;
-  font-size: 30px;
+  font-size: 20px;
   color: #000000;
 }
 

@@ -58,7 +58,7 @@ const Navbar = () => {
                     <Link to="/login" className="btn btn-light">Login</Link>&nbsp;
                     <Link to="/signup" className="btn btn-warning">Sign Up</Link>
                 </div>
-            )}
+            )} 
 
         </div>
     );
