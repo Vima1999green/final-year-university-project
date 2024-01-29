@@ -282,33 +282,18 @@ const reloadPage=() => {
                 <div className={viewFacility_css.contentImage}>
                     <div className={viewFacility_css.body}>
 
-                        <Grid item xs={12} lg={6}>
+                        <Grid item xs={12} lg={6} >
                             {userRole === 'admin' && (
                                 <Button
                                     variant="contained"
-                                    sx={{ maxWidth: 550 }}
-                                    className={viewFacility_css.card}
+                                    sx={{ width: '100%' }}
+                                    className={viewFacility_css.button}
                                     onClick={handleClickOpen}
-                                >
-
-                                    <CardActionArea>
-
-                                        <CardMedia className={viewFacility_css.cardMedia}
-                                            component="img"
-                                            image={add_facility_image}
-                                            alt="Add Facility here"
-                                        />
-
-                                        <CardContent>
-
-                                            <h2>Add a Facility</h2>
+                                >Add Facility </Button>
 
 
-                                        </CardContent>
 
-                                    </CardActionArea>
 
-                                </Button>
                             )}
                         </Grid>
 

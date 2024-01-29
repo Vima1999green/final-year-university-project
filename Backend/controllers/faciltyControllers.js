@@ -2,7 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const Facility = require("../model/facilityModel");
 const validateFacilityData = require("../validation/facitityRouteValidation/addFacility");
-const uploadImages=require('./uploadImages')
+const uploadImages = require('./uploadImages')
 
 //controller addFacilty()
 //description add facility to database

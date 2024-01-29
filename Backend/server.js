@@ -3,9 +3,9 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const passport = require('passport')
 const userRoutes = require('./routes/api/userRoutes')
-const facilityRoutes=require('./routes/api/facilityRoutes')
+const facilityRoutes = require('./routes/api/facilityRoutes')
 const cors = require('cors')
-const path=require('path')
+const path = require('path')
 
 const dbUrl = require('./config/keys').mongoUrl
 
@@ -27,7 +27,7 @@ app.use(passport.initialize());
 //passport config
 require('./config/passport')(passport);
 
-app.use('',(req,res,next)=>{
+app.use('', (req, res, next) => {
     console.log(req.url)
     next()
 })
