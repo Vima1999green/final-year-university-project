@@ -7,12 +7,15 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import Button from "@mui/material/Button";
 import axios from 'axios';
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import isEmpty from '../../isEmpty';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import IconButton from '@mui/material/IconButton';
+import ImageSlider from '../ImageSlider/ImageSlider';
 
 const Facility = () => {
+    const userType = JSON.parse(localStorage.getItem('facilityUser')).userDetails.userType;
+    const navigate = useNavigate()
     console.log('facility component renders')
 
     const fileInputRef = useRef(null);
@@ -190,38 +193,18 @@ const Facility = () => {
 
 
     const handleDelete = async () => {
-        //     //     try {
-        //     //         if (data._id) {
-        //     //             // Perform the delete operation
-        //     //             await fetch(`backend_api_url/${data._id}`, {
-        //     //                 method: "DELETE",
-        //     //             });
-
-        //     //             // Clear the form and reset the state
-        //     //             setData({
-        //     //                 _id: "",
-        //     //                 name: "",
-        //     //                 location: "",
-        //     //                 description: "",
-        //     //                 cost: "",
-        //     //                 capacity: "",
-        //     //                 address: "",
-        //     //                 rules: "",
-        //     //                 imageUrl: "",
-        //     //             });
-        //     //             setSelectedImage(null);
-        //     //             setEditable(false);
-        //     //         }
-        //     //     } catch (error) {
-        //     //         console.error("Error deleting data:", error);
-        //     //     }
-        //     // };
-        // useEffect(() => {
-        //     fetchImages();
-        // }, []);
-        await axios.delete(`http://localhost:4000/api/facility/deleteSingleFacility/${facilityId}`)
+        const token = JSON.parse(localStorage.getItem('facilityUser')).token
+        console.log('Delete facility')
+        await axios.delete(
+            `http://localhost:4000/api/facility/deleteSingleFacility/${facilityId}`,
+            {
+                headers: {
+                    Authorization: token
+                }
+            })
             .then(res => {
                 console.log(res.data)
+                alert(res.data)
                 setData({
 
                     name: "",
@@ -236,8 +219,22 @@ const Facility = () => {
                 setEditable(false)
             })
             .catch(error => {
-                alert(error.response.data)
+                console.log(error)
+                if (error.response && error.response.data) {
+                    // The request was made and the server responded with a status code
+                    console.error('Server response:', error.response.data);
+                    alert(error.response.data);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.error('No response received:', error.request);
+                    alert('Error: No response received from the server');
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.error('Error:', error.message);
+                    alert('Error deleting facility');
+                }
             })
+        navigate('/viewFacilities')
     }
 
 
@@ -257,41 +254,41 @@ const Facility = () => {
     };
 
     // create ImageSlider component
-    const ImageSlider = () => {
-        console.log('image slider renderd')
-        const settings = {
-            dots: true,
-            infinite: true,
-            speed: 500,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-        };
-        if (!Array.isArray(data.images) || data.images.length === 0) {
-            console.error("No images available or data.images is not an array:", data.images);
+    // const ImageSlider = () => {
+    //     console.log('image slider renderd')
+    //     const settings = {
+    //         dots: true,
+    //         infinite: true,
+    //         speed: 500,
+    //         slidesToShow: 1,
+    //         slidesToScroll: 1,
+    //     };
+    //     if (!Array.isArray(data.images) || data.images.length === 0) {
+    //         console.error("No images available or data.images is not an array:", data.images);
 
-            return null;
-        }
-        // const serverBaseUrl = "http://localhost:4000";
-        // const imagesFolder = "Backend/uploads";
+    //         return null;
+    //     }
+    //     // const serverBaseUrl = "http://localhost:4000";
+    //     // const imagesFolder = "Backend/uploads";
 
 
-        return (
-            <Slider {...settings} className={Facility_css.gym_img_slider}>
-                {data.images.map((imageUrl, index) => (
-                    <div key={index}>
-                        {console.log(imageUrl)}
-                        <img
-                            src={imageUrl}
-                            width={"700px"}
-                            height={"350px"}
-                            style={{ padding: "10px", border: "2px solid #ccc", borderRadius: "9px" }}
-                            alt={`Image ${index}`}
-                        />
-                    </div>
-                ))}
-            </Slider>
-        );
-    };
+    //     return (
+    //         <Slider {...settings} className={Facility_css.gym_img_slider}>
+    //             {data.images.map((imageUrl, index) => (
+    //                 <div key={index}>
+    //                     {console.log(imageUrl)}
+    //                     <img
+    //                         src={imageUrl}
+    //                         width={"700px"}
+    //                         height={"350px"}
+    //                         style={{ padding: "10px", border: "2px solid #ccc", borderRadius: "9px" }}
+    //                         alt={`Image ${index}`}
+    //                     />
+    //                 </div>
+    //             ))}
+    //         </Slider>
+    //     );
+    // };
 
     return (
         <div>
@@ -423,32 +420,35 @@ const Facility = () => {
                             </div>
 
                             <br />
+                            {
+                                userType === 'admin' ?
+                                    (<div className={Facility_css.buttonGroup}>
+                                        {
+                                            <>
+                                                <Button onClick={handleEdit} variant="contained">
+                                                    Edit
+                                                </Button>
 
-                            <div className={Facility_css.buttonGroup}>
-                                {
-                                    <>
-                                        <Button onClick={handleEdit} variant="contained">
-                                            Edit
-                                        </Button>
-
-                                        {data._id && ( // Display delete button only if there's an _id
-                                            <Button
-                                                // onClick={handleDelete}
-                                                variant="contained"
-                                                color="error"
-                                                onClick={handleDelete}
-                                            >
-                                                Delete
+                                                {data._id && ( // Display delete button only if there's an _id
+                                                    <Button
+                                                        // onClick={handleDelete}
+                                                        variant="contained"
+                                                        color="error"
+                                                        onClick={handleDelete}
+                                                    >
+                                                        Delete
+                                                    </Button>
+                                                )}
+                                            </>
+                                        }
+                                        {editable && (
+                                            <Button onClick={handleSave} variant="contained">
+                                                Save
                                             </Button>
                                         )}
-                                    </>
-                                }
-                                {editable && (
-                                    <Button onClick={handleSave} variant="contained">
-                                        Save
-                                    </Button>
-                                )}
-                            </div>
+                                    </div>) : null
+                            }
+
                             <br />
                             <div className={Facility_css.booking_btn}>
                                 <Button variant="contained" color="warning" size="large">
@@ -464,7 +464,10 @@ const Facility = () => {
                             <div className={Facility_css.img_container}>
 
                                 <div className={Facility_css.gym_img_box}>
-                                    <ImageSlider />
+                                    {/* <ImageSlider /> */}
+                                    {console.log(data.images)}
+                                    {console.log(typeof data.images[0])}
+                                    <ImageSlider images={data.images} />
                                 </div>
                                 <input
                                     type="file"
@@ -472,9 +475,12 @@ const Facility = () => {
                                     style={{ display: 'none' }}
                                     onChange={handleFileChange}
                                 />
-                                <IconButton color="primary" onClick={handleChooseImage}>
+                                {userType === 'admin' ? (<IconButton color="primary" onClick={handleChooseImage}>
                                     <AddPhotoAlternateIcon />
-                                </IconButton>
+                                </IconButton>) : null
+
+                                }
+
                             </div>
 
 

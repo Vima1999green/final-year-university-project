@@ -148,39 +148,6 @@ const reloadPage=() => {
             address: facAddress,
             rules: facRules
         }
-
-
-
-        // // Append facility data to the FormData object
-        // formData.append('FacilityName', facName);
-        // formData.append('Description', facDesc);
-        // formData.append('Cost', facCost);
-        // formData.append('location', facLocation);
-        // formData.append('Capacity', facCapacity);
-        // formData.append('Address', facAddress);
-        // formData.append('Rules', facRules);
-
-        // // Append each image file to the FormData object
-        // for (const file of selectedFiles) {
-        //     formData.append('images', file);
-        // }
-
-        // await axios.post('http://localhost:4000/api/facility/regsiter', formData, {
-        //     headers: {
-        //         'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
-        //     },
-
-        // })
-        //     .then(response => {
-        //         console.log(response.data)
-        //         alert('Facility created succesfully');
-
-        //     })
-
-        //     .catch(error => {
-        //         console.log(error.response.data);
-        //         alert(error.response.data + '\r\n' + 'Fcaility creation failed')
-        //     })
         const token = JSON.parse(localStorage.getItem('facilityUser')).token
         let facilityId = '';
         await axios
@@ -246,9 +213,11 @@ const reloadPage=() => {
                     },
                 })
             .then(res => {
+                console.log('Uopload success')
                 alert(res.data)
             })
             .catch(error => {
+                console.log('Uopload Failes')
                 alert(error.response.data)
             })
     };
@@ -301,67 +270,13 @@ const reloadPage=() => {
 
 
 
-                        <Grid container spacing={2} sx={{ margin: 0, padding: 0, marginTop: '20px' }}>
-                            <Grid item xs={12} lg={6}>
-
-                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
-                                    {/* <Link to={'/facility/gymnasium'} className={viewFacility_css.cardLink}> */}
-                                    <CardActionArea>
-
-                                        <CardMedia className={viewFacility_css.cardMedia}
-                                            component="img"
-                                            image={gym_image}
-                                            alt="gymnasium university of ruhuna"
-                                        />
-
-                                        <CardContent>
-
-                                            <h2 className={viewFacility_css.cardText}>
-                                                Gymnasium
-                                            </h2>
-                                        </CardContent>
-
-
-                                    </CardActionArea>
-                                    {/* </Link> */}
-
-                                </Card>
-
-                            </Grid>
-
-                            <Grid item xs={12} lg={6}>
-
-                                <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
-                                    {/* <Link to={'/facility/playground'} className={viewFacility_css.cardLink}> */}
-                                    <CardActionArea>
-
-                                        <CardMedia className={viewFacility_css.cardMedia}
-                                            component="img"
-                                            image={playground_image}
-                                            alt="playground university of ruhuna"
-                                        />
-
-                                        <CardContent>
-
-                                            <h2 className={viewFacility_css.cardText}>
-                                                Playground
-                                            </h2>
-                                        </CardContent>
-
-
-                                    </CardActionArea>
-                                    {/* </Link> */}
-
-                                </Card>
-
-                            </Grid>
 
 
 
 
 
 
-                        </Grid>
+
 
 
 

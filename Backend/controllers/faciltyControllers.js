@@ -1,9 +1,11 @@
 const multer = require('multer');
 const path = require('path');
 const Facility = require("../model/facilityModel");
-const validateFacilityData = require("../validation/facitityRouteValidation/addFacility");
+const validateFacilityData = require("../validation/facitityRouteValidation/validateFacilityRegisterData");
 const createMulterInstance = require('./createMulterInstance')
-const checkFileType=require('../validation/facitityRouteValidation/checkPhotoType')
+const checkFileType = require('../validation/facitityRouteValidation/checkPhotoType');
+const isEmpty = require('../validation/isEmpty');
+const validateFacilityUpdate = require('../validation/facitityRouteValidation/updateFacility')
 
 //controller addFacilty()
 //description add facility to database
@@ -45,33 +47,37 @@ const uploadPhotos = async (req, res, next) => {
   if (req.user.userType !== "admin") {
     console.log(req.user.userType);
     console.log("user is not admin");
-    return res.status(401).send("Unauthrized");
+    return res.status(401).send("Unauthorized");
   }
   //update images array in the database
   const facilityId = req.params.facilityId
-  const uploadPhotos=createMulterInstance(checkFileType,'FacilityPhotos')
-  const uploadPhotoData = uploadPhotos.array('photos', 5);
-  uploadPhotoData(req, res, (err) => {
-    if (err instanceof multer.MulterError) {
-      return res.status(400).send('Multer error: ' + err);
-    } else if (err) {
-      return res.status(500).send('Internal server error: ' + err);
-    }
-
-    const facility = Facility.findOneAndUpdate(
-      { _id: facilityId },
-      { $push: { images: req.files.map(file => file.filename) } },
-      { new: true }
-    ).then(res => {
-      console.log('Database updated')
-    }).catch(error => {
-      return res.status(500).send('Error updating facility: ', error.response.data);
-    })
-    // Files were successfully uploaded
-    console.log('Files uploaded');
-    res.status(200).send('Files uploaded');
-    // next();
-  });
+  const uploadPhotos = createMulterInstance(checkFileType, 'FacilityPhotos')
+  if (!isEmpty(uploadPhotos.array('photos', 6))) {
+    const uploadPhotoData = uploadPhotos.array('photos', 6);
+    uploadPhotoData(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        return res.status(400).send('Multer error: ' + err);
+      } else if (err) {
+        return res.status(500).send('Internal server error: ' + err);
+      }
+      const imageArray = req.files.map(file => file.filename)
+      const facility = Facility.findOneAndUpdate(
+        { _id: facilityId },
+        { images: imageArray },
+        { new: true }
+      ).then(res => {
+        console.log('Database updated')
+      }).catch(error => {
+        return res.status(500).send('Error updating facility: ', error.response.data);
+      })
+      // Files were successfully uploaded
+      console.log('Files uploaded');
+      res.status(200).send('Files uploaded');
+      // next();
+    });
+  } else {
+    res.status(200).send('No files to upload');
+  }
 }
 
 
@@ -82,7 +88,7 @@ const getSingleFacilty = (req, res) => {
   Facility.findById(req.params.id)
     .then((facility) => {
 
-      const baseUrl = 'http://localhost:4000/uploads/';
+      const baseUrl = 'http://localhost:4000/uploads/FacilityPhotos/';
 
       const imagesWithUrls = facility.images.map((image) => baseUrl + image);
       // console.log({ ...facility._doc, images: imagesWithUrls })
@@ -131,7 +137,7 @@ const deleteSingleFacility = async (req, res) => {
     }
 
     const faciltyId = req.params.id;
-    const deletedFacility = await Facility.findbyIdAndDelete(faciltyId);
+    const deletedFacility = await Facility.findByIdAndDelete(faciltyId);
 
     if (!deletedFacility) {
       return res.status(404).send("Facility not Found");
@@ -148,40 +154,32 @@ const deleteSingleFacility = async (req, res) => {
 //developer primalsha chamodi
 
 const updateFacility = async (req, res) => {
-  try {
-    if (req.user.userType !== 'admin') {
-      console.log(req.user.userType)
-      console.log('user is not admin')
-      return res.status(401).send('Unauthrized')
-    }
-
-    const facilityId = req.params.id;
-    const updatedData = req.body;
-
-    //validation
-    const { errors, isValid } = validate_UpdateFacilityData(updatedData);
-
+  if (req.user.userType === 'admin') {
+    let faciltyData = req.body
+    faciltyData.id = req.params.id
+    const { errors, isValid } = await validateFacilityUpdate(faciltyData);
     if (!isValid) {
-      return res.status(400).json(errors);
+      var errorMsg = ''
+      Object.values(errors).forEach(error => {
+        errorMsg += error + '\r\n'
+      })
+      errorMsg = errorMsg.trim()
+      res.status(400).send(errorMsg);
     }
-
-    // Update the database
-    const updatedFacility = await Facility.findByIdAndUpdate(
-      facilityId,
-      updatedData,
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedFacility) {
-      return res.status(404).send('Facility not found');
+    else {
+      try {
+        const facility = await Facility.findOneAndUpdate({ _id: req.params.id }, req.body,{new:true})
+        if (facility) {
+          console.log('Facility updated')
+         return res.send(facility) 
+        }
+      } catch (error) {
+        console.error("Error updating or finding facility:", error);
+        return res.status(500).send("Error updating or finding facility");
+      }
     }
-
-    // Send the updated data to the frontend
-    res.send(updatedFacility);
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+  } else {
+    return res.status(401).send('You are not authorized to update facility data')
   }
 };
 

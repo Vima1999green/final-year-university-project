@@ -108,6 +108,7 @@ const Form = ({ switchForm }) => {
     const [password, setPassword] = useState("");
     const [confirmpassword, setConfirmPassword] = useState("");
     const [requiredFieldError, setRequiredFieldError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
 
@@ -161,6 +162,7 @@ const Form = ({ switchForm }) => {
     const handleSubmit = async (event) => {
 
         event.preventDefault();
+        setIsLoading(true)
         console.log('handle submit')
         if (!Fname || !Lname || !email || !password || !confirmpassword) {
             setRequiredFieldError("All fields are required");
@@ -218,6 +220,7 @@ const Form = ({ switchForm }) => {
             })
         // Clear form and errors
         // handleClear();
+        setIsLoading(false)
     };
 
     // Clear form and errors
@@ -364,10 +367,10 @@ const Form = ({ switchForm }) => {
                             )}
 
                             {/* Form submission buttons */}
-                            <button className={Sign_css.submitBtn} type="submit" onClick={handleSubmit}>
+                            <button className={Sign_css.submitBtn} type="submit" onClick={handleSubmit} disabled={isLoading}>
                                 Submit
                             </button>
-                            <button className={Sign_css.clearBtn} type="reset" onClick={handleClear}>
+                            <button className={Sign_css.clearBtn} type="reset" onClick={handleClear} disabled={isLoading}>
                                 Clear
                             </button>
 

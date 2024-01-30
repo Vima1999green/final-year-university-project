@@ -46,18 +46,20 @@ router.get("/getAllFacilities", getAllfacilities);
 
 //@route DELETE api/deleteSingleFacilities
 //@desc delete single facilities
-//@access public
+//@access private
 //@developer Vimukthi Nuwan
-router.delete("/deleteSingleFacility/:id", deleteSingleFacility);
+router.delete(
+  "/deleteSingleFacility/:id",
+  passport.authenticate("jwt", { session: false }),
+  deleteSingleFacility);
 
 //@route POST api/updateFacility/:id
 //@desc update single facility
 //@access private
 //@developer Primalsha Chamodi
-router.post(
+router.put(
   "/updateFacility/:id",
   passport.authenticate("jwt", { session: false }),
-  uploadPhotos,
   updateFacility
 );
 
