@@ -6,10 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 //import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import validation from "./Validation.js";
 //import ForgotPWD from './FogotPWD';
-import { useLogin } from '../../hooks/useLogin.js'
 import isEmpty from "../../isEmpty.js";
 import axios from 'axios';
-import Navbar from '../NavBar/Navbar.js';
+
 
 
 function Login() {
@@ -21,7 +20,8 @@ function Login() {
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { login, error, isLoading } = useLogin()
+  const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleInput = (e) => {
     setValues({ ...values, [e.target.name]: [e.target.value] });
@@ -63,12 +63,47 @@ function Login() {
 
 
   const handleSubmit = async () => {
-    await login(email, password)
 
-
-
-
+    setIsLoading(true)
+    setError(null)
+    await axios.post('http://localhost:4000/api/users/login', {
+      email: email,
+      password: password
+    }
+    )
+      .then(res => {
+        console.log(res.data)
+        if (res.data.isAutheticate) {
+          localStorage.setItem('facilityUser', JSON.stringify(res.data))
+          alert('login succcesfulll');
+          navigate('/landpage')
+        }
+        else {
+          if (res.data.msg === 'Email is not verified') {
+            axios.post('http://localhost:4000/api/users/reconfirmationEmail', { email: email })
+              .then(res => {
+                console.log(res.data)
+              })
+              .catch(err => {
+                console.log(err.responce.data)
+              })
+            alert('Login Failed\r\n' + res.data.msg)
+            navigate(`/verifyEmail/${email}`)
+          }
+          else {
+            alert('Login Failed\r\n' + res.data.msg)
+          }
+        }
+      })
+      .catch(err => {
+        console.log(err.response.data)
+        //alert('error occured');
+        alert('Login Failed\r\n' + err.response.data.msg)
+      })
+    setIsLoading(false)
   }
+
+
   return (
     <div className={Login_css.content}>
       <div className={Login_css.contentImage}>

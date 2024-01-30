@@ -2,7 +2,9 @@ const multer = require('multer');
 const path = require('path');
 const Facility = require("../model/facilityModel");
 const validateFacilityData = require("../validation/facitityRouteValidation/addFacility");
-const uploadImages = require('./uploadImages')
+const validate_UpdateFacilityData = require('../validation/facitityRouteValidation/updateFacility')
+const uploadImages = require('./uploadImages');
+const isEmpty = require('../validation/isEmpty')
 
 //controller addFacilty()
 //description add facility to database
@@ -44,32 +46,36 @@ const uploadPhotos = async (req, res, next) => {
   if (req.user.userType !== "admin") {
     console.log(req.user.userType);
     console.log("user is not admin");
-    return res.status(401).send("Unauthrized");
+    return res.status(401).send("Unauthorized");
   }
   //update images array in the database
   const facilityId = req.params.facilityId
-  const uploadPhotoData = uploadImages.array('photos', 5);
-  uploadPhotoData(req, res, (err) => {
-    if (err instanceof multer.MulterError) {
-      return res.status(400).send('Multer error: ' + err);
-    } else if (err) {
-      return res.status(500).send('Internal server error: ' + err);
-    }
+  if (!isEmpty(uploadImages.array('photos', 5))) {
+    const uploadPhotoData = uploadImages.array('photos', 5);
+    uploadPhotoData(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        return res.status(400).send('Multer error: ' + err);
+      } else if (err) {
+        return res.status(500).send('Internal server error: ' + err);
+      }
 
-    const facility = Facility.findOneAndUpdate(
-      { _id: facilityId },
-      { $push: { images: req.files.map(file => file.filename) } },
-      { new: true }
-    ).then(res => {
-      console.log('Database updated')
-    }).catch(error => {
-      return res.status(500).send('Error updating facility: ', error.response.data);
-    })
-    // Files were successfully uploaded
-    console.log('Files uploaded');
-    res.status(200).send('Files uploaded');
-    // next();
-  });
+      const facility = Facility.findOneAndUpdate(
+        { _id: facilityId },
+        { $push: { images: req.files.map(file => file.filename) } },
+        { new: true }
+      ).then(res => {
+        console.log('Database updated')
+      }).catch(error => {
+        return res.status(500).send('Error updating facility: ', error.response.data);
+      })
+      // Files were successfully uploaded
+      console.log('Files uploaded');
+      res.status(200).send('Files uploaded');
+      // next();
+    });
+  } else {
+    res.status(200).send('No files to upload');
+  }
 }
 
 
@@ -129,7 +135,7 @@ const deleteSingleFacility = async (req, res) => {
     }
 
     const faciltyId = req.params.id;
-    const deletedFacility = await Facility.findbyIdAndDelete(faciltyId);
+    const deletedFacility = await Facility.findByIdAndDelete(faciltyId);
 
     if (!deletedFacility) {
       return res.status(404).send("Facility not Found");
@@ -150,7 +156,7 @@ const updateFacility = async (req, res) => {
     if (req.user.userType !== 'admin') {
       console.log(req.user.userType)
       console.log('user is not admin')
-      return res.status(401).send('Unauthrized')
+      return res.status(401).send('Unauthorized')
     }
 
     const facilityId = req.params.id;
