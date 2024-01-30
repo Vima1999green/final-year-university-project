@@ -9,9 +9,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import gym_image from '../../Images/gym9.jpg'
-import playground_image from '../../Images/playground1.jpeg';
-import { Link, useNavigate } from 'react-router-dom';
+
+import { Link, } from 'react-router-dom';
 import isEmpty from '../../isEmpty';
 
 const ViewFacility = () => {
@@ -19,7 +18,7 @@ const ViewFacility = () => {
     const user = JSON.parse(localStorage.getItem('facilityUser'));
     const userRole = user.userDetails.userType;
 
-    const navigate = useNavigate();
+
 
     const [options, setOptions] = useState([]);//to fill  menu items in the select Box component
 
@@ -45,7 +44,7 @@ const ViewFacility = () => {
 
 
     const handleInput = (event) => {
-        event.preventDefault();
+
         setValues({ ...values, [event.target.name]: [event.target.value] });
 
         if (event.target.name === 'facName')
@@ -95,11 +94,12 @@ const ViewFacility = () => {
     };
     const handleClose = () => {
         setOpen(false);
+        handleClear();
     };
 
 
     const handleFileChange = (event) => {
-        event.preventDefault();
+
         if (event.target.files.length > 5) {
             alert('You can only upload maximum of 5 images')
         } else {
@@ -123,8 +123,8 @@ const ViewFacility = () => {
         setFacRules('')
     };
 
-    const hanldeSubmit = async (event) => {
-        event.preventDefault();
+    const hanldeSubmit = async () => {
+
         console.log('hanlde submit');
         console.log('==================');
         console.log('submitted data', {
@@ -186,7 +186,9 @@ const ViewFacility = () => {
             }
         }
         handleClear();
-        reloadPage()
+        reloadPage();
+        handleClose();
+        setSelectedFiles([]);
 
 
 
@@ -218,7 +220,7 @@ const ViewFacility = () => {
                 alert(res.data)
             })
             .catch(error => {
-                console.log('Uopload Failes')
+                console.log('Upload Failes')
                 alert(error.response.data)
             })
     };
@@ -330,6 +332,7 @@ const ViewFacility = () => {
                                             color="primary"
                                             value={values.facName}
                                             onChange={handleInput}
+                                            autoComplete='true'
                                         />
 
                                     </div>
@@ -344,6 +347,7 @@ const ViewFacility = () => {
                                             color="primary"
                                             value={values.facDesc}
                                             onChange={handleInput}
+                                            autoComplete='true'
                                         />
 
                                     </div>
@@ -360,6 +364,7 @@ const ViewFacility = () => {
                                             type='number'
                                             value={values.facCost}
                                             onChange={handleInput}
+                                            autoComplete='true'
                                         />
 
                                     </div>
@@ -374,6 +379,7 @@ const ViewFacility = () => {
                                             color="primary"
                                             value={values.facLocation}
                                             onChange={handleInput}
+                                            autoComplete='true'
                                         />
 
                                     </div>
@@ -389,6 +395,7 @@ const ViewFacility = () => {
                                             type='number'
                                             value={values.facCapacity}
                                             onChange={handleInput}
+                                            autoComplete='true'
                                         />
 
                                     </div>
@@ -403,6 +410,7 @@ const ViewFacility = () => {
                                             color="primary"
                                             value={values.facAddress}
                                             onChange={handleInput}
+                                            autoComplete='true'
 
                                         />
 
@@ -418,6 +426,7 @@ const ViewFacility = () => {
 
                                             value={values.rules}
                                             onChange={handleInput}
+                                            autoComplete='true'
                                             fullWidth
                                         />
 

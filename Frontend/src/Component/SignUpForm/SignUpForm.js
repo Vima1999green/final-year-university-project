@@ -264,6 +264,7 @@ const Form = ({ switchForm }) => {
                                 required
                                 className={Sign_css.inputFields}
                                 name="firstName"
+                                autoComplete="true"
                             />
 
                             {/* Last Name */}
@@ -276,6 +277,7 @@ const Form = ({ switchForm }) => {
                                 required
                                 className={Sign_css.inputFields}
                                 name="LastName"
+                                autoComplete="true"
                             />
 
                             {/* university fields */}
@@ -292,6 +294,7 @@ const Form = ({ switchForm }) => {
                                             required
                                             className={Sign_css.inputFields}
                                             name="UniversityId"
+                                            autoComplete="true"
                                         />
                                         {/* Display University ID error if exists */}
                                         {universityIdError && (
@@ -309,6 +312,7 @@ const Form = ({ switchForm }) => {
                                             required
                                             className={Sign_css.inputFields}
                                             name="universityEmail"
+                                            autoComplete='true'
                                         />
                                     </div>
                                 </>
@@ -324,6 +328,8 @@ const Form = ({ switchForm }) => {
                                 required
                                 className={Sign_css.inputFields}
                                 name="personalEmail"
+                                autoComplete='true'
+
                             />
                             {/* Display email error if exists */}
                             {emailError && (
@@ -340,6 +346,8 @@ const Form = ({ switchForm }) => {
                                 required
                                 className={Sign_css.inputFields}
                                 name="password"
+                                autoComplete='true'
+
                             />
                             {/* Password validation component */}
                             <PasswordValidator

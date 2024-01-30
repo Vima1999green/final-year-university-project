@@ -475,7 +475,7 @@ const Facility = () => {
                                     style={{ display: 'none' }}
                                     onChange={handleFileChange}
                                 />
-                                {userType === 'admin' ? (<IconButton color="primary" onClick={handleChooseImage}>
+                                {userType === 'admin' ? (<IconButton color="primary" onClick={handleChooseImage} sx={{ color: 'black !important' }}>
                                     <AddPhotoAlternateIcon />
                                 </IconButton>) : null
 
