@@ -11,7 +11,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import gym_image from '../../Images/gym9.jpg'
 import playground_image from '../../Images/playground1.jpeg';
-import add_facility_image from '../../Images/facility.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import isEmpty from '../../isEmpty';
 
@@ -19,6 +18,7 @@ const ViewFacility = () => {
 
     const user = JSON.parse(localStorage.getItem('facilityUser'));
     const userRole = user.userDetails.userType;
+
     const navigate = useNavigate();
 
     const [options, setOptions] = useState([]);//to fill  menu items in the select Box component
@@ -283,7 +283,7 @@ const reloadPage=() => {
                     <div className={viewFacility_css.body}>
 
                         <Grid item xs={12} lg={6} >
-                            {userRole === 'admin' && (
+                            {userRole === 'admin' ? (
                                 <Button
                                     variant="contained"
                                     sx={{ width: '100%' }}
@@ -294,6 +294,8 @@ const reloadPage=() => {
 
 
 
+                            ) : (
+                                null
                             )}
                         </Grid>
 
@@ -303,25 +305,25 @@ const reloadPage=() => {
                             <Grid item xs={12} lg={6}>
 
                                 <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
-                                    <Link to={'/facility/gymnasium'} className={viewFacility_css.cardLink}>
-                                        <CardActionArea>
+                                    {/* <Link to={'/facility/gymnasium'} className={viewFacility_css.cardLink}> */}
+                                    <CardActionArea>
 
-                                            <CardMedia className={viewFacility_css.cardMedia}
-                                                component="img"
-                                                image={gym_image}
-                                                alt="gymnasium university of ruhuna"
-                                            />
+                                        <CardMedia className={viewFacility_css.cardMedia}
+                                            component="img"
+                                            image={gym_image}
+                                            alt="gymnasium university of ruhuna"
+                                        />
 
-                                            <CardContent>
+                                        <CardContent>
 
-                                                <h2 className={viewFacility_css.cardText}>
-                                                    Gymnasium
-                                                </h2>
-                                            </CardContent>
+                                            <h2 className={viewFacility_css.cardText}>
+                                                Gymnasium
+                                            </h2>
+                                        </CardContent>
 
 
-                                        </CardActionArea>
-                                    </Link>
+                                    </CardActionArea>
+                                    {/* </Link> */}
 
                                 </Card>
 
@@ -330,25 +332,25 @@ const reloadPage=() => {
                             <Grid item xs={12} lg={6}>
 
                                 <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card} >
-                                    <Link to={'/facility/playground'} className={viewFacility_css.cardLink}>
-                                        <CardActionArea>
+                                    {/* <Link to={'/facility/playground'} className={viewFacility_css.cardLink}> */}
+                                    <CardActionArea>
 
-                                            <CardMedia className={viewFacility_css.cardMedia}
-                                                component="img"
-                                                image={playground_image}
-                                                alt="playground university of ruhuna"
-                                            />
+                                        <CardMedia className={viewFacility_css.cardMedia}
+                                            component="img"
+                                            image={playground_image}
+                                            alt="playground university of ruhuna"
+                                        />
 
-                                            <CardContent>
+                                        <CardContent>
 
-                                                <h2 className={viewFacility_css.cardText}>
-                                                    Playground
-                                                </h2>
-                                            </CardContent>
+                                            <h2 className={viewFacility_css.cardText}>
+                                                Playground
+                                            </h2>
+                                        </CardContent>
 
 
-                                        </CardActionArea>
-                                    </Link>
+                                    </CardActionArea>
+                                    {/* </Link> */}
 
                                 </Card>
 
@@ -493,14 +495,14 @@ const reloadPage=() => {
                                     <div>
                                         <label>Rules : </label>
                                         <TextField
-                                            fullWidth
-                                            name='rules'
+                                            name="rules"
                                             label=""
-                                            variant="filled"
-                                            color="primary"
-                                            value={values.facRules}
-                                            onChange={handleInput}
+                                            multiline
+                                            rows={5}  // You can adjust the number of rows as needed
 
+                                            value={values.rules}
+                                            onChange={handleInput}
+                                            fullWidth
                                         />
 
                                     </div>

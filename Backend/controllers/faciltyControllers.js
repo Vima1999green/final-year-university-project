@@ -2,7 +2,8 @@ const multer = require('multer');
 const path = require('path');
 const Facility = require("../model/facilityModel");
 const validateFacilityData = require("../validation/facitityRouteValidation/addFacility");
-const uploadImages = require('./uploadImages')
+const createMulterInstance = require('./createMulterInstance')
+const checkFileType=require('../validation/facitityRouteValidation/checkPhotoType')
 
 //controller addFacilty()
 //description add facility to database
@@ -48,7 +49,8 @@ const uploadPhotos = async (req, res, next) => {
   }
   //update images array in the database
   const facilityId = req.params.facilityId
-  const uploadPhotoData = uploadImages.array('photos', 5);
+  const uploadPhotos=createMulterInstance(checkFileType,'FacilityPhotos')
+  const uploadPhotoData = uploadPhotos.array('photos', 5);
   uploadPhotoData(req, res, (err) => {
     if (err instanceof multer.MulterError) {
       return res.status(400).send('Multer error: ' + err);
@@ -79,8 +81,16 @@ const uploadPhotos = async (req, res, next) => {
 const getSingleFacilty = (req, res) => {
   Facility.findById(req.params.id)
     .then((facility) => {
-      res.send(facility);
+
+      const baseUrl = 'http://localhost:4000/uploads/';
+
+      const imagesWithUrls = facility.images.map((image) => baseUrl + image);
+      // console.log({ ...facility._doc, images: imagesWithUrls })
+      const result = { ...facility._doc, images: imagesWithUrls };
+      res.send(result)
+
     })
+
     .catch((error) => {
       res.status(404).send(error);
     });
@@ -93,7 +103,7 @@ const getAllfacilities = (req, res) => {
   Facility.find()
     .then((facilities) => {
       // console.log(facilities)
-      const baseUrl = 'http://localhost:4000/uploads/';
+      const baseUrl = 'http://localhost:4000/uploads/FacilityPhotos/';
       const facilitiesWithUrls = facilities.map((facility) => {
         const imagesWithUrls = facility.images.map((image) => baseUrl + image);
         // console.log({ ...facility._doc, images: imagesWithUrls })
@@ -121,34 +131,15 @@ const deleteSingleFacility = async (req, res) => {
     }
 
     const faciltyId = req.params.id;
-    const deletedFacility = await facility.findbyIdAndDelete(faciltyId);
+    const deletedFacility = await Facility.findbyIdAndDelete(faciltyId);
 
     if (!deletedFacility) {
       return res.status(404).send("Facility not Found");
-    }
-    res.send(deletedFacility);
+    } else
+      return res.send('Facility deleted sucessfully');
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server Error");
-  }
-};
-
-const deleteAllFacilities = async (req, res) => {
-  try {
-    if (req.user.userType !== "admin") {
-      console.log(req.user.userType);
-      console.log("user is not admin");
-      return res.status(401).send("Unauthorized");
-    }
-    const deletionResult = await Facility.deleteMany({});
-
-    if (deletionResult.deletedCount === 0) {
-      return res.status(404).send("No facilities found to delete");
-    }
-    res.send(`Successfully deleted ${deletionResult.deletedCount} facilities`);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -199,7 +190,6 @@ module.exports = {
   getSingleFacilty,
   getAllfacilities,
   deleteSingleFacility,
-  deleteAllFacilities,
   updateFacility,
   uploadPhotos
 };

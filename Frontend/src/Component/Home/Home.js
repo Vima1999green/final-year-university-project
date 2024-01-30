@@ -1,10 +1,10 @@
-//import home from '../Images/home.png';
-import sport1 from '../Images/sports1.jpg';
-import sport2 from '../Images/sports2.jpg';
-import sport3 from '../Images/sports3.jpg';
-import sport4 from '../Images/sports4.jpg';
-import sport5 from '../Images/sports5.jpg';
-import sport6 from '../Images/sports6.jpg';
+//import home from '../../Images/home.png';
+import sport1 from '../../Images/sports1.jpg';
+import sport2 from '../../Images/sports2.jpg';
+import sport3 from '../../Images/sports3.jpg';
+import sport4 from '../../Images/sports4.jpg';
+import sport5 from '../../Images/sports5.jpg';
+import sport6 from '../../Images/sports6.jpg';
 import home_css from "./home.module.css";
 import { useState, useEffect } from 'react';
 
@@ -16,9 +16,9 @@ const Home = () => {
     const [currentEventIndex, setCurrentEventIndex] = useState(0);
     const [eventImages, setEventImages] = useState([sport1, sport2, sport3]);
     const [eventDescriptions, setEventDescriptions] = useState([
-        'Description for Event 1',
-        'Description for Event 2',
-        'Description for Event 3',
+        'Inter University Athletics',
+        'Intra Faculty Swimming',
+        'Inter Faculty Weightlifting',
     ]);
     useEffect(() => {
         const eventIntervalId = setInterval(() => {
@@ -40,9 +40,7 @@ const Home = () => {
                         <table>
                             <tr>
                                 <td style={{ width: '75%' }} >
-                                    <p className={home_css.p}>Welcome<br></br>
-                                        to the<br></br>
-                                        PlayGround and Gym Facility Scheduler</p>
+                                    <p className={home_css.p}>Welcome!!!<br></br></p>
 
                                 </td>
                                 <td style={{ width: '25%' }}>
@@ -62,6 +60,27 @@ const Home = () => {
 
                     <br></br>
                     <br></br>
+                    <div className={home_css.about}>
+                            <h1>About</h1>
+                            <br></br>
+                            <p>Welcome to our PlayGround and Gym Facility Scheduler, 
+                                where convenience meets excellence. Our platform simplifies 
+                                the process of reserving playgrounds and the gymnasium, 
+                                ensuring a seamless experience for users. Easily request bookings, 
+                                track the real-time status, and access the current schedule at your fingertips. 
+                                We prioritize transparency, enabling users to share proof of payment directly through the system.
+                                <br></br>
+                                <br></br>
+                                Customer satisfaction is paramount, and in the rare event 
+                                of property damage during an activity, we promptly provide 
+                                customers with documented proof for transparency and resolution. 
+                                Our commitment lies in fostering a user-friendly environment that 
+                                empowers individuals to make the most of our state-of-the-art facilities.
+                                <br></br> 
+                                <br></br>
+                                Join us in creating memorable and hassle-free experiences 
+                                through our PlayGround and Gym Facility Scheduler.</p>
+                        </div>
 
 
                     <div className={home_css.images}>
@@ -115,7 +134,9 @@ const Home = () => {
                                 </td>
                             </tr>
                         </center>
+                        
 
+                        <br></br>
                     </div>
                     <br></br>
                     <br></br>
@@ -124,7 +145,7 @@ const Home = () => {
                         <br></br>
                         <p>Faculty of Science is one of the pioneering faculties at the
                             University of Ruhuna, which was founded in 1978 and has made
-                            an immense contribution for the countryâ€™s tertiary education
+                            an immense contribution for the country’s tertiary education
                             throughout the last 44 years. The Faculty of Science offers
                             learning and research opportunities for undergraduate and
                             postgraduate students in the fields of Biological Science,

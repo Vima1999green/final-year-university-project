@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import Login_css from './Login.module.css'
-import email from '../Images/email2.png';
+import Login_css from './EmailVerification.module.css'
+import email from '../../Images/email2.png';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import Form from './Form';
+import Form from '../SignUpForm/SignUpForm';
 
 
 function EmailVerification() {
@@ -41,7 +41,7 @@ function EmailVerification() {
       console.log(res)
       alert('Email verified')
       console.log('navigating to login')
-      navigate('/landpage')
+      navigate('/login')
     })
       .catch(err => {
         console.log(err.response.data)

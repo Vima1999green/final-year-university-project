@@ -6,10 +6,10 @@ import { Link, useNavigate } from "react-router-dom";
 //import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import validation from "./Validation.js";
 //import ForgotPWD from './FogotPWD';
-import { useLogin } from '../hooks/useLogin.js'
-import isEmpty from "../isEmpty.js";
+import { useLogin } from '../../hooks/useLogin.js'
+import isEmpty from "../../isEmpty.js";
 import axios from 'axios';
-import Navbar from './Navbar.js';
+import Navbar from '../NavBar/Navbar.js';
 
 
 function Login() {

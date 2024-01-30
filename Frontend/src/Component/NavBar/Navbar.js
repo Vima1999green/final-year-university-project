@@ -1,5 +1,5 @@
-import logo from '../Images/logo.png';
-import header_css from "./header.module.css";
+import logo from '../../Images/logo.png';
+import header_css from "./NavBar.module.css";
 import { Link, useLocation } from 'react-router-dom';
 import UserProfile from './UserProfile';
 
@@ -58,7 +58,7 @@ const Navbar = () => {
                     <Link to="/login" className="btn btn-light">Login</Link>&nbsp;
                     <Link to="/signup" className="btn btn-warning">Sign Up</Link>
                 </div>
-            )}
+            )} 
 
         </div>
     );
