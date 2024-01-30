@@ -168,10 +168,10 @@ const updateFacility = async (req, res) => {
     }
     else {
       try {
-        const facility = await Facility.findOneAndUpdate({ _id: req.params.id }, req.body,{new:true})
+        const facility = await Facility.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
         if (facility) {
           console.log('Facility updated')
-         return res.send(facility) 
+          return res.send(facility)
         }
       } catch (error) {
         console.error("Error updating or finding facility:", error);

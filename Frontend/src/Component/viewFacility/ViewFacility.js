@@ -9,8 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
-import { Link, } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import isEmpty from '../../isEmpty';
 
 const ViewFacility = () => {
@@ -18,7 +17,7 @@ const ViewFacility = () => {
     const user = JSON.parse(localStorage.getItem('facilityUser'));
     const userRole = user.userDetails.userType;
 
-
+    const navigate = useNavigate();
 
     const [options, setOptions] = useState([]);//to fill  menu items in the select Box component
 
@@ -44,7 +43,7 @@ const ViewFacility = () => {
 
 
     const handleInput = (event) => {
-
+        event.preventDefault();
         setValues({ ...values, [event.target.name]: [event.target.value] });
 
         if (event.target.name === 'facName')
@@ -71,18 +70,19 @@ const ViewFacility = () => {
     };
 
 
-const reloadPage=() => {
-    console.log('reloadPage')
-    axios.get('http://localhost:4000/api/facility/getAllFacilities')
-        .then(response =>{
-            console.log(response.data)
-            setOptions(response.data)}
-        )
+    const reloadPage = () => {
+        console.log('reloadPage')
+        axios.get('http://localhost:4000/api/facility/getAllFacilities')
+            .then(response => {
+                console.log(response.data)
+                setOptions(response.data)
+            }
+            )
 
-        .catch(error =>
-            console.error(error)
-        )
-}
+            .catch(error =>
+                console.error(error)
+            )
+    }
     // get AllFacilities from backend api endpoint
     useEffect(reloadPage, []);
 
@@ -93,12 +93,11 @@ const reloadPage=() => {
     };
     const handleClose = () => {
         setOpen(false);
-        handleClear();
     };
 
 
     const handleFileChange = (event) => {
-
+        event.preventDefault();
         if (event.target.files.length > 5) {
             alert('You can only upload maximum of 5 images')
         } else {
@@ -120,10 +119,11 @@ const reloadPage=() => {
         setFacLocation('')
         setFacAddress('')
         setFacRules('')
+        setSelectedFiles([])
     };
 
-    const hanldeSubmit = async () => {
-
+    const hanldeSubmit = async (event) => {
+        event.preventDefault();
         console.log('hanlde submit');
         console.log('==================');
         console.log('submitted data', {
@@ -187,9 +187,8 @@ const reloadPage=() => {
         handleClear();
         reloadPage();
         handleClose();
-        setSelectedFiles([]);
 
-        
+
 
     };
 
@@ -219,7 +218,7 @@ const reloadPage=() => {
                 alert(res.data)
             })
             .catch(error => {
-                console.log('Upload Failes')
+                console.log('Uopload Failes')
                 alert(error.response.data)
             })
     };
@@ -331,7 +330,6 @@ const reloadPage=() => {
                                             color="primary"
                                             value={values.facName}
                                             onChange={handleInput}
-                                            autoComplete='true'
                                         />
 
                                     </div>
@@ -346,7 +344,6 @@ const reloadPage=() => {
                                             color="primary"
                                             value={values.facDesc}
                                             onChange={handleInput}
-                                            autoComplete='true'
                                         />
 
                                     </div>
@@ -363,7 +360,6 @@ const reloadPage=() => {
                                             type='number'
                                             value={values.facCost}
                                             onChange={handleInput}
-                                            autoComplete='true'
                                         />
 
                                     </div>
@@ -378,7 +374,6 @@ const reloadPage=() => {
                                             color="primary"
                                             value={values.facLocation}
                                             onChange={handleInput}
-                                            autoComplete='true'
                                         />
 
                                     </div>
@@ -394,7 +389,6 @@ const reloadPage=() => {
                                             type='number'
                                             value={values.facCapacity}
                                             onChange={handleInput}
-                                            autoComplete='true'
                                         />
 
                                     </div>
@@ -409,7 +403,6 @@ const reloadPage=() => {
                                             color="primary"
                                             value={values.facAddress}
                                             onChange={handleInput}
-                                            autoComplete='true'
 
                                         />
 
@@ -425,7 +418,6 @@ const reloadPage=() => {
 
                                             value={values.rules}
                                             onChange={handleInput}
-                                            autoComplete='true'
                                             fullWidth
                                         />
 
