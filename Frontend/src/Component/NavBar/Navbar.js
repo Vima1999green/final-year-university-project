@@ -33,7 +33,7 @@ const Navbar = () => {
             </text> */}
             <text><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
                 <h4>Physical Education Unit<br></br>
-                    PLAYGROUND & GYM FACILITY SCHEDULER</h4>
+                    SPORTS FACILITY SCHEDULER</h4>
             </text>
 
             {showUserProfile && (
