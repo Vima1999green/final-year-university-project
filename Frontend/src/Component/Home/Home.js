@@ -60,8 +60,12 @@ const Home = () => {
 
                     <br></br>
                     <br></br>
+<<<<<<< HEAD
 
 
+=======
+                    
+>>>>>>> df88414e824f77ef761c7975fe780532940d8081
                     <div className={home_css.images}>
                         <center>
                             <tr>
@@ -142,6 +146,32 @@ const Home = () => {
 
                     <br></br>
                     <br></br>
+<<<<<<< HEAD
+=======
+                    <div className={home_css.about}>
+                            <h1>About</h1>
+                            <br></br>
+                            <p>Welcome to our PlayGround and Gym Facility Scheduler, 
+                                where convenience meets excellence. Our platform simplifies 
+                                the process of reserving playgrounds and the gymnasium, 
+                                ensuring a seamless experience for users. Easily request bookings, 
+                                track the real-time status, and access the current schedule at your fingertips. 
+                                We prioritize transparency, enabling users to share proof of payment directly through the system.
+                                <br></br>
+                                <br></br>
+                                Customer satisfaction is paramount, and in the rare event 
+                                of property damage during an activity, we promptly provide 
+                                customers with documented proof for transparency and resolution. 
+                                Our commitment lies in fostering a user-friendly environment that 
+                                empowers individuals to make the most of our state-of-the-art facilities.
+                                <br></br> 
+                                <br></br>
+                                Join us in creating memorable and hassle-free experiences 
+                                through our PlayGround and Gym Facility Scheduler.</p>
+                        </div>
+                        <br />
+                        <br />
+>>>>>>> df88414e824f77ef761c7975fe780532940d8081
 
                     <div className={home_css.map}>
                         <center>
