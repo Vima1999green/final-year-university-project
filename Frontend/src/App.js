@@ -13,7 +13,7 @@ import ViewFacility from './Component/ViewFacility/ViewFacility';
 import UserProfile from './Component/NavBar/UserProfile';
 import Facility from './Component/Facility/Facility';
 import UserHistory from './Component/History/UserHistory';
-
+import Profile from './Component/UserProfile/Profile';
 
 
 
@@ -43,7 +43,7 @@ function App() {
             <Route path="/viewFacilities" element={<ViewFacility />} />
             <Route path="/facility/:facilityId" element={<Facility />} />
             <Route path="/history" element={<UserHistory />} />
-
+            <Route path="/profile" element={<Profile/>}/>
 
 
             <Route path='/userProfile' element={<UserProfile />} />
