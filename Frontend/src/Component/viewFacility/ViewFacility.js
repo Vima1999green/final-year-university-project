@@ -71,19 +71,18 @@ const ViewFacility = () => {
     };
 
 
-    const reloadPage = () => {
-        console.log('reloadPage')
-        axios.get('http://localhost:4000/api/facility/getAllFacilities')
-            .then(response => {
-                console.log(response.data)
-                setOptions(response.data)
-            }
-            )
+const reloadPage=() => {
+    console.log('reloadPage')
+    axios.get('http://localhost:4000/api/facility/getAllFacilities')
+        .then(response =>{
+            console.log(response.data)
+            setOptions(response.data)}
+        )
 
-            .catch(error =>
-                console.error(error)
-            )
-    }
+        .catch(error =>
+            console.error(error)
+        )
+}
     // get AllFacilities from backend api endpoint
     useEffect(reloadPage, []);
 
@@ -190,7 +189,7 @@ const ViewFacility = () => {
         handleClose();
         setSelectedFiles([]);
 
-
+        
 
     };
 

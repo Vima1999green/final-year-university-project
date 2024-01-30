@@ -10,6 +10,7 @@ const validateFacilityData = async (data) => {
     data.capacity = isEmpty(data.capacity) ? '' : data.capacity
     data.rules = isEmpty(data.rules) ? '' : data.rules
     data.address = isEmpty(data.address) ? '' : data.address
+    data.cost = isEmpty(data.cost) ? '' : data.cost.toString()
 
     //validating name
     if (validator.isEmpty(data.name))
@@ -60,7 +61,7 @@ const validateFacilityData = async (data) => {
     else if (data.cost < 0)
         errors.cost = 'Cost cannot be less than zero';
 
-
+        
     return {
         errors,
         isValid: isEmpty(errors)

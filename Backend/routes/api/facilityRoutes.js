@@ -57,10 +57,9 @@ router.delete(
 //@desc update single facility
 //@access private
 //@developer Primalsha Chamodi
-router.post(
+router.put(
   "/updateFacility/:id",
   passport.authenticate("jwt", { session: false }),
-  uploadPhotos,
   updateFacility
 );
 
