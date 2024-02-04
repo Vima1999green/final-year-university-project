@@ -16,6 +16,7 @@ const validateBookingData = (data) => {
     data.status = isEmpty(data.status) ? '' : data.status;
     data.description = isEmpty(data.description) ? '' : data.description;
     data.facilityId = isEmpty(data.facilityId) ? '' : data.facilityId;
+    data.permissionLetter = isEmpty(data.permissionLetter) ? '' : data.permissionLetter;
 
     //validate userID
     if (validator.isEmpty(data.userID))
@@ -50,7 +51,7 @@ const validateBookingData = (data) => {
         
     }
 
-    
+
     //validate status
     const validStatusValues = ['pending', 'cancelled', 'approved', 'payment', 'postponed'];
     if (validator.isEmpty(data.status))
@@ -69,7 +70,9 @@ const validateBookingData = (data) => {
     else if (!mongoose.Types.ObjectId.isValid(data.facilityId)) {
         errors.facilityId = 'Invalid User Id';
     }
-
+    //validate permissionLetter
+    if (validator.isEmpty(data.permissionLetter))
+        errors.permissionLetter = 'Permission Letter is required';
     return {
         errors,
         isValid: isEmpty(errors)

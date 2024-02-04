@@ -60,6 +60,10 @@ const bookingSchema = new Schema({
         type: Boolean,
         default: false
 
+    },
+    permissionLetter:{
+        type:String,
+        required: [true, 'Permission letter is required']
     }
 }, { timestamps: true })
 
