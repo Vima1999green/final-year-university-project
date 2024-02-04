@@ -36,39 +36,12 @@ const Facility = () => {
     });
 
     const [editable, setEditable] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState(null)
 
 
 
 
-    // const fetchDataFromDatabase = async () => {
 
-    //     // try {
-    //     //     // Fetch data from backend API endpoint
-    //     //     const response = await fetch(`http://localhost:4000/api/facility/getFacility/${data._id}`, {
-    //     //         method: 'GET',
-    //     //         headers: {
-    //     //             "Content-Type": "application/json",
-    //     //         },
-    //     //         body: JSON.stringify(data),
-    //     //     });
-    //     //     const result = await response.json();
-
-    //     //     // Update state with data from the database
-    //     //     setData(result);
-    //     // } catch (error) {
-    //     //     console.error("Error fetching data:", error);
-    //     // }
-
-    //     // await axios.get(`http://localhost:4000/api/facility/getFacility/${facilityId}`)
-    //     //     .then(res => {
-    //     //         console.log(res.data)
-    //     //     })
-    //     //     .catch(err => {
-    //     //         alert(err.response.data)
-    //     //     })
-
-
-    // };
 
     useEffect(() => {
         // Fetch data from the database
@@ -96,6 +69,22 @@ const Facility = () => {
             [field]: value,
         }));
     };
+    const handleFileChange = (event) => {
+        // Handle the selected file(s) here
+        event.preventDefault();
+        if (event.target.files.length > 5) {
+            alert('You can only upload maximum of 5 images')
+        } else {
+            const filesArray = selectedFiles ? [...selectedFiles, ...event.target.files] : [...event.target.files];
+            setSelectedFiles(filesArray);
+        }
+    };
+    const handleChooseImage = () => {
+        fileInputRef.current.click();
+    }
+
+
+
 
     const handleEdit = () => {
 
@@ -149,9 +138,9 @@ const Facility = () => {
                 }
             })
 
-        if (!isEmpty(facilityId)) {
+        if (!isEmpty(facilityId) && selectedFiles) {
             try {
-                await uploadImages(facilityId);
+                await uploadImages(facilityId, selectedFiles);
                 console.log('images uploaded succesfully');
             } catch (error) {
                 console.log(error.message)
@@ -159,36 +148,39 @@ const Facility = () => {
                 return
             }
         }
+    }
 
-        const uploadImages = async (facilityId, imageFiles) => {
-            const formData = new FormData();
+    const uploadImages = async (facilityId, imageFiles) => {
+        const formData = new FormData();
 
-            // Append facility ID to the FormData object
-            formData.append('facilityId', facilityId);
+        // Append facility ID to the FormData object
+        formData.append('facilityId', facilityId);
 
-            // Append each image file to the FormData object
-            for (const file of imageFiles) {
-                formData.append('photos', file);
-            }
 
-            const token = JSON.parse(localStorage.getItem('facilityUser')).token
-            await axios
-                .post(`http://localhost:4000/api/facility/uploadPhotos/${facilityId}`,
-                    formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
-                            Authorization: token
-                        },
-                    })
-                .then(res => {
-                    alert(res.data)
+        for (const file of imageFiles) {
+            formData.append('photos', file);
+        }
+
+
+
+        const token = JSON.parse(localStorage.getItem('facilityUser')).token
+        await axios
+            .post(`http://localhost:4000/api/facility/uploadPhotos/${facilityId}`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+                        Authorization: token
+                    },
                 })
-                .catch(error => {
-                    alert(error.response.data)
-                })
-        };
+            .then(res => {
+                alert(res.data)
+            })
+            .catch(error => {
+                alert(error.response.data)
+            })
     };
+
 
 
 
@@ -240,55 +232,8 @@ const Facility = () => {
 
 
     // }
-    const handleChooseImage = () => {
-        fileInputRef.current.click();
-    }
-
-    const handleFileChange = (event) => {
-        // Handle the selected file(s) here
-        const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            console.log('Selected File:', selectedFile);
-            // Add your logic to handle the selected file
-        }
-    };
-
-    // create ImageSlider component
-    // const ImageSlider = () => {
-    //     console.log('image slider renderd')
-    //     const settings = {
-    //         dots: true,
-    //         infinite: true,
-    //         speed: 500,
-    //         slidesToShow: 1,
-    //         slidesToScroll: 1,
-    //     };
-    //     if (!Array.isArray(data.images) || data.images.length === 0) {
-    //         console.error("No images available or data.images is not an array:", data.images);
-
-    //         return null;
-    //     }
-    //     // const serverBaseUrl = "http://localhost:4000";
-    //     // const imagesFolder = "Backend/uploads";
 
 
-    //     return (
-    //         <Slider {...settings} className={Facility_css.gym_img_slider}>
-    //             {data.images.map((imageUrl, index) => (
-    //                 <div key={index}>
-    //                     {console.log(imageUrl)}
-    //                     <img
-    //                         src={imageUrl}
-    //                         width={"700px"}
-    //                         height={"350px"}
-    //                         style={{ padding: "10px", border: "2px solid #ccc", borderRadius: "9px" }}
-    //                         alt={`Image ${index}`}
-    //                     />
-    //                 </div>
-    //             ))}
-    //         </Slider>
-    //     );
-    // };
 
     return (
         <div>
@@ -474,8 +419,9 @@ const Facility = () => {
                                     ref={fileInputRef}
                                     style={{ display: 'none' }}
                                     onChange={handleFileChange}
+                                    multiple
                                 />
-                                {userType === 'admin' ? (<IconButton color="primary" onClick={handleChooseImage}>
+                                {userType === 'admin' ? (<IconButton color="primary" onClick={handleChooseImage} sx={{ color: 'black !important' }} >
                                     <AddPhotoAlternateIcon />
                                 </IconButton>) : null
 

@@ -24,6 +24,7 @@ const Navbar = () => {
 
     return (
         < div className={header_css.navbar}>
+
             <div>
                 <img src={logo} alt='logopic' style={{ width: '140px' }}></img>
             </div>
@@ -36,21 +37,15 @@ const Navbar = () => {
                     SPORTS FACILITY SCHEDULER</h4>
             </text>
 
+
+
+
             {showUserProfile && (
                 <div className={header_css.userProfileContainer}>
                     <UserProfile />
                 </div>
             )}
-            {/* {isAuthenticated ? (
-                (<div className={header_css.userProfileContainer}><UserProfile /></div>)
 
-            ) : (showAuthLinks && (
-                <div className={header_css.links}>
-                    <Link to="/login" className="btn btn-light">Login</Link>&nbsp;
-                    <Link to="/signup" className="btn btn-warning">Sign Up</Link>
-                </div>
-            ))
-            } */}
 
 
             {isAuthenticated && showAuthLinks && (
@@ -58,7 +53,7 @@ const Navbar = () => {
                     <Link to="/login" className="btn btn-light">Login</Link>&nbsp;
                     <Link to="/signup" className="btn btn-warning">Sign Up</Link>
                 </div>
-            )} 
+            )}
 
         </div>
     );

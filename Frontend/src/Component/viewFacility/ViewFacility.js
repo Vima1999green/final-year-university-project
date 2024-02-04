@@ -9,8 +9,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import gym_image from '../../Images/gym9.jpg'
-import playground_image from '../../Images/playground1.jpeg';
 import { Link, useNavigate } from 'react-router-dom';
 import isEmpty from '../../isEmpty';
 
@@ -72,18 +70,19 @@ const ViewFacility = () => {
     };
 
 
-const reloadPage=() => {
-    console.log('reloadPage')
-    axios.get('http://localhost:4000/api/facility/getAllFacilities')
-        .then(response =>{
-            console.log(response.data)
-            setOptions(response.data)}
-        )
+    const reloadPage = () => {
+        console.log('reloadPage')
+        axios.get('http://localhost:4000/api/facility/getAllFacilities')
+            .then(response => {
+                console.log(response.data)
+                setOptions(response.data)
+            }
+            )
 
-        .catch(error =>
-            console.error(error)
-        )
-}
+            .catch(error =>
+                console.error(error)
+            )
+    }
     // get AllFacilities from backend api endpoint
     useEffect(reloadPage, []);
 
@@ -120,6 +119,7 @@ const reloadPage=() => {
         setFacLocation('')
         setFacAddress('')
         setFacRules('')
+        setSelectedFiles([])
     };
 
     const hanldeSubmit = async (event) => {
@@ -164,6 +164,9 @@ const reloadPage=() => {
                 alert('Facility created succesfully')
                 console.log('Facility created succesfully')
                 console.log('Facility created succesfully ALERT Finished')
+                handleClear();
+                reloadPage();
+                handleClose();
             })
             .catch(error => {
                 if (error.response) {
@@ -178,16 +181,20 @@ const reloadPage=() => {
             try {
                 await uploadImages(facilityId, selectedFiles);
                 console.log('images uploaded succesfully');
+                handleClear();
+                reloadPage();
+                handleClose();
             } catch (error) {
                 console.log(error.message)
                 alert(error.message + '\r\n' + 'Uploading images failed');
                 return
             }
         }
-        handleClear();
-        reloadPage()
+        // handleClear();
+        // reloadPage();
+        // handleClose();
 
-        
+
 
     };
 
@@ -288,7 +295,7 @@ const reloadPage=() => {
                                 console.log('facility', facility)
                                 return (
                                     <Grid item xs={6} key={index}>
-                                        <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card}>
+                                        <Card sx={{ maxWidth: 550,maxHeight:400 }} className={viewFacility_css.card}>
                                             <Link to={`/facility/${facility._id}`} className={viewFacility_css.cardLink}>
                                                 <CardActionArea>
                                                     <CardMedia
@@ -296,6 +303,7 @@ const reloadPage=() => {
                                                         component="img"
                                                         alt={facility.name}
                                                         image={facility.images[0]}
+                                                            style={{ height: '300px', width: '550px' }}
                                                     />
                                                     <CardContent>
                                                         <h2 className={viewFacility_css.cardText}>

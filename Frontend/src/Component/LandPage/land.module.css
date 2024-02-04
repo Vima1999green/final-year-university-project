@@ -89,9 +89,6 @@ li:hover .sublinks {
     margin-right: 0;
     direction: column;
 
-
-
-
 }
 
 .overAllCalendarbtnConatiner {
@@ -109,6 +106,7 @@ li:hover .sublinks {
 .calendarContainer {
     margin-bottom: 20px;
     width: 700px;
+    margin-top: 20px;
 }
 
 .calendar {
@@ -122,6 +120,13 @@ li:hover .sublinks {
 .playgroundBtn,
 .gymnasiumBtn {
     margin-right: 10px;
+    display: inline-block;
 
 
+}
+
+.calendarContainer {
+    background-color: gray !important;
+    width: 70%;
+    margin-top: 10px;
 }

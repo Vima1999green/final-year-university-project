@@ -51,7 +51,7 @@ const LandPage = () => {
                                     <ImageList className={landPage_css.imageListContainer} cols={3} rowHeight={160}>
                                         {itemData.map((item) => (
                                             <ImageListItem key={item.img} className={landPage_css.ImageListItem}>
-                                                <img src={`${item.img}`} />
+                                                <img src={`${item.img}`}/>
                                             </ImageListItem>
                                         ))}
                                     </ImageList>
