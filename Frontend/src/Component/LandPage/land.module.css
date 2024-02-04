@@ -10,6 +10,7 @@
 
 .contentImage {
     background-color: rgba(255, 255, 255, 0.5);
+    margin: 10px;
 }
 
 .body {
@@ -71,9 +72,10 @@ li:hover .sublinks {
 
 .imageListContainer {
     width: 800px;
-    height: 450px;
+    height: 400px;
     margin-left: 0;
     margin-top: 5px;
+    margin-bottom: 0;
 
 
 }
@@ -104,17 +106,15 @@ li:hover .sublinks {
 }
 
 .calendarContainer {
-    margin-bottom: 20px;
-    width: 700px;
+    width: 50%;
+    /* Adjust the width as needed */
     margin-top: 20px;
+    background-color: grey;
+    padding-top: 40px;
+    height: 300px;
 }
 
-.calendar {
-    background: gray;
-    border: 2px solid #a0a096;
 
-
-}
 
 .overallBtn,
 .playgroundBtn,
@@ -123,10 +123,4 @@ li:hover .sublinks {
     display: inline-block;
 
 
-}
-
-.calendarContainer {
-    background-color: gray !important;
-    width: 70%;
-    margin-top: 10px;
 }

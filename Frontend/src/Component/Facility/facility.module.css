@@ -73,6 +73,7 @@ label {
 .txt_field {
     color: black;
     font-size: 50px;
+    font-weight: 500;
 }
 
 .img_galary {

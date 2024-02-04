@@ -274,6 +274,7 @@ const Facility = () => {
                                     onChange={(e) => handleInputChange("name", e.target.value)}
                                     disabled={!editable}
 
+
                                 />
                             </div>
                             {/* 2. Location field */}
