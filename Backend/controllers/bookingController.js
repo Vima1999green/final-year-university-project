@@ -56,21 +56,34 @@ const updateBooking = async (req, res) => {
     let bookingData = req.body
     bookingData.id = req.params.id
 
+
+
     try {
-      const booking = await Booking.findByIdAndUpdate(bookingData.id,
-        { bookingDate: bookingData.bookingDate, Time: bookingData.Time, status: bookingData.status },
-        { new: true }
-      )
-
-      if (booking) {
-        console.log('booking data updated');
-        return res.send(booking)
-
+      const existingBooking = await Booking.findById(bookingData.id);
+      if (!existingBooking) {
+        return res.status(404).send('Booking not found');
       }
+
+      if (bookingData.status !== existingBooking.status ||
+        bookingData.bookingDate !== existingBooking.bookingDate ||
+        bookingData.postponeRequested === true
+      ) {
+        const booking = await Booking.findByIdAndUpdate(bookingData.id,
+          { bookingDate: bookingData.bookingDate, Time: bookingData.Time, status: bookingData.status },
+          { new: true }
+        )
+
+        if (booking) {
+          console.log('booking data updated');
+          return res.send(booking)
+
+        }
+      }
+
 
     } catch (error) {
       console.error('Error updating booking data', error);
-      return res.status(500).send('Error updating or finding booking data');
+      return res.status(500).send('Error updating  data');
     }
 
 
@@ -126,7 +139,7 @@ const uploadNic = async (req, res) => {
       }
 
       const nic = req.file.path;
-      const booking = Booking.findByIdAndDelete(
+      Booking.findByIdAndDelete(
         bookingId,
         { userNic: nic },
         { new: true }
