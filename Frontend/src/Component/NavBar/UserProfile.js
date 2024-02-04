@@ -1,6 +1,7 @@
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
+import { Link } from '@mui/material';
 
 const UserProfile = () => {
     useEffect(() => {
@@ -35,6 +36,7 @@ const UserProfile = () => {
 
                     {/* Display the user's email */}
                     <p> {JSON.parse(localStorage.getItem('facilityUser')).userDetails.email}</p>
+                    <Link to='/logout' style={{ textDecoration: 'none', color: 'yellow' }}>LogOut</Link>
 
                 </div>
             )}

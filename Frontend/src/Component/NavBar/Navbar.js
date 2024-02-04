@@ -32,10 +32,14 @@ const Navbar = () => {
                 Physical Education Unit<br></br>
                 PlayGround and Gym Facility Scheduler
             </text> */}
-            <text><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
-                <h4>Physical Education Unit<br></br>
-                    SPORTS FACILITY SCHEDULER</h4>
-            </text>
+            {isAuthenticated ?
+                (<Link to='/landpage' style={{ textDecoration: 'none' }}><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
+                    <h4 style={{ color: 'white' }}>Physical Education Unit<br></br>
+                        SPORTS FACILITY SCHEDULER</h4>
+                </Link>)
+                : null}
+
+
 
 
 

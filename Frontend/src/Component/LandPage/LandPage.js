@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import landPage_css from './land.module.css';
 import { ImageList, ImageListItem, Grid, Button } from '@mui/material';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import sport1 from '../../Images/sports1.jpg';
 import sport2 from '../../Images/sports2.jpg';
 import sport3 from '../../Images/sports3.jpg';
 import sport4 from '../../Images/sports4.jpg';
 import sport5 from '../../Images/sports5.jpg';
 import sport6 from '../../Images/sports6.jpg';
-
+import dayjs from 'dayjs';
 
 
 const LandPage = () => {
@@ -39,40 +40,14 @@ const LandPage = () => {
             </div>
             <div className={landPage_css.content}>
                 <div className={landPage_css.contentImage}>
+
+
+
+
                     <div className={landPage_css.body}>
-
-
-
                         <Grid container spacing={0} direction="column">
-
-
-
-
-
-                            <Grid item xs={12} className={landPage_css.calendarContainer} >
-                                <FullCalendar
-
-                                    className={landPage_css.calendarBackground}
-                                    plugins={[dayGridPlugin]}
-                                    initialView="dayGridMonth"
-                                    validRange={{
-                                        start: '2024-01-01',
-                                        end: '2024-12-31',
-                                    }}
-                                />
-                            </Grid>
-
-
-
-
-
-
-
-
-                            <br />
-
                             <Grid container spacing={3} direction="raw" >
-                                <Grid item xs={12} md={8} >
+                                <Grid item xs={12} md={8}  >
                                     <ImageList className={landPage_css.imageListContainer} cols={3} rowHeight={160}>
                                         {itemData.map((item) => (
                                             <ImageListItem key={item.img} className={landPage_css.ImageListItem}>
@@ -93,6 +68,18 @@ const LandPage = () => {
                                         <Button className={landPage_css.gymnasiumBtn} variant="contained" size='large' fullWidth>Gymnasium</Button>
                                     </Grid>
                                 </Grid>
+
+                            </Grid>
+
+
+                            <Grid item xs={12} lg={6} className={landPage_css.calendarContainer} >
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DateCalendar
+                                        className={landPage_css.calendar}
+                                        minDate={dayjs('2024-01-01').startOf('day')}
+                                        style={{ width: '100%', fontSize: '30px' }}
+                                    />
+                                </LocalizationProvider>
                             </Grid>
                         </Grid>
 
