@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import isEmpty from '../../isEmpty';
+import TopNav from '../TopNav/TopNav';
 
 const ViewFacility = () => {
 
@@ -227,27 +228,8 @@ const ViewFacility = () => {
     return (
 
         <div>
+            <TopNav />
 
-            <div className={viewFacility_css.topNav}>
-                <nav>
-                    <ul className={viewFacility_css.navLinks}>
-                        <li><Link to="/viewFacilities" style={{ textDecoration: "none", color: "white" }}>Facility</Link></li>
-                        <li><Link to="/service" style={{ textDecoration: "none", color: "white" }}>Service</Link>
-                            <ul className={viewFacility_css.sublinks}>
-                                <li>
-                                    <Link to="/booking" style={{ textDecoration: "none", color: "white" }}>Booking</Link>
-                                </li>
-                                <li>
-                                    <Link to="/membership" style={{ textDecoration: "none", color: "white" }}>Membership</Link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><Link to="/profile" style={{ textDecoration: "none", color: "white" }}>Profile</Link></li>
-                        <li><Link to="/history" style={{ textDecoration: "none", color: "white" }}>History</Link></li>
-                        <li><Link to="/logout" style={{ textDecoration: "none", color: "white" }}>Logout</Link></li>
-                    </ul>
-                </nav>
-            </div>
             <div className={viewFacility_css.content}>
                 <div className={viewFacility_css.contentImage}>
                     <div className={viewFacility_css.body}>

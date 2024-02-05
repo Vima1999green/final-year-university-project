@@ -12,6 +12,7 @@ import isEmpty from '../../isEmpty';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import IconButton from '@mui/material/IconButton';
 import ImageSlider from '../ImageSlider/ImageSlider';
+import TopNav from '../TopNav/TopNav';
 
 const Facility = () => {
     const userType = JSON.parse(localStorage.getItem('facilityUser')).userDetails.userType;
@@ -237,26 +238,7 @@ const Facility = () => {
 
     return (
         <div>
-            <div className={Facility_css.topNav}>
-                <nav>
-                    <ul className={Facility_css.navLinks}>
-                        <li><Link to="/viewFacilities" style={{ textDecoration: "none", color: "white" }}>Facility</Link></li>
-                        <li><Link to="/service" style={{ textDecoration: "none", color: "white" }}>Service</Link>
-                            <ul className={Facility_css.sublinks}>
-                                <li>
-                                    <Link to="/booking" style={{ textDecoration: "none", color: "white" }}>Booking</Link>
-                                </li>
-                                <li>
-                                    <Link to="/membership" style={{ textDecoration: "none", color: "white" }}>Membership</Link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><Link to="/profile" style={{ textDecoration: "none", color: "white" }}>Profile</Link></li>
-                        <li><Link to="/history" style={{ textDecoration: "none", color: "white" }}>History</Link></li>
-                        <li><Link to="/logout" style={{ textDecoration: "none", color: "white" }}>Logout</Link></li>
-                    </ul>
-                </nav>
-            </div>
+            <TopNav />
 
             <div className={Facility_css.content}>
                 <div className={Facility_css.contentImage}>
