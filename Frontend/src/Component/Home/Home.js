@@ -120,7 +120,7 @@ const Home = () => {
                     <div className={home_css.about}>
                         <h1>About</h1>
                         <br></br>
-                        <p>Welcome to our PlayGround and Gym Facility Scheduler,
+                        <p>Welcome to our Sports Facility Scheduler,
                             where convenience meets excellence. Our platform simplifies
                             the process of reserving playgrounds and the gymnasium,
                             ensuring a seamless experience for users. Easily request bookings,
@@ -136,8 +136,10 @@ const Home = () => {
                             <br></br>
                             <br></br>
                             Join us in creating memorable and hassle-free experiences
-                            through our PlayGround and Gym Facility Scheduler.</p>
+                            through our Sports Facility Scheduler.</p>
                     </div>
+                    <br />
+                    <br />
 
                     <br></br>
                     <br></br>
@@ -146,7 +148,7 @@ const Home = () => {
                     <div className={home_css.map}>
                         <center>
                             <p><iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d3679.398934615926!2d80.57359697919456!3d5.938110746027745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1suniversity%20of%20ruhuna%20gymnasium%20and%20play%20ground!5e0!3m2!1sen!2slk!4v1703666049154!5m2!1sen!2slk"
-                                width="600" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title='locaton of the playground and gym'></iframe></p>
+                                width="600" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title='locaton of the Sports'></iframe></p>
                         </center>
                     </div>
                 </div >

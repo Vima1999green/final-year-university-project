@@ -151,10 +151,10 @@ function Login() {
                     </button>
                     {error && <div className="error">{error}</div>}
                   </div>
-                  <div className="remember me" style={{ color: 'black' }}>
+                  {/* <div className="remember me" style={{ color: 'black' }}>
                     <input type="checkbox" title="remember_me" />
                     Remember me
-                  </div>
+                  </div> */}
                   <br />
 
 
