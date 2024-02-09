@@ -165,6 +165,9 @@ const ViewFacility = () => {
                 alert('Facility created succesfully')
                 console.log('Facility created succesfully')
                 console.log('Facility created succesfully ALERT Finished')
+                handleClear();
+                reloadPage();
+                handleClose();
             })
             .catch(error => {
                 if (error.response) {
@@ -179,15 +182,18 @@ const ViewFacility = () => {
             try {
                 await uploadImages(facilityId, selectedFiles);
                 console.log('images uploaded succesfully');
+                handleClear();
+                reloadPage();
+                handleClose();
             } catch (error) {
                 console.log(error.message)
                 alert(error.message + '\r\n' + 'Uploading images failed');
                 return
             }
         }
-        handleClear();
-        reloadPage();
-        handleClose();
+        // handleClear();
+        // reloadPage();
+        // handleClose();
 
 
 
@@ -271,7 +277,7 @@ const ViewFacility = () => {
                                 console.log('facility', facility)
                                 return (
                                     <Grid item xs={6} key={index}>
-                                        <Card sx={{ maxWidth: 550 }} className={viewFacility_css.card}>
+                                        <Card sx={{ maxWidth: 550,maxHeight:400 }} className={viewFacility_css.card}>
                                             <Link to={`/facility/${facility._id}`} className={viewFacility_css.cardLink}>
                                                 <CardActionArea>
                                                     <CardMedia
@@ -279,6 +285,7 @@ const ViewFacility = () => {
                                                         component="img"
                                                         alt={facility.name}
                                                         image={facility.images[0]}
+                                                            style={{ height: '300px', width: '550px' }}
                                                     />
                                                     <CardContent>
                                                         <h2 className={viewFacility_css.cardText}>

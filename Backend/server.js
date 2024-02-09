@@ -6,6 +6,7 @@ const userRoutes = require('./routes/api/userRoutes')
 const facilityRoutes = require('./routes/api/facilityRoutes')
 const cors = require('cors')
 const path = require('path')
+const bookingRoutes = require('./routes/api/bookingRoutes')
 
 const dbUrl = require('./config/keys').mongoUrl
 
@@ -37,6 +38,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 app.use('/api/users', userRoutes)
 app.use('/api/facility', facilityRoutes)
+app.use('/api/booking', bookingRoutes)
 
 app.listen(process.env.PORT || 4000, () => {
     console.log('listeneing to the server')

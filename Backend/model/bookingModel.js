@@ -4,11 +4,11 @@ const Schema = mongoose.Schema
 const bookingSchema = new Schema({
 
     userID: {
-        type: mongoose.userID,
+        type: mongoose.ObjectId,
         required: [true, 'User id is required']
     },
 
-    userNic: {
+    userNIC: {
         type: String,
         required: true
     },
@@ -60,9 +60,13 @@ const bookingSchema = new Schema({
         type: Boolean,
         default: false
 
+    },
+    permissionLetter:{
+        type:String,
+        required: [true, 'Permission letter is required']
     }
 }, { timestamps: true })
 
 
-const bookingModel = mongoose.model('blacklist', bookingSchema)
+const bookingModel = mongoose.model('booking', bookingSchema)
 module.exports = bookingModel

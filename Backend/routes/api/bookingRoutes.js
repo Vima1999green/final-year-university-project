@@ -1,7 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const {
-  addBooking,
+  createBooking,
   getAllBookings,
   updateBooking,
   deleteBooking,
@@ -14,6 +14,7 @@ const router = express.Router();
 //@desc Add booking to database
 //@access private
 //@developer Lahiru Srimal
+router.post('/createBooking', createBooking);
 
 
 //@route GET api/booking/

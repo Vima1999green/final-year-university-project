@@ -47,7 +47,7 @@ const Navbar = () => {
         </div>
       )}
 
-      {!isAuthenticated && showAuthLinks && (
+      { showAuthLinks && (
         <div className={header_css.links}>
           <Link to="/login" className="btn btn-light">
             Login

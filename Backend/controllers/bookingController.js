@@ -4,11 +4,34 @@ const Booking = require("../model/bookingModel");
 const createMulterInstance = require("./createMulterInstance");
 const checkFileType = require("../validation/facitityRouteValidation/checkPhotoType");
 const isEmpty = require("../validation/isEmpty");
+const validateBookingData=require('../validation/bookingRouteValidation/createBooking')
+const validateUpdateBookingData = require('../validation/bookingRouteValidation/updateBooking');
 
-//controller addBooking()
+
+//controller createBooking()
 //description add booking to database
 //developer Lahiru Srimal
-const addBooking = () => {};
+const createBooking=async(req,res)=>{
+
+    // Validate booking data
+    const { errors, isValid } = await validateBookingData(req.body);
+    if (!isValid) {
+      var errorMsg = "";
+      Object.values(errors).forEach((error) => {
+        errorMsg += error + "\r\n";
+      });
+      errorMsg = errorMsg.trim();
+      return res.status(400).send(errorMsg);
+    }
+  //create booking in the database
+  await Booking.create(req.body)
+    .then((newBooking) => {
+      res.send(newBooking);
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
+}
 
 //controller getAllBookings()
 //description get all bookings from database
@@ -33,37 +56,48 @@ const updateBooking = async (req, res) => {
   if (req.user.userType === "admin") {
     let bookingData = req.body;
     bookingData.id = req.params.bookingID;
-
-    try {
-      const existingBooking = await Booking.findById(bookingData.id);
-      if (!existingBooking) {
-        return res.status(404).send("Booking not found");
-      }
-
-      if (
-        bookingData.status !== existingBooking.status ||
-        bookingData.bookingDate !== existingBooking.bookingDate ||
-        bookingData.postponeRequested === true
-      ) {
-        const booking = await Booking.findByIdAndUpdate(
-          bookingData.id,
-          {
-            bookingDate: bookingData.bookingDate,
-            Time: bookingData.Time,
-            status: bookingData.status,
-          },
-          { new: true }
-        );
-
-        if (booking) {
-          console.log("booking data updated");
-          return res.send(booking);
+    const { errors, isValid } = await validateUpdateBookingData(bookingData);
+    if (!isValid) {
+      var errorMsg = ''
+      Object.values(errors).forEach(error => {
+        errorMsg += error + '\r\n'
+      })
+      errorMsg = errorMsg.trim()
+      res.status(400).send(errorMsg);
+    }else
+    {
+      try {
+        const existingBooking = await Booking.findById(bookingData.id);
+        if (!existingBooking) {
+          return res.status(404).send("Booking not found");
         }
+  
+        if (
+         
+          bookingData.postponeRequested === true
+        ) {
+          const booking = await Booking.findByIdAndUpdate(
+            bookingData.id,
+            {
+              bookingDate: bookingData.bookingDate,
+              Time: bookingData.Time,
+              status: bookingData.status,
+            },
+            { new: true }
+          );
+  
+          if (booking) {
+            console.log("booking data updated");
+            return res.send(booking);
+          }
+        }
+      } catch (error) {
+        console.error("Error updating booking data", error);
+        return res.status(500).send("Error updating  data");
       }
-    } catch (error) {
-      console.error("Error updating booking data", error);
-      return res.status(500).send("Error updating  data");
     }
+
+    
   } else {
     res.status(401).send("you are not authorized to update booking data");
   }
@@ -135,7 +169,7 @@ const uploadNic = async (req, res) => {
 };
 
 module.exports = {
-  addBooking,
+  createBooking,
   getAllBookings,
   updateBooking,
   deleteBooking,

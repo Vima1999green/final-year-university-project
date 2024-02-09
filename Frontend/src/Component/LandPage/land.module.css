@@ -1,5 +1,5 @@
 .content {
-  padding: 30px;
+  padding: 20px;
   background-image: url("../../Images/home.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -9,11 +9,11 @@
 
 .contentImage {
   background-color: rgba(255, 255, 255, 0.5);
-  margin: 10px;
+  margin: 5px;
 }
 
 .body {
-  margin: 0;
+  margin: 30px;
   padding: 0;
   margin-left: 50px;
   display: flex;
@@ -61,9 +61,7 @@
   background-color: grey;
 
   height: 400px;
-  margin-top: 70px;
-  margin-bottom: 70px;
-  margin-left: 50px;
+  margin: 70px;
 }
 
 .overallBtn,
