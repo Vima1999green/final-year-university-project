@@ -28,7 +28,7 @@ const Calendar = () => {
         endAccessor="end"
         min={minDate}
         max={maxDate}
-        style={{ height: 300, width: "100%" }}
+       
       ></BigCalendar>
     </div>
   );
