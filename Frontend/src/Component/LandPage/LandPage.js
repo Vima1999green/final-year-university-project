@@ -8,9 +8,6 @@ import {
   Button,
   CardActionArea,
 } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -24,8 +21,8 @@ import booking from "../../Images/booking.jpeg";
 import membership from "../../Images/membership.jpg";
 import notification from "../../Images/notification.jpg";
 import calendar from "../../Images/calendar.jpeg";
-import dayjs from "dayjs";
 import Calendar from "../Calendar/Calendar";
+
 
 const LandPage = () => {
   const [value, setValue] = useState(new Date());
@@ -38,14 +35,14 @@ const LandPage = () => {
           <div className={landPage_css.body}>
             <Grid container spacing={2} direction="column">
               <Grid container spacing={0} direction="raw">
-                <Grid
-                  item
-                  xs={12}
-                  lg={6}
-                  className={landPage_css.calendarContainer}
-                >
-                  <Calendar />
+                <Grid className={landPage_css.calendarContainer}>
+                    <Grid item xs={12} md={8} >
+                      <Calendar/>
+
+                    </Grid>
+
                 </Grid>
+               
 
                 <Grid className={landPage_css.buttonContainer} lg={3} md={6}>
                   <Grid className={landPage_css.overAllCalendarbtnConatiner}>

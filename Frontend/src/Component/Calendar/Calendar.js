@@ -1,37 +1,41 @@
-import { Calendar as BigCalendar, dayjsLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import "./Calendar.css";
+import { Calendar as BigCalendar, dayjsLocalizer } from 'react-big-calendar';
+import dayjs from 'dayjs';
+import  './Calendar.css';
+
 
 const Calendar = () => {
-  const localizer = dayjsLocalizer(dayjs);
-  const [currentYear, setCurrentYear] = useState(dayjs().year());
+    const localizer = dayjsLocalizer(dayjs);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const currentYear = dayjs().year();
-      setCurrentYear(currentYear);
-    }, 60000);
+    const currentYear =dayjs().year();
 
-    return () => clearInterval(interval);
-  }, []);
+    const handleNavigate = (newDate,view) => {
+        console.log('handle navigate');
+        const newYear = dayjs(newDate).year();
 
-  const minDate = new Date(`${currentYear}-01-01`);
-  const maxDate = new Date(`${currentYear}-12-31`);
+        if(newYear!==currentYear){
+            console.log('year changed')
+            return false;
+        }
+      
+       return true;
+    }
 
-  return (
-    <div>
-      <BigCalendar
-        localizer={localizer}
-        startAccessor="start"
-        endAccessor="end"
-        min={minDate}
-        max={maxDate}
-       
-      ></BigCalendar>
-    </div>
-  );
-};
+    
+    return ( 
+        <div>
+            <BigCalendar
+                
+                localizer={localizer}
+                onNavigate={handleNavigate}
+                events={[]}
+                style={{height:500,margin:0,width:'100%'}}
+             
+            />
 
+           
+
+        </div>
+     );
+}
+ 
 export default Calendar;
