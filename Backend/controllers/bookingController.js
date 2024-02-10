@@ -13,22 +13,40 @@ const sendEmail = require('./notificationController');
 //controller createBooking()
 //description add booking to database
 //developer Lahiru Srimal
-const createBooking=async(req,res)=>{
+const createBooking = async (req, res) => {
 
-    // Validate booking data
-    const { errors, isValid } = await validateBookingData(req.body);
-    if (!isValid) {
-      var errorMsg = "";
-      Object.values(errors).forEach((error) => {
-        errorMsg += error + "\r\n";
-      });
-      errorMsg = errorMsg.trim();
-      return res.status(400).send(errorMsg);
-    }
+  // Validate booking data
+  const { errors, isValid } = await validateBookingData(req.body);
+  if (!isValid) {
+    var errorMsg = "";
+    Object.values(errors).forEach((error) => {
+      errorMsg += error + "\r\n";
+    });
+    errorMsg = errorMsg.trim();
+    return res.status(400).send(errorMsg);
+  }
   //create booking in the database
   await Booking.create(req.body)
     .then((newBooking) => {
-      res.send(newBooking);
+      //sending email to admin
+      let mailStatus = false
+      let mailError = {}
+      try {
+        const isEmailSend = sendEmail(
+          'teamalpha869@gmail.com',
+          'Sport Facility Reservation',
+          `${req.body.facility} Reservation`,
+          `A user had meke a booking reservation for ${req.body.facility}`)
+      } catch (err) {
+        mailStatus = false
+        mailError = err
+      }
+      res.send(
+        {
+          newBooking,
+          isEmailSend: isEmailSend,
+          mailError: mailError
+        });
     })
     .catch((error) => {
       res.status(400).send(error);
@@ -181,45 +199,117 @@ const deleteBooking = async (req, res) => {
 //description upload NIC of the user to the database
 //developer Malitha Chamikara
 
-const uploadNic = async (req, res) => {
-  const { bookingId } = req.params;
-  const uploadNic = createMulterInstance(checkFileType, "Nic photos");
-  const uploadNicData = uploadNic.single("nicPhoto");
-
-  if (!isEmpty(uploadNicData)) {
-    uploadNicData(req, res, (err) => {
-      if (err instanceof multer.MulterError) {
-        return res.status(400).send("Multer err" + err);
-      } else if (err) {
-        return res.status(500).send("Internal server error" + err);
+const uploadNIC = async (req, res) => {
+  //check database for booking
+  let bookingExist = false
+  let userID = ""
+  await Booking.findById(req.params.bookingID)
+    .then(booking => {
+      if (!isEmpty(booking)) {
+        bookingExist = true
+        userID = booking.userID
       }
+    })
+    .catch(err => {
+      bookingExist = false
+    })
+  //autherization
+  if (req.user.id !== userID.toString()) return res.status(401).send('Unauthorized')
+  const bookingID = req.params.bookingID
 
-      const nic = req.file.path;
-      Booking.findByIdAndDelete(bookingId, { userNic: nic }, { new: true })
-
-        .then((booking) => {
-          console.log("Nic uploaded and booking updated");
-          return res.send(booking);
+  if (bookingExist) {
+    const uploadNICInstance = createMulterInstance(checkFileType, 'NIC')
+    if (!isEmpty(uploadNICInstance.single('nicPhoto'))) {
+      const uploadNICData = uploadNICInstance.single('nicPhoto');
+      uploadNICData(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+          return res.status(400).send('Multer error: ' + err);
+        } else if (err) {
+          return res.status(500).send('Internal server error: ' + err);
+        }
+        const nicPath = req.file.filename;
+        const booking = Booking.findOneAndUpdate(
+          { _id: bookingID },
+          { userNICImg: nicPath },
+          { new: true }
+        ).then(res => {
+          console.log('Database updated')
+        }).catch(error => {
+          return res.status(500).send('Error updating Letter: ', error.response.data);
         })
-
-        .catch((error) => {
-          return res
-            .status(500)
-            .send("Error updating booking", error.response.data);
-        });
-
-      console.log("Files uploaded");
-      res.status(200).send("Files uploaded");
-    });
+        // Files were successfully uploaded
+        console.log('Files uploaded');
+        res.status(200).send('NIC uploaded');
+        // next();
+      });
+    } else {
+      res.status(200).send('No files to upload');
+    }
   } else {
-    res.status(200).send("No files to upload");
+    return res.status(404).send('Booking not found')
   }
 };
 
+//controller uploadLetter()
+//description upload letter to server
+//developer Lahiru Srimal
+
+const uploadLetter = async (req, res, next) => {
+  //check database for booking
+  let bookingExist = false
+  let userID = ""
+  await Booking.findById(req.params.bookingID)
+    .then(booking => {
+      if (!isEmpty(booking)) {
+        bookingExist = true
+        userID = booking.userID
+      }
+    })
+    .catch(err => {
+      bookingExist = false
+    })
+  //autherization
+  if (req.user.id !== userID.toString() || req.user.userType === 'admin')
+    return res.status(401).send('Unauthorized')
+  const bookingID = req.params.bookingID
+  if (bookingExist) {
+    const uploadLetterInstance = createMulterInstance(checkLetterType, 'PermissionLetters')
+    if (!isEmpty(uploadLetterInstance.single('letter'))) {
+      const uploadLetterData = uploadLetterInstance.single('letter');
+      uploadLetterData(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+          return res.status(400).send('Multer error: ' + err);
+        } else if (err) {
+          return res.status(500).send('Internal server error: ' + err);
+        }
+        const letter = req.file.filename;
+        const booking = Booking.findOneAndUpdate(
+          { _id: bookingID },
+          { permissionLetter: letter },
+          { new: true }
+        ).then(res => {
+          console.log('Database updated')
+        }).catch(error => {
+          return res.status(500).send('Error updating Letter: ', error.response.data);
+        })
+        // Files were successfully uploaded
+        console.log('Files uploaded');
+        res.status(200).send('Letter uploaded');
+        // next();
+      });
+    } else {
+      res.status(200).send('No files to upload');
+    }
+  } else {
+    return res.status(404).send('Booking not found')
+  }
+
+};
 module.exports = {
   createBooking,
   getAllBookings,
   updateBooking,
   deleteBooking,
-  uploadNic,
+  uploadNIC,
+  uploadLetter
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import landPage_css from "./land.module.css";
 import TopNav from "../TopNav/TopNav";
 import {
@@ -22,10 +22,34 @@ import membership from "../../Images/membership.jpg";
 import notification from "../../Images/notification.jpg";
 import calendar from "../../Images/calendar.jpeg";
 import Calendar from "../Calendar/Calendar";
+import axios from 'axios';
 
 
 const LandPage = () => {
   const [value, setValue] = useState(new Date());
+  const [bookings,setBookings] = useState([]);
+
+  //useEffect to  fetch all the booking  data from backend server
+  useEffect(()=>{
+    fetchBookings();
+  },[]);
+
+  const fetchBookings = async () =>{
+      await axios.get('http://localhost:4000/api/booking/getAllBookings')
+              .then((response)=>{
+                console.log(response.data)
+                
+                
+                  setBookings(response.data);
+              })
+
+              .catch(error=>{
+                console.error('Error fetching booking data',error);
+              })
+  }
+
+
+
   return (
     <div>
       <TopNav />
@@ -37,7 +61,7 @@ const LandPage = () => {
               <Grid container spacing={0} direction="raw">
                 <Grid className={landPage_css.calendarContainer}>
                     <Grid item xs={12} md={8} >
-                      <Calendar/>
+                      <Calendar bookings={bookings}/>
 
                     </Grid>
 

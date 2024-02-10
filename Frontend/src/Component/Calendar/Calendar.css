@@ -825,3 +825,22 @@ button.rbc-input::-moz-focus-inner {
   background-color: #74ad31;
   pointer-events: none;
 }
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 20px; 
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px; 
+}
+.legend-label{
+  color: black;
+}
