@@ -379,9 +379,11 @@ const Facility = () => {
 
                             <br />
                             <div className={Facility_css.booking_btn}>
+                                <Link to='/booking'>
                                 <Button variant="contained" color="warning" size="large">
                                     Booking
                                 </Button>
+                                </Link>
                             </div>
                         </div>
 
