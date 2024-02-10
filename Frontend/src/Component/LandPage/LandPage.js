@@ -28,6 +28,7 @@ import axios from 'axios';
 const LandPage = () => {
   const [value, setValue] = useState(new Date());
   const [bookings,setBookings] = useState([]);
+  const [clickedFacility,setClickedFacility] = useState(null);
 
   //useEffect to  fetch all the booking  data from backend server
   useEffect(()=>{
@@ -48,6 +49,15 @@ const LandPage = () => {
               })
   }
 
+  const filterBookings=(facility)=>{
+    if(facility===clickedFacility)return;
+      setClickedFacility(facility)
+  };
+
+  const filteredBookings = clickedFacility ? 
+      bookings.filter(booking=>booking.facility===clickedFacility):
+      bookings
+
 
 
   return (
@@ -61,7 +71,7 @@ const LandPage = () => {
               <Grid container spacing={0} direction="raw">
                 <Grid className={landPage_css.calendarContainer}>
                     <Grid item xs={12} md={8} >
-                      <Calendar bookings={bookings}/>
+                      <Calendar bookings={filteredBookings}/>
 
                     </Grid>
 
@@ -75,6 +85,7 @@ const LandPage = () => {
                       variant="contained"
                       size="large"
                       fullWidth
+                      onClick={()=>filterBookings(null)}
                     >
                       Overall Calendar
                     </Button>
@@ -85,6 +96,7 @@ const LandPage = () => {
                       variant="contained"
                       size="large"
                       fullWidth
+                      onClick={()=>filterBookings('playground')}
                     >
                       Playground
                     </Button>
@@ -95,6 +107,7 @@ const LandPage = () => {
                       variant="contained"
                       size="large"
                       fullWidth
+                      onClick={()=>filterBookings('gymnasium')}
                     >
                       Gymnasium
                     </Button>

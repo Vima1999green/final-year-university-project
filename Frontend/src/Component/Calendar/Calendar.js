@@ -51,9 +51,8 @@ const Calendar = ({bookings}) => {
 
         const style = {
             backgroundColor: backgroundColor,
-            color: 'white',
-            borderRadius: '0px',
-            border: 'none'
+            color: 'black',
+
         };
         return {
             style: style
