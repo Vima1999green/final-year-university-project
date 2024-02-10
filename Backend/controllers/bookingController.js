@@ -1,11 +1,13 @@
 const multer = require("multer");
 const path = require("path");
 const Booking = require("../model/bookingModel");
+const User  = require('../model/userModel');
 const createMulterInstance = require("./createMulterInstance");
 const checkFileType = require("../validation/facitityRouteValidation/checkPhotoType");
 const isEmpty = require("../validation/isEmpty");
 const validateBookingData=require('../validation/bookingRouteValidation/createBooking')
 const validateUpdateBookingData = require('../validation/bookingRouteValidation/updateBooking');
+const sendEmail = require('./notificationController');
 
 
 //controller createBooking()
@@ -90,6 +92,28 @@ const updateBooking = async (req, res) => {
             console.log("booking data updated");
             return res.send(booking);
           }
+
+          //fetch user email from userId 
+          const user  = await User.findById(existingBooking.userID);
+          if(!user){
+            return res.status(404).send('User not found');
+          }
+
+          //sending email to the user 
+          try{
+            await sendEmail(
+              user.email,
+              "Booking update notification",
+              "Your booking dates has been updated",
+              `<p>Your booking dates and times  are updated and new dates and times are
+                  ${bookingData.bookingDate}and ${bookingData.Time}</P>`
+            );
+            console.log('Booking data updated and email sent to the user');
+
+          }catch(error){
+              console.error('Error sending email ',error);
+              return res.status(500).send('Error sending email ');
+          }
         }
       } catch (error) {
         console.error("Error updating booking data", error);
@@ -119,7 +143,31 @@ const deleteBooking = async (req, res) => {
         await Booking.findByIdAndDelete(bookingData.id);
         console.log("Booking deleted");
         return res.send("Booking deleted");
-      }
+
+       
+
+        }
+        const user = User.findById(bookingData.userID);
+        if(!user)
+        {
+          return res.status(404).send('User not found');
+        }
+
+        try{
+          await sendEmail(
+            user.email,
+            "Booking cancelation notification",
+            "Your booking has been cancelled",
+            `<p>Your booking has been cancelled</p>`
+          );
+          console.log('Succesfully send cancellation email');
+
+        }catch(error){
+          console.error('Error sending email',error);
+          return res.status(500).send('Error sending email');
+
+        }
+        
     } catch (error) {
       console.error("Error deleteing or finding booking data", error);
       return res.status(500).send("Error deleting or finding booking data");

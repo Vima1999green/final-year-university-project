@@ -35,9 +35,7 @@ const sendEmail = async (to, subject, heading, content) => {
               <div className="content">
                 ${content}
               </div>
-              <div className="verifyLink">
-                <a href="http://localhost:3000/api/users/verifyEmail">Verify your email here</a>
-              </div>
+             
             </div> ` // html body
     }
     // send mail with defined transport object
