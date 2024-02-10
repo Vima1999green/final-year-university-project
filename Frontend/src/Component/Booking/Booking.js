@@ -42,7 +42,6 @@ const Booking = () => {
     facility: "",
     bookingDate: "",
     Time: "",
-    status: "",
     description: "",
     facilityId: "",
   });
@@ -59,7 +58,7 @@ const Booking = () => {
     e.preventDefault();
 
      // Check if any required field is empty
-  const requiredFields = ["userNIC", "organizationName", "organizationAddress", "designation", "facility", "bookingDate", "Time", "status", "description", "facilityId"];
+  const requiredFields = ["userNIC", "organizationName", "organizationAddress", "designation", "facility", "bookingDate", "Time", "description", "facilityId"];
   const emptyFields = requiredFields.filter(field => !applicantData[field]);
 
   if (emptyFields.length > 0) {
@@ -204,10 +203,7 @@ const Booking = () => {
           </label>
           <br/>
          
-          <label>
-            Status:
-            <TextField  id="filled-basic" variant="filled" size="small" fullWidth  required/> <br />
-          </label>
+         
    
           <label>
             Description:
