@@ -1,29 +1,11 @@
 import userHistory_css from './userHistory.module.css';
 import { Link } from 'react-router-dom';
+import TopNav from '../TopNav/TopNav';
 import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Grid } from '@mui/material';
 const UserHistory = () => {
     return (
         <div>
-            <div className={userHistory_css.topNav}>
-                <nav>
-                    <ul className={userHistory_css.navLinks}>
-                        <li><Link to="/viewFacilities" style={{ textDecoration: "none", color: "white" }}>Facility</Link></li>
-                        <li><Link to="/service" style={{ textDecoration: "none", color: "white" }}>Service</Link>
-                            <ul className={userHistory_css.sublinks}>
-                                <li>
-                                    <Link to="/booking" style={{ textDecoration: "none", color: "white" }}>Booking</Link>
-                                </li>
-                                <li>
-                                    <Link to="/membership" style={{ textDecoration: "none", color: "white" }}>Membership</Link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><Link to="/profile" style={{ textDecoration: "none", color: "white" }}>Profile</Link></li>
-                        <li><Link to="/history" style={{ textDecoration: "none", color: "white" }}>History</Link></li>
-                        <li><Link to="/logout" style={{ textDecoration: "none", color: "white" }}>Logout</Link></li>
-                    </ul>
-                </nav>
-            </div>
+            <TopNav />
             <div className={userHistory_css.content}>
                 <div className={userHistory_css.contentImage}>
 
