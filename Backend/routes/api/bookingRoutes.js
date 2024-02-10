@@ -5,7 +5,8 @@ const {
   getAllBookings,
   updateBooking,
   deleteBooking,
-  uploadNic
+  uploadNIC,
+  uploadLetter
 } = require("../../controllers/bookingController");
 
 const router = express.Router();
@@ -28,7 +29,7 @@ router.get('/getAllBookings', getAllBookings);
 //@desc update a booking in the database
 //@access private
 //@developer Malitha Chamikara
-router.put('/updateBooking/:bookingId',
+router.put('/updateBooking/:bookingID',
   passport.authenticate("jwt", { session: false }),
   updateBooking)
 
@@ -45,9 +46,18 @@ router.delete('/deleteBooking/:bookingId',
 //@desc upload NIC to the database
 //@access private
 //@developer Malitha Chamikara
-router.post('/uploadNic/:bookingId',
+router.post('/uploadNIC/:bookingID',
   passport.authenticate("jwt", { session: false }),
-  uploadNic
+  uploadNIC
+)
+
+//@route POST api/booking/uploadLetter/:bookingID
+//@desc upload permission letter to the database
+//@access private
+//@developer Lahiru Srimal
+router.post('/uploadLetter/:bookingID',
+  passport.authenticate("jwt", { session: false }),
+  uploadLetter
 )
 
 module.exports = router;

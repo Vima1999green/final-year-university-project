@@ -17,7 +17,11 @@ const Navbar = () => {
     const isAuthenticated = user && user.isAutheticate;
 
 
-    const showAuthLinks = location.pathname === "/login" || location.pathname === "/signup" || location.pathname.startsWith("/pwdReset") || location.pathname.startsWith("/verifyEmail") || location.pathname === "/";
+    const showAuthLinks = location.pathname === "/login" || 
+                        location.pathname === "/signup" || 
+                        location.pathname.startsWith("/pwdReset") || 
+                        location.pathname.startsWith("/verifyEmail") || 
+                        location.pathname === "/";
 
     const showUserProfile = isAuthenticated && !showAuthLinks;
 
@@ -32,12 +36,12 @@ const Navbar = () => {
                 Physical Education Unit<br></br>
                 PlayGround and Gym Facility Scheduler
             </text> */}
-            {isAuthenticated ?
-                (<Link to='/landpage' style={{ textDecoration: 'none' }}><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
+            
+                <Link to='/landpage' style={{ textDecoration: 'none' }}><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
                     <h4 style={{ color: 'white' }}>Physical Education Unit<br></br>
                         SPORTS FACILITY SCHEDULER</h4>
-                </Link>)
-                : null}
+                </Link>
+                
 
 
 
@@ -52,7 +56,7 @@ const Navbar = () => {
 
 
 
-            {isAuthenticated && showAuthLinks && (
+            {!isAuthenticated && showAuthLinks && (
                 <div className={header_css.links}>
                     <Link to="/login" className="btn btn-light">Login</Link>&nbsp;
                     <Link to="/signup" className="btn btn-warning">Sign Up</Link>

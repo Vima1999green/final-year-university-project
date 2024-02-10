@@ -51,9 +51,9 @@ const uploadPhotos = async (req, res, next) => {
   }
   //update images array in the database
   const facilityId = req.params.facilityId
-  const uploadPhotos = createMulterInstance(checkFileType, 'FacilityPhotos')
-  if (!isEmpty(uploadPhotos.array('photos', 6))) {
-    const uploadPhotoData = uploadPhotos.array('photos', 6);
+  const uploadPhotosInstance = createMulterInstance(checkFileType, 'FacilityPhotos')
+  if (!isEmpty(uploadPhotosInstance.array('photos', 6))) {
+    const uploadPhotoData = uploadPhotosInstance.array('photos', 6);
     uploadPhotoData(req, res, (err) => {
       if (err instanceof multer.MulterError) {
         return res.status(400).send('Multer error: ' + err);

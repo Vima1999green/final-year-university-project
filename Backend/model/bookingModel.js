@@ -13,6 +13,10 @@ const bookingSchema = new Schema({
         required: true
     },
 
+    userNICImg:{
+        type:String
+    },
+
     organizationName: {
         type: String,
         required: [true, 'Organization name is required']
@@ -62,8 +66,7 @@ const bookingSchema = new Schema({
 
     },
     permissionLetter:{
-        type:String,
-        required: [true, 'Permission letter is required']
+        type:String
     }
 }, { timestamps: true })
 
