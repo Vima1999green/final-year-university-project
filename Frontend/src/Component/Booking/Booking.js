@@ -4,95 +4,74 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Event_Img from "../../Images/booking_individual.jpg";
 import Event_Img2 from "../../Images/event01.jpg";
-// import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import { MultiInputTimeRangeField } from '@mui/x-date-pickers-pro/MultiInputTimeRangeField';
-// import { SingleInputTimeRangeField } from '@mui/x-date-pickers-pro/SingleInputTimeRangeField';
 import Button from "@mui/material/Button";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimeField } from '@mui/x-date-pickers/TimeField';
-import dayjs from 'dayjs';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimeField } from "@mui/x-date-pickers/TimeField";
+import dayjs from "dayjs";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { StaticDatePicker } from "@mui/x-date-pickers";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 
 
 const Booking = () => {
+  //select form type (individual or event)
   const [formType, setFormType] = useState("event");
-  const [value, setValue] = React.useState(dayjs('2022-04-17T15:30'));
-  const [applicantData, setApplicantData] = useState({
-    userID: '',
-    userNIC: '',
-    organizationName: '',
-    organizationAddress: '',
-    designation: '',
-    facility: '',
-    bookingDate: '',
-    Time: '',
-    status: '',
-    description: '',
-    facilityId: '',
-    deleteRequested: false,
-    postponeRequested: false,
+  const [selectedFacility, setSelectedFacility] = useState('');
 
+  
+  // const [value, setValue] = React.useState(dayjs("2022-04-17T15:30"));
+  const [value, setValue] = useState(new Date());
+  const [highlightedDays, setHighlightedDays] = useState([1, 2, 13]);
+  const [applicantData, setApplicantData] = useState({
+    userNIC: "",
+    organizationName: "",
+    organizationAddress: "",
+    designation: "",
+    facility: "",
+    bookingDate: "",
+    Time: "",
+    status: "",
+    description: "",
+    facilityId: "",
   });
+  const handleFacilitySelect = (event) => {
+    setSelectedFacility(event.target.value);
+  };
 
   const currentDate = new Date();
   const shouldDisableDate = (date) => {
-    // Disable dates earlier than the current date
     return date < currentDate;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission or validation here
-    console.log(applicantData
-        );
+
+     // Check if any required field is empty
+  const requiredFields = ["userNIC", "organizationName", "organizationAddress", "designation", "facility", "bookingDate", "Time", "status", "description", "facilityId"];
+  const emptyFields = requiredFields.filter(field => !applicantData[field]);
+
+  if (emptyFields.length > 0) {
+    alert(`Please fill in the following required fields: ${emptyFields.join(', ')}`);
+    return;
+  }
+
+    console.log(applicantData);
   };
-  //------------------------------------------------
-  // const [formFields, setFormFields] = useState([]);
-  // const [formData, setFormData] = useState({});
 
-  // const handleFieldChange = (fieldName, value) => {
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [fieldName]: value,
-  //   }));
-  // };
-
-  // const addField = () => {
-  //   const newField = `Field_${formFields.length + 1}`;
-  //   setFormFields((prevFields) => [...prevFields, newField]);
-  // };
-
-  // const removeField = (fieldName) => {
-  //   setFormFields((prevFields) => prevFields.filter((field) => field !== fieldName));
-  //   setFormData((prevData) => {
-  //     const { [fieldName]: removedField, ...restData } = prevData;
-  //     return restData;
-  //   });
-  // };
-
-  // const saveToDatabase = () => {
-  
-  //   console.log("Saving to database:", formData);
-  // };
-
-
-
-
-  //----------------------------------------------------
-
-
+  // get selected date from calender
 
   const [selectedDate, setSelectedDate] = useState(null);
-  const handleDateChange = (date) => {
+
+  const handleDateSelect = (date) => {
     setSelectedDate(date);
   };
-
+  // fetch data from database
   useEffect(() => {
     const fetchDataFromDatabase = async () => {
       try {
@@ -101,10 +80,9 @@ const Booking = () => {
         );
         const data = await response.json();
 
-        // Assuming the data structure has 'name' and 'email' properties
         setApplicantData({
-          name: data.name,
-         
+          userNIC: data.userNIC,
+
         });
       } catch (error) {
         console.error("Error fetching data from database:", error);
@@ -118,244 +96,180 @@ const Booking = () => {
     setFormType(event.target.value);
   };
 
+
+  
+  
+
+  //event form 01-------------------
   const renderEventForm = () => (
     <div className={Book_css.type01}>
-      <div className={Book_css.left_event}>
+      <form  >
+        <div className={Book_css.left_event}>
 
-      <label>
-        User ID :
-        <TextField
-          id="filled-basic"
-          variant="filled"
-          size="small"
-          //value={applicantData.id}
-          // Disable input to make it read-only
-          // InputProps={{
-          //   readOnly: true,
-          // }}
-          fullWidth
-        />
-        <br />
-      </label>
+          
 
-      <label>
-        User NIC :
-        <TextField
-          id="filled-basic"
-          variant="filled"
-          size="small"
+          <label> 
+            User NIC :<br/>
+            <TextField type="file" /> <br />
+          </label>
+              
+          <label>
+            Name of Organization:
+            <TextField id="filled-basic"  variant="filled" size="small" fullWidth  required/> <br />
+          </label>
+
+          <label>
+            Address of Organization:
+            <TextField id="filled-basic" variant="filled" size="small" fullWidth multiline required/> <br />
+          </label>
+        
+          <label>
+            Designation:
+            <TextField id="filled-basic" variant="filled" size="small" fullWidth  required/> <br />
+          </label><br/>
+
+          <label>
+        Facility :
+        <Select value={selectedFacility}  onChange={handleFacilitySelect} variant="filled" size="small" fullWidth required id="facility-select">
+          <MenuItem value="" style={{color:'black'}}>Select Facility</MenuItem>
+          <MenuItem value="Facility 1" style={{color:'black'}}>Playground</MenuItem>
+          <MenuItem value="Facility 2" style={{color:'black'}}>Gymnasium</MenuItem>
          
-          fullWidth
-          required
-        />
+        </Select>
         <br />
       </label>
+         
+          <br/>
+          {/* <label>
+            Booking Date:
+            <TextField id="filled-basic" variant="filled" size="small" fullWidth value={
+                selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : ""} readOnly/><br/>
+          </label>  */}
+          <label>
+  Booking Date:
+  
+  <TextField
+    id="filled-basic"
+    variant="filled"
+    size="small"
+    fullWidth
+    
+    
+  />
+  <br />
+</label>
 
-      <label>
-          Name of Organization:
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            size="small"
-            fullWidth
-          />
-        </label>
-        <br />
+    
+          <label>
+            Time:<br/>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer
+                components={["TimeField", "TimeField", "TimeField"]} >
+              
+                <TimeField
+                  value={value}
+                  onChange={(newValue) => setValue(newValue)}
+                  format="hh:mm a" />
+                
+              </DemoContainer>
+            </LocalizationProvider>
+          </label>
+          <br/>
+         
+          <label>
+            Status:
+            <TextField  id="filled-basic" variant="filled" size="small" fullWidth  required/> <br />
+          </label>
+   
+          <label>
+            Description:
+            <TextField id="filled-basic" variant="filled" size="small" fullWidth  required/> <br />
+          </label>
+              
+             
+          <br />
+         
+          <label>
+            Permission Letter:<br/>
+          <TextField type="file" />
+            {/* <Button variant="contained" color="primary" component="span">   Upload    </Button> */}
+          </label>
+          <br />
 
-        <label>
-          Address of Organization:
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            size="small"
-            multiline
-            fullWidth
-          />
+          <Button variant="contained" color="warning" style={{ textAlign: "left", marginBottom: "15px", float: "right" }} onClick={handleSubmit}>
+            Submit Your Booking
+          </Button>
           <br />
-        </label>
-        <br />
-        <label>
-          Designation:
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            size="small"
-            
-            fullWidth
-          />
-          <br />
-        </label>
-        <br />
-        <label>
-          Facility :
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            size="small"
-            
-            // Disable input to make it read-only
-           
-            fullWidth
-          />
-          <br />
-        </label>
-        <br />
+        </div>
         
-        
-        <label>
-          Booking Date:
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            size="small"
-            fullWidth
-          />
-          <br />
-        </label>
-        <br />
-        <label>
-          Time:
-          
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['TimeField', 'TimeField', 'TimeField']}>
-        <TimeField
-          
-          value={value}
-          onChange={(newValue) => setValue(newValue)}
-          format="hh:mm a"
-        />
+        {/* --------- Booking calender  ------------- */}
+
+        <div className={Book_css.right_event}>
+          <h3  style={{color: "gray", fontSize: "18px",fontFamily: "inherit", }} >
+            Select your booking date from here!
+          </h3>
+
+          <div className={Book_css.right_event_calender}>
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar onDateSelect={handleDateSelect} />
+            </LocalizationProvider> */}
+              <LocalizationProvider dateAdapter={AdapterDayjs} style={{color:'black'}}>
+      <DemoContainer
+      style={{color:'black'}}
+        components={[
+          'DatePicker',
+          'MobileDatePicker',
+          'DesktopDatePicker',
+          'StaticDatePicker',
+        ]}
+      >
+       
+        <DemoItem style={{color:'black'}}>
+          <StaticDatePicker defaultValue={dayjs('2022-04-17')} style={{color:'black'}}/>
+        </DemoItem>
       </DemoContainer>
     </LocalizationProvider>
-          <br />
-        </label>
-        <br />
-        <label>
-         Status:
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            size="small"
-            fullWidth
-          />
-          <br />
-        </label>
-        <br />
 
-        <label>
-         Description:
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            size="small"
-            fullWidth
-            multiline
-          />
-          <br />
-        </label>
-        <br />
-        <label>
-         Facility ID:
-          <TextField
-            id="filled-basic"
-            variant="filled"
-            size="small"
-            fullWidth
+    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <StaticDatePicker
+        displayStaticWrapperAs="desktop"
+        defaultValue={dayjs('2022-04-17')}
+        renderInput={(props) => (
+          <input {...props} className={classes.selectedDate} />
+        )}
+        slotProps={{
+          toolbar: { toolbarFormat: 'ddd DD MMMM', hidden: false },
+        }}
+      />
+    </LocalizationProvider> */}
+
+            {/* {selectedDate && (
+        <TextField
+          id="selectedDate"
+          label="Selected Date"
+          value={selectedDate.toLocaleDateString()} // Convert selected date to a locale date string
+          variant="outlined"
+          
+        />
+      )} */}
             
-          />
-          <br />
-        </label>
-        <br />
-
-        <Button variant="contained" color="primary"style={{ textAlign: 'left', marginLeft: 0 ,float:'right'}}>Submit</Button><br/>
-        
-      </div>
-      <div className={Book_css.right_event}>
-        {/* <img
-          src={Event_Img2}
-          alt="Event Image"
-          style={{ width: "350px" }}
-          className={Book_css.eventImage}
-        /> */}
-        <h3 style={{color:'black'}}>Select your booking date here!</h3>
-        <div className={Book_css.right_event_calender}>
-         <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateCalendar />
-    </LocalizationProvider>
-   
-    </div>
-      </div>
+          </div>
+        </div>
+      </form>
     </div>
   );
+
+  //individual event form 02---------
 
   const renderIndividualPracticeForm = () => (
     <div className={Book_css.type01}>
       <div className={Book_css.left_event}>
+        <br />
 
-      
-      <br />
-
-      {/* <label>
-        Name of Applicant:
-        <TextField
-          id="filled-basic"
-          variant="filled"
-          size="small"
-          value={applicantData.name}
-          // Disable input to make it read-only
-          InputProps={{
-            readOnly: true,
-          }}
-          fullWidth
-        />
-        <br />
-      </label>
-      <br />
-      <label>
-        Email :
-        <TextField
-          id="filled-basic"
-          variant="filled"
-          size="small"
-          value={applicantData.email}
-          // Disable input to make it read-only
-          InputProps={{
-            readOnly: true,
-          }}
-          fullWidth
-        />
-        <br />
-      </label>
-      <br />
-      <label>
-        Contact No:
-        <TextField
-          id="contact-number"
-          variant="filled"
-          size="small"
-          fullWidth
-        />
-        <br />
-      </label>
-      <br />
-      <label>
-        Cost :
-        <TextField
-          fullWidth
-          name="cost"
-          label=""
-          variant="filled"
-          color="primary"
-          type="number"
-          value={applicantData.cost}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-      </label><br/>
-       */}
+        {/* form 02 content-------------------- */}
 
       </div>
-          
+
       <div className={Book_css.right_event}>
         <img
           src={Event_Img}
@@ -368,41 +282,55 @@ const Booking = () => {
   );
 
   return (
-    <div className={Book_css.container}>
-     <div className={Book_css.contentImage}>
-      <div className={Book_css.content}>
-        <form onSubmit={handleSubmit}>
-          <div className={Book_css.header}>
-            <h2>Lets Make Your Reservation </h2>
-          </div>
-          <div className={Book_css.type}>
-            <label>
-              <input
-                type="radio"
-                value="event"
-                checked={formType === "event"}
-                onChange={handleRadioChange}
-              />
-              For event
-            </label>
-          </div>
-          <div className={Book_css.type}>
-            <label>
-              <input
-                type="radio"
-                value="address"
-                checked={formType === "address"}
-                onChange={handleRadioChange}
-              />
-              For individual Practice
-            </label>
-          </div>
+    <div>
+      <div className={Book_css.topNav}>
+                <nav>
+                    <ul className={Book_css.navLinks}>
+                        <li><Link to="/viewFacilities" style={{ textDecoration: "none", color: "white" }}>Facility</Link></li>
+                        <li><Link to="/service" style={{ textDecoration: "none", color: "white" }}>Service</Link>
+                            <ul className={Book_css.sublinks}>
+                                <li>
+                                    <Link to="/booking" style={{ textDecoration: "none", color: "white" }}>Booking</Link>
+                                </li>
+                                <li>
+                                    <Link to="/membership" style={{ textDecoration: "none", color: "white" }}>Membership</Link>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><Link to="/profile" style={{ textDecoration: "none", color: "white" }}>Profile</Link></li>
+                        <li><Link to="/history" style={{ textDecoration: "none", color: "white" }}>History</Link></li>
+                        <li><Link to="/logout" style={{ textDecoration: "none", color: "white" }}>Logout</Link></li>
+                    </ul>
+                </nav>
+            </div>
 
-          {formType === "event"
-            ? renderEventForm()
-            : renderIndividualPracticeForm()}
-        </form>
-      </div>
+      <div className={Book_css.container}>
+        <div className={Book_css.contentImage}>
+          <div className={Book_css.content}>
+            <form onSubmit={handleSubmit}>
+              <div className={Book_css.header}>
+                <h2>Lets Make Your Reservation </h2>
+              </div>
+              <div className={Book_css.type}>
+                <label>
+                  <input type="radio" value="event" checked={formType === "event"} onChange={handleRadioChange} />
+                  For event
+                </label>
+              </div>
+              <div className={Book_css.type}>
+                <label>
+                  <input type="radio" value="event" checked={formType === "address"} onChange={handleRadioChange} />
+                      For individual practice
+                </label>
+                 
+              </div>
+
+              {formType === "event"  ? renderEventForm() : renderIndividualPracticeForm()}
+             
+              
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -9,12 +9,11 @@ import App_Css from './App.module.css';
 import EmailVerification from './Component/EmailVerification/EmailVerification';
 import LandPage from './Component/LandPage/LandPage';
 import ViewFacility from './Component/ViewFacility/ViewFacility';
-
 import UserProfile from './Component/NavBar/UserProfile';
 import Facility from './Component/Facility/Facility';
 import UserHistory from './Component/History/UserHistory';
 import Profile from './Component/UserProfile/Profile';
-import Booking from './Component/Booking/Booking';
+import Booking  from './Component/Booking/Booking';
 
 
 
@@ -49,6 +48,8 @@ function App() {
             <Route path='/bookingForm' element={<Booking />} />
 
 
+
+            <Route path='/booking' element={<Booking/>}/>
 
 
 
