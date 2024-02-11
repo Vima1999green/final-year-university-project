@@ -5,7 +5,8 @@ const {
   getAllBookings,
   updateBooking,
   deleteBooking,
-  uploadNic
+  uploadNIC,
+  uploadLetter
 } = require("../../controllers/bookingController");
 
 const router = express.Router();
@@ -45,9 +46,15 @@ router.delete('/deleteBooking/:bookingId',
 //@desc upload NIC to the database
 //@access private
 //@developer Malitha Chamikara
-router.post('/uploadNic/:bookingId',
+router.post('/uploadNIC/:bookingId',
   passport.authenticate("jwt", { session: false }),
-  uploadNic
+  uploadNIC
 )
+
+router.post('/uploadLetter/:bookingId',
+  passport.authenticate("jwt", { session: false }),
+  uploadLetter
+)
+
 
 module.exports = router;

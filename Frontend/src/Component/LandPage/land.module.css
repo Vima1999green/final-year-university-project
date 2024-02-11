@@ -21,18 +21,19 @@
   align-items: center;
   min-height: 100vh;
   flex-direction: column;
+  width: 100%;
 }
 
 .imageListContainer {
-  width: 800px;
-  height: 400px;
-  margin-left: 0;
-  margin-top: 5px;
-  margin-bottom: 0;
+  width: calc(90% + 40px);
+  height: 750px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-left: 20px;
 }
 
 .imageListItem {
-  height: 164px;
+  margin: 0 20px;
   margin-right: 20px;
 }
 
@@ -40,7 +41,8 @@
   margin-top: 70px;
   margin-right: 0;
   direction: column;
-  margin-left: 60px;
+  margin-left: 0;
+  width: 30%;
 }
 
 .overAllCalendarbtnConatiner {
@@ -54,15 +56,11 @@
 .gymnasiumbtnConatiner {
   margin-bottom: 30px;
 }
-
-.calendarContainer {
-  width: 100%;
-
-  background-color: grey;
-
-  height: 300px;
-  margin: 50px;
+.calendarContainer{
+  margin-top: 30px;
+  width: 70%;
 }
+
 
 .overallBtn,
 .playgroundBtn,
@@ -82,4 +80,5 @@
 
 .cardHolder {
   margin-top: 10px;
+  margin-bottom: 10px;
 }
