@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Book_css from "./Booking.module.css";
-import Box from "@mui/material/Box";
+
 import TextField from "@mui/material/TextField";
 import Event_Img from "../../Images/booking_individual.jpg";
-import Event_Img2 from "../../Images/event01.jpg";
+
 import Button from "@mui/material/Button";
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 
@@ -11,13 +11,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimeField } from "@mui/x-date-pickers/TimeField";
 import dayjs from "dayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { StaticDatePicker } from "@mui/x-date-pickers";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TopNav from "../TopNav/TopNav";
 import axios from 'axios';
+
+// import 'react-big-calendar/lib/css/react-big-calendar.css';
+// import { Calendar as BigCalendar, dayjsLocalizer } from 'react-big-calendar';
+import  Calendar  from '../Calendar/Calendar'; 
 
 
 
@@ -29,10 +32,14 @@ const Booking = () => {
   const [formType, setFormType] = useState("event");
   const [selectedFacility, setSelectedFacility] = useState('');
   const [facilities,setFacilities] = useState([]);
+  const [bookings,setBookings] = useState([]);
+  
+
+  
 
   
   // const [value, setValue] = React.useState(dayjs("2022-04-17T15:30"));
-  const [value, setValue] = useState(new Date());
+  const [value, setValue] = useState(dayjs(new Date()));
   const [highlightedDays, setHighlightedDays] = useState([1, 2, 13]);
   const [applicantData, setApplicantData] = useState({
     userNIC: "",
@@ -45,9 +52,7 @@ const Booking = () => {
     description: "",
     facilityId: "",
   });
-  const handleFacilitySelect = (event) => {
-    setSelectedFacility(event.target.value);
-  };
+
 
   const currentDate = new Date();
   const shouldDisableDate = (date) => {
@@ -77,29 +82,11 @@ const Booking = () => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const handleDateSelect = (date) => {
-    setSelectedDate(date);
+    
+    setApplicantData({ ...applicantData, bookingDate: date.format("YYYY-MM-DD") });
+    console.log("Updated applicantData:", { ...applicantData, bookingDate: date.format("YYYY-MM-DD") });
   };
-  // fetch data from database
-  // useEffect(() => {
-  //   const fetchDataFromDatabase = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         "mongodb://localhost:27017/sportsunitproject"
-  //       );
-  //       const data = await response.json();
-
-  //       setApplicantData({
-  //         userNIC: data.userNIC,
-
-  //       });
-  //     } catch (error) {
-  //       console.error("Error fetching data from database:", error);
-  //     }
-  //   };
-
-  //   fetchDataFromDatabase();
-  // }, [formType]);
-
+  
   useEffect(()=>{
     const fetchFacilities = async ()=>{
       await axios.get('http://localhost:4000/api/facility/getAllFacilities')
@@ -111,15 +98,50 @@ const Booking = () => {
               console.error(error)
             })
 
-    }
+    };
+
+    const fetchBookings = async () =>{
+      await axios.get('http://localhost:4000/api/booking/getAllBookings')
+              .then((response)=>{
+                console.log(response.data)
+                
+                
+                  setBookings(response.data);
+              })
+
+              .catch(error=>{
+                console.error('Error fetching booking data',error);
+              })
+  };
     fetchFacilities();
-  },[])
+    fetchBookings();
+  },[]);
+
+ 
+
+  const handleFacilitySelect = (event) => {
+    console.log('in facility select');
+    let facility  = event.target.value;
+    setSelectedFacility(facility);
+    console.log(selectedFacility)
+    filterBookings(selectedFacility);
+    
+  };
+  
 
   const handleRadioChange = (event) => {
     setFormType(event.target.value);
   };
 
+  const filterBookings=(facility)=>{
+    if(facility===selectedFacility)return;
+      setSelectedFacility(facility)
+  };
 
+  const filteredBookings = selectedFacility ? 
+      bookings.filter(booking=>booking.facility===selectedFacility):
+      bookings
+ 
   
   
 
@@ -128,33 +150,10 @@ const Booking = () => {
     <div className={Book_css.type01}>
       <form  >
         <div className={Book_css.left_event}>
-
-          
-
-          <label> 
-            User NIC :<br/>
-            <TextField type="file" /> <br />
-          </label>
-              
-          <label>
-            Name of Organization:
-            <TextField id="filled-basic"  variant="filled" size="small" fullWidth  required/> <br />
-          </label>
-
-          <label>
-            Address of Organization:
-            <TextField id="filled-basic" variant="filled" size="small" fullWidth multiline required/> <br />
-          </label>
-        
-          <label>
-            Designation:
-            <TextField id="filled-basic" variant="filled" size="small" fullWidth  required/> <br />
-          </label><br/>
-
-          <label>
+        <label>
         Facility :
-        <Select value={selectedFacility}  onChange={handleFacilitySelect} variant="filled" size="small"  required id="facility-select" fullWidth>
-          <MenuItem value="" style={{color:'black'}} fullWidth>Select Facility</MenuItem>
+        <Select value={selectedFacility}  onChange={handleFacilitySelect} variant="filled" size="small"  required id="facility-select" fullWidth placeholder="select">
+         
           {console.log(facilities)}
           {facilities.map(facility=>{
             return(
@@ -165,20 +164,17 @@ const Booking = () => {
         </Select>
         <br />
       </label>
-         
-          <br/>
-          {/* <label>
-            Booking Date:
-            <TextField id="filled-basic" variant="filled" size="small" fullWidth value={
-                selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : ""} readOnly/><br/>
-          </label>  */}
-          <label>
+      <br/>
+
+      <label>
   Booking Date:
   
   <TextField
     id="filled-basic"
     variant="filled"
     size="small"
+    value={applicantData.bookingDate}
+    onChange={(e)=>setApplicantData({ ...applicantData, bookingDate: e.target.value })}
     fullWidth
     
     
@@ -202,6 +198,37 @@ const Booking = () => {
             </LocalizationProvider>
           </label>
           <br/>
+         
+          
+
+          <label> 
+            User NIC :<br/>
+            <TextField type="file" /> <br />
+          </label>
+              
+          <label>
+            Name of Organization:
+            <TextField id="filled-basic"  variant="filled" size="small" fullWidth  required/> <br />
+          </label>
+
+          <label>
+            Address of Organization:
+            <TextField id="filled-basic" variant="filled" size="small" fullWidth multiline required/> <br />
+          </label>
+        
+          <label>
+            Designation:
+            <TextField id="filled-basic" variant="filled" size="small" fullWidth  required/> <br />
+          </label><br/>
+
+          
+         
+          <br/>
+          {/* <label>
+            Booking Date:
+            <TextField id="filled-basic" variant="filled" size="small" fullWidth value={
+                selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : ""} readOnly/><br/>
+          </label>  */}
          
          
    
@@ -228,16 +255,17 @@ const Booking = () => {
         
         {/* --------- Booking calender  ------------- */}
 
-        <div className={Book_css.right_event}>
-          <h3  style={{color: "gray", fontSize: "18px",fontFamily: "inherit", }} >
-            Select your booking date from here!
-          </h3>
+        
+         
+         
+        
 
-          <div className={Book_css.right_event_calender}>
+          
+          
             {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar onDateSelect={handleDateSelect} />
             </LocalizationProvider> */}
-              <LocalizationProvider dateAdapter={AdapterDayjs} style={{color:'black'}}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs} style={{color:'black'}}>
       <DemoContainer
       style={{color:'black'}}
         components={[
@@ -252,33 +280,12 @@ const Booking = () => {
           <StaticDatePicker defaultValue={dayjs('2022-04-17')} style={{color:'black'}}/>
         </DemoItem>
       </DemoContainer>
-    </LocalizationProvider>
-
-    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <StaticDatePicker
-        displayStaticWrapperAs="desktop"
-        defaultValue={dayjs('2022-04-17')}
-        renderInput={(props) => (
-          <input {...props} className={classes.selectedDate} />
-        )}
-        slotProps={{
-          toolbar: { toolbarFormat: 'ddd DD MMMM', hidden: false },
-        }}
-      />
     </LocalizationProvider> */}
 
-            {/* {selectedDate && (
-        <TextField
-          id="selectedDate"
-          label="Selected Date"
-          value={selectedDate.toLocaleDateString()} // Convert selected date to a locale date string
-          variant="outlined"
-          
-        />
-      )} */}
+    
             
-          </div>
-        </div>
+          
+        
       </form>
     </div>
   );
@@ -324,9 +331,19 @@ const Booking = () => {
               </div>
               <div className={Book_css.type}>
                 <label>
-                  <input type="radio" value="event" checked={formType === "address"} onChange={handleRadioChange} />
+                  <input type="radio" value="address" checked={formType === "address"} onChange={handleRadioChange} />
                       For individual practice
                 </label>
+
+                <h2  style={{color: "red", fontSize: "24px",fontFamily: "inherit", }} >
+                  Select your booking date from here!
+                </h2>
+
+                
+                <Calendar style={{ backgroundColor: 'white' }} bookings={filteredBookings} />
+
+    
+
                  
               </div>
 

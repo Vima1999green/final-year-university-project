@@ -6,6 +6,7 @@ import  './Calendar.css';
 const Calendar = ({bookings}) => {
     console.log(bookings)
 
+  
     const events = bookings.map(booking => ({
        
         title: booking.description, 
