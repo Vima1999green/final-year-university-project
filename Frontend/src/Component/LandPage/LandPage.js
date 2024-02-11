@@ -124,7 +124,7 @@ const LandPage = () => {
                     <ImageListItem
                       key={item.img}
                       className={landPage_css.ImageListItem}
-                      
+         
                     >
                       <img src={`${item.img}`} />
                     </ImageListItem>

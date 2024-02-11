@@ -29,7 +29,7 @@ const TopNav = () => {
                                 (<li><Link to="/requests" style={{ textDecoration: "none", color: "white" }}>Requests</Link></li>) :
                                 null
                         }
-                        <li><Link to="/yearplan" style={{ textDecoration: "none", color: "white" }}>YearPlan</Link></li>
+                        <li><Link to="/yearplan" style={{ textDecoration: "none", color: "white" }}>Year Plan</Link></li>
                     </ul>
                 </nav>
             </div>
