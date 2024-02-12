@@ -16,16 +16,19 @@ import {
 } from "@mui/material";
 
 const UserHistory = () => {
-  const [customerDetails, setCustomerDetails] = useState([]);
+  const [bookingDetails, setBookingDetails] = useState([]);
 
   useEffect(() => {
     const fetchBookingDetails = async () => {
-      try {
-        const response =
-          await axios.get(/*"http://localhost:3001/api/booking"*/);
-      } catch (error) {
-        console.error("Error fetching booking details:", error);
-      }
+          await axios.get('http://localhost:4000/api/booking/getAllBookings')
+                  .then((response)=>{
+                    console.log(response.data);
+                    setBookingDetails(response.data);
+                  })
+
+                  .catch(error=>{
+                    console.error('Error fetching booking details',error);
+                  })
     };
     fetchBookingDetails();
   }, []);
@@ -36,31 +39,31 @@ const UserHistory = () => {
       <div className={userHistory_css.content}>
         <div className={userHistory_css.contentImage}>
           <div className={userHistory_css.body}>
-            <Grid item xs={12}>
+            <Grid item xs={12} style={{width:'100%'}}>
               <Grid>
-                <h4>My booking List</h4>
-                <TableContainer component={Paper}>
+                <h2 style={{color:'black'}}> booking List</h2>
+                <TableContainer component={Paper} className={userHistory_css.tableContainer} >
                   <Table>
                     <TableHead className={userHistory_css.tableHead}>
                       <TableRow>
-                        <TableCell>Organization</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Facility</TableCell>
-                        <TableCell>Date</TableCell>
-                        <TableCell>Event Title</TableCell>
-                        <TableCell>Status</TableCell>
+                        <TableCell className={userHistory_css.tableCell}>Organization</TableCell>
+                        <TableCell className={userHistory_css.tableCell}>Address</TableCell>
+                        <TableCell className={userHistory_css.tableCell}>Facility</TableCell>
+                        <TableCell className={userHistory_css.tableCell}>Date</TableCell>
+                        <TableCell className={userHistory_css.tableCell}>Description</TableCell>
+                        <TableCell className={userHistory_css.tableCell}>Status</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody className={userHistory_css.tableBody}>
-                      {customerDetails.map((customerDetail, index) => (
+                      {bookingDetails.map((bookingDetail, index) => (
                         <TableRow key={index}>
-                          <TableCell>{customerDetail.organization}</TableCell>
-                          <TableCell>{customerDetail.name}</TableCell>
-                          <TableCell>{customerDetail.facility}</TableCell>
-                          <TableCell>{customerDetail.date}</TableCell>
-                          <TableCell>{customerDetail.eventTitle}</TableCell>
+                          <TableCell>{bookingDetail.organizationName}</TableCell>
+                          <TableCell>{bookingDetail.organizationAddress}</TableCell>
+                          <TableCell>{bookingDetail.facility}</TableCell>
+                          <TableCell>{bookingDetail.bookingDate}</TableCell>
+                          <TableCell>{bookingDetail.description}</TableCell>
                           <TableCell>
-                            {customerDetail.status
+                            {bookingDetail.status
                               ? "Finished"
                               : "Not Finished"}
                           </TableCell>

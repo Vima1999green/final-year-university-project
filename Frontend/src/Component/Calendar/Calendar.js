@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import  './Calendar.css';
 
 
-const Calendar = ({bookings}) => {
+const Calendar = ({bookings,onSelectDate}) => {
     console.log(bookings)
 
   
@@ -61,6 +61,7 @@ const Calendar = ({bookings}) => {
 
     }
 
+  
     
     return ( 
         <div>
@@ -70,6 +71,7 @@ const Calendar = ({bookings}) => {
                 onNavigate={handleNavigate}
                 events={events}
                 eventPropGetter={eventStyleGetter}
+                onSelectSlot={({start})=>onSelectDate(start)}
                 style={{height:500,margin:0,width:'100%'}}
              
             />

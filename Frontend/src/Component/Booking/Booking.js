@@ -168,18 +168,22 @@ const Booking = () => {
 
       <label>
   Booking Date:
-  
-  <TextField
+ 
+   <TextField
     id="filled-basic"
     variant="filled"
     size="small"
-    value={applicantData.bookingDate}
-    onChange={(e)=>setApplicantData({ ...applicantData, bookingDate: e.target.value })}
+    value={selectedDate}
+    aria-readonly
     fullWidth
     
     
   />
-  <br />
+  
+  
+
+<br/>
+  
 </label>
 
     
@@ -340,7 +344,7 @@ const Booking = () => {
                 </h2>
 
                 
-                <Calendar style={{ backgroundColor: 'white' }} bookings={filteredBookings} />
+                <Calendar style={{ backgroundColor: 'white' }} bookings={filteredBookings} onSelectDate={setSelectedDate} />
 
     
 
