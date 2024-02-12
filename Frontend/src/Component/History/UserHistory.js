@@ -13,7 +13,7 @@ import {
   TableRow,
   Paper,
   Grid,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const UserHistory = () => {
   const [customerDetails, setCustomerDetails] = useState([]);

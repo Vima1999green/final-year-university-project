@@ -33,10 +33,10 @@ const Navbar = () => {
                 PlayGround and Gym Facility Scheduler
             </text> */}
             
-                <Link to='/landpage' style={{ textDecoration: 'none' }}><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
+                {/* <Link to='/landpage' style={{ textDecoration: 'none' }}><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
                     <h4 style={{ color: 'white' }}>Physical Education Unit<br></br>
                         SPORTS FACILITY SCHEDULER</h4>
-                </Link>
+                </Link> */}
                 
 
       <Link to="/landpage" style={{ textDecoration: "none" }}>
