@@ -10,6 +10,8 @@
 .navLinks {
     list-style-type: none;
     margin-top: 8px;
+    padding: 0;
+    text-align: center;
 }
 
 .navLinks li {
@@ -41,4 +43,17 @@
 
 li:hover .sublinks {
     display: block;
+}
+
+@media only screen and (max-width: 700px) {
+    .navLinks li {
+        margin-right: 10px; 
+    }
+}
+
+
+@media only screen and (max-width: 400px) {
+    .navLinks li {
+        margin-right: 5px; 
+    }
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import landPage_css from "./land.module.css";
 import TopNav from "../TopNav/TopNav";
 import {
@@ -8,9 +8,6 @@ import {
   Button,
   CardActionArea,
 } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -24,11 +21,45 @@ import booking from "../../Images/booking.jpeg";
 import membership from "../../Images/membership.jpg";
 import notification from "../../Images/notification.jpg";
 import calendar from "../../Images/calendar.jpeg";
-import dayjs from "dayjs";
 import Calendar from "../Calendar/Calendar";
+import axios from 'axios';
+
 
 const LandPage = () => {
   const [value, setValue] = useState(new Date());
+  const [bookings,setBookings] = useState([]);
+  const [clickedFacility,setClickedFacility] = useState(null);
+
+  //useEffect to  fetch all the booking  data from backend server
+  useEffect(()=>{
+    fetchBookings();
+  },[]);
+
+  const fetchBookings = async () =>{
+      await axios.get('http://localhost:4000/api/booking/getAllBookings')
+              .then((response)=>{
+                console.log(response.data)
+                
+                
+                  setBookings(response.data);
+              })
+
+              .catch(error=>{
+                console.error('Error fetching booking data',error);
+              })
+  }
+
+  const filterBookings=(facility)=>{
+    if(facility===clickedFacility)return;
+      setClickedFacility(facility)
+  };
+
+  const filteredBookings = clickedFacility ? 
+      bookings.filter(booking=>booking.facility===clickedFacility):
+      bookings
+
+
+
   return (
     <div>
       <TopNav />
@@ -38,14 +69,14 @@ const LandPage = () => {
           <div className={landPage_css.body}>
             <Grid container spacing={2} direction="column">
               <Grid container spacing={0} direction="raw">
-                <Grid
-                  item
-                  xs={12}
-                  lg={6}
-                  className={landPage_css.calendarContainer}
-                >
-                  <Calendar />
+                <Grid className={landPage_css.calendarContainer}>
+                    <Grid item xs={12} md={8} >
+                      <Calendar bookings={filteredBookings}/>
+
+                    </Grid>
+
                 </Grid>
+               
 
                 <Grid className={landPage_css.buttonContainer} lg={3} md={6}>
                   <Grid className={landPage_css.overAllCalendarbtnConatiner}>
@@ -54,6 +85,7 @@ const LandPage = () => {
                       variant="contained"
                       size="large"
                       fullWidth
+                      onClick={()=>filterBookings(null)}
                     >
                       Overall Calendar
                     </Button>
@@ -64,6 +96,7 @@ const LandPage = () => {
                       variant="contained"
                       size="large"
                       fullWidth
+                      onClick={()=>filterBookings('playground')}
                     >
                       Playground
                     </Button>
@@ -74,6 +107,7 @@ const LandPage = () => {
                       variant="contained"
                       size="large"
                       fullWidth
+                      onClick={()=>filterBookings('gymnasium')}
                     >
                       Gymnasium
                     </Button>

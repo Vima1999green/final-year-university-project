@@ -16,6 +16,11 @@ import { StaticDatePicker } from "@mui/x-date-pickers";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import TopNav from "../TopNav/TopNav";
+import axios from 'axios';
+
+
+
 
 
 
@@ -23,6 +28,7 @@ const Booking = () => {
   //select form type (individual or event)
   const [formType, setFormType] = useState("event");
   const [selectedFacility, setSelectedFacility] = useState('');
+  const [facilities,setFacilities] = useState([]);
 
   
   // const [value, setValue] = React.useState(dayjs("2022-04-17T15:30"));
@@ -36,7 +42,6 @@ const Booking = () => {
     facility: "",
     bookingDate: "",
     Time: "",
-    status: "",
     description: "",
     facilityId: "",
   });
@@ -49,11 +54,11 @@ const Booking = () => {
     return date < currentDate;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
      // Check if any required field is empty
-  const requiredFields = ["userNIC", "organizationName", "organizationAddress", "designation", "facility", "bookingDate", "Time", "status", "description", "facilityId"];
+  const requiredFields = ["userNIC", "organizationName", "organizationAddress", "designation", "facility", "bookingDate", "Time", "description", "facilityId"];
   const emptyFields = requiredFields.filter(field => !applicantData[field]);
 
   if (emptyFields.length > 0) {
@@ -62,6 +67,9 @@ const Booking = () => {
   }
 
     console.log(applicantData);
+
+  
+    
   };
 
   // get selected date from calender
@@ -72,25 +80,40 @@ const Booking = () => {
     setSelectedDate(date);
   };
   // fetch data from database
-  useEffect(() => {
-    const fetchDataFromDatabase = async () => {
-      try {
-        const response = await fetch(
-          "mongodb://localhost:27017/sportsunitproject"
-        );
-        const data = await response.json();
+  // useEffect(() => {
+  //   const fetchDataFromDatabase = async () => {
+  //     try {
+  //       const response = await fetch(
+  //         "mongodb://localhost:27017/sportsunitproject"
+  //       );
+  //       const data = await response.json();
 
-        setApplicantData({
-          userNIC: data.userNIC,
+  //       setApplicantData({
+  //         userNIC: data.userNIC,
 
-        });
-      } catch (error) {
-        console.error("Error fetching data from database:", error);
-      }
-    };
+  //       });
+  //     } catch (error) {
+  //       console.error("Error fetching data from database:", error);
+  //     }
+  //   };
 
-    fetchDataFromDatabase();
-  }, [formType]);
+  //   fetchDataFromDatabase();
+  // }, [formType]);
+
+  useEffect(()=>{
+    const fetchFacilities = async ()=>{
+      await axios.get('http://localhost:4000/api/facility/getAllFacilities')
+            .then(response=>{
+              console.log(response.data)
+              setFacilities(response.data)
+            })
+            .catch(error=>{
+              console.error(error)
+            })
+
+    }
+    fetchFacilities();
+  },[])
 
   const handleRadioChange = (event) => {
     setFormType(event.target.value);
@@ -130,10 +153,14 @@ const Booking = () => {
 
           <label>
         Facility :
-        <Select value={selectedFacility}  onChange={handleFacilitySelect} variant="filled" size="small" fullWidth required id="facility-select">
-          <MenuItem value="" style={{color:'black'}}>Select Facility</MenuItem>
-          <MenuItem value="Facility 1" style={{color:'black'}}>Playground</MenuItem>
-          <MenuItem value="Facility 2" style={{color:'black'}}>Gymnasium</MenuItem>
+        <Select value={selectedFacility}  onChange={handleFacilitySelect} variant="filled" size="small"  required id="facility-select" fullWidth>
+          <MenuItem value="" style={{color:'black'}} fullWidth>Select Facility</MenuItem>
+          {console.log(facilities)}
+          {facilities.map(facility=>{
+            return(
+            <MenuItem key={facility._id} value={facility.name} style={{ color: 'black' }}>{facility.name}</MenuItem>
+            );
+          })}
          
         </Select>
         <br />
@@ -176,10 +203,7 @@ const Booking = () => {
           </label>
           <br/>
          
-          <label>
-            Status:
-            <TextField  id="filled-basic" variant="filled" size="small" fullWidth  required/> <br />
-          </label>
+         
    
           <label>
             Description:
@@ -283,26 +307,7 @@ const Booking = () => {
 
   return (
     <div>
-      <div className={Book_css.topNav}>
-                <nav>
-                    <ul className={Book_css.navLinks}>
-                        <li><Link to="/viewFacilities" style={{ textDecoration: "none", color: "white" }}>Facility</Link></li>
-                        <li><Link to="/service" style={{ textDecoration: "none", color: "white" }}>Service</Link>
-                            <ul className={Book_css.sublinks}>
-                                <li>
-                                    <Link to="/booking" style={{ textDecoration: "none", color: "white" }}>Booking</Link>
-                                </li>
-                                <li>
-                                    <Link to="/membership" style={{ textDecoration: "none", color: "white" }}>Membership</Link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><Link to="/profile" style={{ textDecoration: "none", color: "white" }}>Profile</Link></li>
-                        <li><Link to="/history" style={{ textDecoration: "none", color: "white" }}>History</Link></li>
-                        <li><Link to="/logout" style={{ textDecoration: "none", color: "white" }}>Logout</Link></li>
-                    </ul>
-                </nav>
-            </div>
+     <TopNav/>
 
       <div className={Book_css.container}>
         <div className={Book_css.contentImage}>

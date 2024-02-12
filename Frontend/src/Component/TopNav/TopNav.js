@@ -12,7 +12,7 @@ const TopNav = () => {
                 <nav>
                     <ul className={TopNav_css.navLinks}>
                         <li><Link to="/viewFacilities" style={{ textDecoration: "none", color: "white" }}>Facility</Link></li>
-                        <li><Link to="/service" style={{ textDecoration: "none", color: "white" }}>Service</Link>
+                        <li><Link  style={{ textDecoration: "none", color: "white" }}>Service</Link>
                             <ul className={TopNav_css.sublinks}>
                                 <li>
                                     <Link to="/booking" style={{ textDecoration: "none", color: "white" }}>Booking</Link>

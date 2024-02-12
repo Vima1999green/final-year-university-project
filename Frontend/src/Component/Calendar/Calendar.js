@@ -1,37 +1,104 @@
-import { Calendar as BigCalendar, dayjsLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import "./Calendar.css";
+import { Calendar as BigCalendar, dayjsLocalizer } from 'react-big-calendar';
+import dayjs from 'dayjs';
+import  './Calendar.css';
 
-const Calendar = () => {
-  const localizer = dayjsLocalizer(dayjs);
-  const [currentYear, setCurrentYear] = useState(dayjs().year());
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const currentYear = dayjs().year();
-      setCurrentYear(currentYear);
-    }, 60000);
+const Calendar = ({bookings}) => {
+    console.log(bookings)
 
-    return () => clearInterval(interval);
-  }, []);
-
-  const minDate = new Date(`${currentYear}-01-01`);
-  const maxDate = new Date(`${currentYear}-12-31`);
-
-  return (
-    <div>
-      <BigCalendar
-        localizer={localizer}
-        startAccessor="start"
-        endAccessor="end"
-        min={minDate}
-        max={maxDate}
+    const events = bookings.map(booking => ({
        
-      ></BigCalendar>
-    </div>
-  );
-};
+        title: booking.description, 
+        start: new Date(booking.bookingDate), 
+        end: new Date(booking.bookingDate), 
+        status: booking.status 
+      }));
+    const localizer = dayjsLocalizer(dayjs);
 
+    const currentYear =dayjs().year();
+
+    const handleNavigate = (newDate,view) => {
+        console.log('handle navigate');
+        const newYear = dayjs(newDate).year();
+
+        if(newYear!==currentYear){
+            console.log('year changed')
+            return false;
+        }
+      
+       return true;
+    }
+
+    const eventStyleGetter = (event)=>{
+        let backgroundColor;
+        switch(event.status){
+            case 'pending':
+                backgroundColor='yellow';
+                break;
+            case 'approved':
+                backgroundColor='green';
+                break;
+            case 'cancelled':
+                backgroundColor='red';
+                break;
+            case 'payment':
+                backgroundColor='purple';
+                break;
+            case 'postponed':
+                backgroundColor='grey';
+                break;
+        }
+
+        const style = {
+            backgroundColor: backgroundColor,
+            color: 'black',
+
+        };
+        return {
+            style: style
+        };
+
+    }
+
+    
+    return ( 
+        <div>
+            <BigCalendar
+                
+                localizer={localizer}
+                onNavigate={handleNavigate}
+                events={events}
+                eventPropGetter={eventStyleGetter}
+                style={{height:500,margin:0,width:'100%'}}
+             
+            />
+             <div className="legend">
+                <div className="legend-item">
+                    <div className="legend-color" style={{ backgroundColor: 'yellow' }}></div>
+                    <div className="legend-label">Pending</div>
+                </div>
+                <div className="legend-item">
+                    <div className="legend-color" style={{ backgroundColor: 'green' }}></div>
+                    <div className="legend-label">Approved</div>
+                </div>
+                <div className="legend-item">
+                    <div className="legend-color" style={{ backgroundColor: 'red' }}></div>
+                    <div className="legend-label">Cancelled</div>
+                </div>
+                <div className="legend-item">
+                    <div className="legend-color" style={{ backgroundColor: 'purple' }}></div>
+                    <div className="legend-label">Payment</div>
+                </div>
+                <div className="legend-item">
+                    <div className="legend-color" style={{ backgroundColor: 'grey' }}></div>
+                    <div className="legend-label">Postponed</div>
+                </div>
+            </div>
+
+           
+
+        </div>
+     );
+}
+ 
 export default Calendar;
