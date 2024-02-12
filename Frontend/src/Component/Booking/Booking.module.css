@@ -91,49 +91,5 @@ label{
 }
 
 
-/* navbar css ------------------ */
-
-.topNav {
-    background-color: #9a2c2c;
-    height: 50px;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-}
-
-.navLinks {
-    list-style-type: none;
-    padding: 0;
-}
-
-.navLinks li {
-    display: inline-block;
-    margin-right: 75px;
-    border: 1px solid white;
-    border-radius: 8px;
-    padding: 3px;
-
-}
 
 
-.navLinks li:hover {
-    background-color: #ddd;
-    color: black;
-}
-
-.sublinks {
-    display: none;
-    padding-left: 0;
-    position: absolute;
-
-}
-
-.sublinks li {
-    display: block;
-    background-color: #333;
-}
-
-li:hover .sublinks {
-    display: block;
-}
