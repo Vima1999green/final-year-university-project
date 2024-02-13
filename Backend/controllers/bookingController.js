@@ -10,6 +10,7 @@ const validateUpdateBookingData = require('../validation/bookingRouteValidation/
 const sendEmail = require('./notificationController');
 
 
+
 //controller createBooking()
 //description add booking to database
 //developer Lahiru Srimal

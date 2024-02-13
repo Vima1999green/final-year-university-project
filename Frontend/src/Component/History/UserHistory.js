@@ -42,7 +42,7 @@ const UserHistory = () => {
             <Grid item xs={12} style={{width:'100%'}}>
               <Grid>
                 <h2 style={{color:'black'}}> booking List</h2>
-                <TableContainer component={Paper} className={userHistory_css.tableContainer} >
+                <TableContainer component={Paper}  >
                   <Table>
                     <TableHead className={userHistory_css.tableHead}>
                       <TableRow>
@@ -50,6 +50,7 @@ const UserHistory = () => {
                         <TableCell className={userHistory_css.tableCell}>Address</TableCell>
                         <TableCell className={userHistory_css.tableCell}>Facility</TableCell>
                         <TableCell className={userHistory_css.tableCell}>Date</TableCell>
+                        <TableCell className={userHistory_css.tableCell}>Time</TableCell>
                         <TableCell className={userHistory_css.tableCell}>Description</TableCell>
                         <TableCell className={userHistory_css.tableCell}>Status</TableCell>
                       </TableRow>
@@ -61,11 +62,11 @@ const UserHistory = () => {
                           <TableCell>{bookingDetail.organizationAddress}</TableCell>
                           <TableCell>{bookingDetail.facility}</TableCell>
                           <TableCell>{bookingDetail.bookingDate}</TableCell>
+                          <TableCell>{bookingDetail.Time}</TableCell>
                           <TableCell>{bookingDetail.description}</TableCell>
                           <TableCell>
-                            {bookingDetail.status
-                              ? "Finished"
-                              : "Not Finished"}
+                            {bookingDetail.status}
+                              
                           </TableCell>
                         </TableRow>
                       ))}

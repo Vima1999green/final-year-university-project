@@ -45,7 +45,7 @@ const ViewFacility = () => {
 
     const handleInput = (event) => {
         event.preventDefault();
-        setValues({ ...values, [event.target.name]: [event.target.value] });
+        setValues({ ...values, [event.target.name]: event.target.value });
 
         if (event.target.name === 'facName')
             setFacName(event.target.value)

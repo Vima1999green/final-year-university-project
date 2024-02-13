@@ -17,6 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TopNav from "../TopNav/TopNav";
 import axios from 'axios';
+import isEmpty from '../../isEmpty';
 
 // import 'react-big-calendar/lib/css/react-big-calendar.css';
 // import { Calendar as BigCalendar, dayjsLocalizer } from 'react-big-calendar';
@@ -33,6 +34,8 @@ const Booking = () => {
   const [selectedFacility, setSelectedFacility] = useState('');
   const [facilities,setFacilities] = useState([]);
   const [bookings,setBookings] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedLetter,setSelectedLetter] = useState(null);
   
 
   
@@ -41,8 +44,13 @@ const Booking = () => {
   // const [value, setValue] = React.useState(dayjs("2022-04-17T15:30"));
   const [value, setValue] = useState(dayjs(new Date()));
   const [highlightedDays, setHighlightedDays] = useState([1, 2, 13]);
+  const [orgName, setOrgName] = useState('');
+  const [orgAddress, setOrgAddress] = useState('');
+  const [designation, setDesignation] = useState('');
+  const [bookDate, setBookDate] = useState(new Date().toString());
+  const [bookDescription, setBookDescription] = useState('');
   const [applicantData, setApplicantData] = useState({
-    userNIC: "",
+    
     organizationName: "",
     organizationAddress: "",
     designation: "",
@@ -50,32 +58,163 @@ const Booking = () => {
     bookingDate: "",
     Time: "",
     description: "",
-    facilityId: "",
+    
   });
 
 
-  const currentDate = new Date();
-  const shouldDisableDate = (date) => {
-    return date < currentDate;
-  };
+  // const currentDate = new Date();
+  // const shouldDisableDate = (date) => {
+  //   return date < currentDate;
+  // };
+
+  
+  const handleInput = (event) => {
+    event.preventDefault();
+    setApplicantData({ ...applicantData ,[event.target.name] : event.target.value });
+
+    if (event.target.name === 'organization')
+        setOrgName(event.target.value)
+    if (event.target.name === 'bookingDate')
+        setBookDate(event.target.value)
+
+    if (event.target.name === 'address')
+        setOrgAddress(event.target.value)
+
+    if (event.target.name === 'bookingTime')
+        setValue(event.target.value)
+
+    if (event.target.name === 'designation')
+        setDesignation(event.target.value)
+
+    if (event.target.name === 'description')
+        setBookDescription(event.target.value)
+
+    
+
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-     // Check if any required field is empty
-  const requiredFields = ["userNIC", "organizationName", "organizationAddress", "designation", "facility", "bookingDate", "Time", "description", "facilityId"];
-  const emptyFields = requiredFields.filter(field => !applicantData[field]);
-
-  if (emptyFields.length > 0) {
-    alert(`Please fill in the following required fields: ${emptyFields.join(', ')}`);
-    return;
-  }
-
+    
+ 
+    console.log('===========');
     console.log(applicantData);
+    const formData = {
+      organizationName: orgName,
+      organizationAddress: orgAddress,
+      designation: designation,
+      description: bookDescription,
+      bookingDate: bookDate,
+      Time:value
+  }
+    const token = JSON.parse(localStorage.getItem('facilityUser')).token
+    let bookingID='';
+    await axios.post('http://localhost:4000/api/booking/createBooking',formData,{
+          headers:{
+            Authorization:token
+          }
+        })
+        
+
+        .then(response=>{
+          bookingID = response.data._id;
+          console.log('bookingID',bookingID);
+          alert('Booking submitted suceesfully');
+
+        })
+
+        .catch(error => {
+          if (error.response) {
+              console.log(error.response.data)
+              alert(error.response.data)
+              console.log('Error alert')
+              return
+          }
+      })
+
+      //uploading Letter and NIC
+      if (!isEmpty(bookingID)) {
+        try {
+            await uploadNIC(bookingID, selectedFile);
+            console.log('NIC uploaded succesfully');
+            await uploadPermissionLetter(bookingID,selectedLetter);
+            console.log('Letter uploaded succesfully')
+            
+        } catch (error) {
+            console.log(error.message)
+            alert(error.message + '\r\n' + 'Uploading files failed');
+            return
+        }
+    }
+
+
 
   
     
   };
+
+  const uploadNIC = async (bookingID, imageFile) => {
+    const formData = new FormData();
+
+   
+
+    // Append each image file to the FormData object
+    for (const file of imageFile) {
+        formData.append('nicPhoto', file);
+    }
+
+    const token = JSON.parse(localStorage.getItem('facilityUser')).token
+    await axios
+        .post(`http://localhost:4000/api/booking/uploadNIC/${bookingID}`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+                    Authorization: token
+                },
+            })
+        .then(res => {
+            console.log('Uopload success')
+            alert(res.data)
+        })
+        .catch(error => {
+            console.log('Uopload Failes')
+            alert(error.response.data)
+        })
+};
+
+const uploadPermissionLetter = async (bookingID, imageFile) => {
+  const formData = new FormData();
+
+  
+  
+
+  // Append each image file to the FormData object
+  for (const file of imageFile) {
+      formData.append('letter', file);
+  }
+
+  const token = JSON.parse(localStorage.getItem('facilityUser')).token
+  await axios
+      .post(`http://localhost:4000/api/booking/uploadLetter/${bookingID}`,
+          formData,
+          {
+              headers: {
+                  'Content-Type': 'multipart/form-data', // Set the content type to multipart/form-data
+                  Authorization: token
+              },
+          })
+      .then(res => {
+          console.log('Uopload success')
+          alert(res.data)
+      })
+      .catch(error => {
+          console.log('Uopload Failes')
+          alert(error.response.data)
+      })
+};
+
 
   // get selected date from calender
 
@@ -113,18 +252,20 @@ const Booking = () => {
                 console.error('Error fetching booking data',error);
               })
   };
+
+  
     fetchFacilities();
     fetchBookings();
   },[]);
 
  
 
-  const handleFacilitySelect = (event) => {
+  const handleFacilitySelect =  (event) => {
     console.log('in facility select');
-    let facility  = event.target.value;
-    setSelectedFacility(facility);
+    setSelectedFacility(event.target.value);
     console.log(selectedFacility)
-    filterBookings(selectedFacility);
+
+    filterBookings(selectedFacility)
     
   };
   
@@ -153,7 +294,7 @@ const Booking = () => {
         <label>
         Facility :
         <Select value={selectedFacility}  onChange={handleFacilitySelect} variant="filled" size="small"  required id="facility-select" fullWidth placeholder="select">
-         
+        <MenuItem  style={{ color: 'black' }}>Select facility</MenuItem>
           {console.log(facilities)}
           {facilities.map(facility=>{
             return(
@@ -170,10 +311,12 @@ const Booking = () => {
   Booking Date:
  
    <TextField
+    name="bookingDate"
     id="filled-basic"
     variant="filled"
     size="small"
-    value={selectedDate}
+    value={applicantData.bookingDate}
+    onChange={handleInput}
     aria-readonly
     fullWidth
     
@@ -194,7 +337,8 @@ const Booking = () => {
                 components={["TimeField", "TimeField", "TimeField"]} >
               
                 <TimeField
-                  value={value}
+                  name="bookingTime"
+                  value={dayjs(value)} 
                   onChange={(newValue) => setValue(newValue)}
                   format="hh:mm a" />
                 
@@ -212,17 +356,45 @@ const Booking = () => {
               
           <label>
             Name of Organization:
-            <TextField id="filled-basic"  variant="filled" size="small" fullWidth  required/> <br />
+            <TextField 
+            id="filled-basic"  
+            variant="filled" 
+            size="small"
+            value={applicantData.orgName} 
+            onChange={handleInput}
+            name="organization"
+            fullWidth 
+            required 
+            autoComplete="true"/> <br />
           </label>
 
           <label>
             Address of Organization:
-            <TextField id="filled-basic" variant="filled" size="small" fullWidth multiline required/> <br />
+            <TextField 
+            id="filled-basic" 
+            variant="filled" 
+            size="small"
+            value={applicantData.orgAddress} 
+            name="address"
+            onChange={handleInput}
+            fullWidth 
+            multiline 
+            required 
+            autoComplete="true"/> <br />
           </label>
         
           <label>
             Designation:
-            <TextField id="filled-basic" variant="filled" size="small" fullWidth  required/> <br />
+            <TextField 
+            id="filled-basic" 
+            variant="filled" 
+            size="small"
+            value={applicantData.designation} 
+            name="designation"
+            onChange={handleInput}
+            fullWidth  
+            required 
+            autoComplete="true"/> <br />
           </label><br/>
 
           
@@ -238,7 +410,16 @@ const Booking = () => {
    
           <label>
             Description:
-            <TextField id="filled-basic" variant="filled" size="small" fullWidth  required/> <br />
+            <TextField 
+            id="filled-basic" 
+            variant="filled" 
+            size="small"
+            value={applicantData.bookDescription} 
+            name="description"
+            onChange={handleInput}
+            fullWidth 
+            required 
+            autoComplete="true"/> <br />
           </label>
               
              
@@ -256,39 +437,6 @@ const Booking = () => {
           </Button>
           <br />
         </div>
-        
-        {/* --------- Booking calender  ------------- */}
-
-        
-         
-         
-        
-
-          
-          
-            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateCalendar onDateSelect={handleDateSelect} />
-            </LocalizationProvider> */}
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs} style={{color:'black'}}>
-      <DemoContainer
-      style={{color:'black'}}
-        components={[
-          'DatePicker',
-          'MobileDatePicker',
-          'DesktopDatePicker',
-          'StaticDatePicker',
-        ]}
-      >
-       
-        <DemoItem style={{color:'black'}}>
-          <StaticDatePicker defaultValue={dayjs('2022-04-17')} style={{color:'black'}}/>
-        </DemoItem>
-      </DemoContainer>
-    </LocalizationProvider> */}
-
-    
-            
-          
         
       </form>
     </div>
