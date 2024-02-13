@@ -2,7 +2,7 @@ const path = require('path')
 //Validate Images (START)
 const checkLetterType = (file, cb) => {
     // Allowed extensions
-    const filetypes = /pdf/;
+    const filetypes = /pdf|jpg|jpeg|png/;
     // Check the extension
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     // Check the MIME type (media player or content type)

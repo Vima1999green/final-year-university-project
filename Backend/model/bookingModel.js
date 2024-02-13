@@ -8,11 +8,6 @@ const bookingSchema = new Schema({
         required: [true, 'User id is required']
     },
 
-    userNIC: {
-        type: String,
-        required: true
-    },
-
     userNICImg:{
         type:String
     },
@@ -37,7 +32,7 @@ const bookingSchema = new Schema({
         required: [true, 'Facility is required']
     },
     bookingDate: {
-        type: Date,
+        type: [Date],
         required: [true, 'Booking date is required']
     },
     Time: {

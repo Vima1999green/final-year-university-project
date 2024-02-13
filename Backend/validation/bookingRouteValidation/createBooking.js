@@ -6,7 +6,6 @@ const validateBookingData = (data) => {
 
     //replace empty,undifined,null objects with string
     data.userID = isEmpty(data.userID) ? '' : data.userID;
-    data.userNIC = isEmpty(data.userNIC) ? '' : data.userNIC;
     data.organizationName = isEmpty(data.organizationName) ? '' : data.organizationName;
     data.organizationAddress = isEmpty(data.organizationAddress) ? '' : data.organizationAddress;
     data.designation = isEmpty(data.designation) ? '' : data.designation;
@@ -16,7 +15,6 @@ const validateBookingData = (data) => {
     data.status = isEmpty(data.status) ? '' : data.status;
     data.description = isEmpty(data.description) ? '' : data.description;
     data.facilityId = isEmpty(data.facilityId) ? '' : data.facilityId;
-    data.permissionLetter = isEmpty(data.permissionLetter) ? '' : data.permissionLetter;
 
     //validate userID
     if (validator.isEmpty(data.userID))
@@ -24,9 +22,6 @@ const validateBookingData = (data) => {
     else if (!mongoose.Types.ObjectId.isValid(data.userID)) {
         errors.userID = 'Invalid User Id';
     }
-    //validate userNIC
-    if (validator.isEmpty(data.userNIC))
-        errors.userNIC = 'User NIC is required';
     //validate organizationName
     if (validator.isEmpty(data.organizationName))
         errors.organizationname = 'Organization name is required';
@@ -68,9 +63,6 @@ const validateBookingData = (data) => {
     else if (!mongoose.Types.ObjectId.isValid(data.facilityId)) {
         errors.facilityId = 'Invalid User Id';
     }
-    //validate permissionLetter
-    if (validator.isEmpty(data.permissionLetter))
-        errors.permissionLetter = 'Permission Letter is required';
     
     return {
         errors,

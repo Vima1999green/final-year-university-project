@@ -178,6 +178,7 @@ const ViewFacility = () => {
                 }
             })
         //uploading photos
+        console.log(selectedFiles)
         if (!isEmpty(facilityId)) {
             try {
                 await uploadImages(facilityId, selectedFiles);
