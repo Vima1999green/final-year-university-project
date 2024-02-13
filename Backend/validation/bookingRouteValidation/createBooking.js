@@ -58,8 +58,6 @@ const validateBookingData = (data) => {
         errors.status = 'Status is required';
     else if (!validator.isIn(data.status, validStatusValues)) {
         errors.status = 'Invalid status';
-    } else {
-        // Proceed with your logic if the status is valid
     }
     //validate description
     if (validator.isEmpty(data.description))
@@ -73,6 +71,7 @@ const validateBookingData = (data) => {
     //validate permissionLetter
     if (validator.isEmpty(data.permissionLetter))
         errors.permissionLetter = 'Permission Letter is required';
+    
     return {
         errors,
         isValid: isEmpty(errors)
