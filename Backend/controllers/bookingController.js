@@ -316,6 +316,21 @@ const uploadLetter = async (req, res, next) => {
   }
 }
 
+//controller getBooking()
+//description get all bookings according to userId
+//developer Lahiru Srimal
+const getBooking=async(req,res)=>{
+  const userID=req.params.userID
+  await Booking.find({userID})
+  .then(bookings=>{
+    // console.log(bookings)
+    res.send(bookings)
+  })
+  .catch(err=>{
+    // console.log(err)
+    res.status(400).send('Can not get any bookings')
+  })
+}
 
 
 module.exports = {
@@ -324,5 +339,6 @@ module.exports = {
   updateBooking,
   deleteBooking,
   uploadNIC,
-  uploadLetter
+  uploadLetter,
+  getBooking
 };
