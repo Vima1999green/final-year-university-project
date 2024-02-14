@@ -59,9 +59,13 @@ const getAllBookings = async (req, res) => {
       const bookingData = bookings.map(booking => ({
         _id: booking._id,
         date: booking.bookingDate,
-        bookingStatus: booking.status,
+        status: booking.status,
         facilityID: booking.facilityId,
-        facility: booking.facility
+        facility: booking.facility,
+        organizationName:booking.organizationName,
+        organizationAddress:booking.organizationAddress,
+        Time:booking.Time,
+        description:booking.description
       }));
       res.send(bookingData);
     })
