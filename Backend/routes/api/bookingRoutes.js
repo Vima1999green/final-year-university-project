@@ -6,7 +6,8 @@ const {
   updateBooking,
   deleteBooking,
   uploadNIC,
-  uploadLetter
+  uploadLetter,
+  getBooking
 } = require("../../controllers/bookingController");
 
 const router = express.Router();
@@ -58,6 +59,14 @@ router.post('/uploadNIC/:bookingID',
 router.post('/uploadLetter/:bookingID',
   passport.authenticate("jwt", { session: false }),
   uploadLetter
+)
+
+//@route POST api/booking/getBooking/:userID
+//@desc get all bookings according to userId
+//@access public
+//@developer Lahiru Srimal
+router.post('/getBooking/:userID',
+  getBooking
 )
 
 module.exports = router;
