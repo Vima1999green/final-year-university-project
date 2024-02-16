@@ -4,6 +4,7 @@ import { Link, useLocation,useNavigate } from "react-router-dom";
 import UserProfile from "./UserProfile";
 import getUserData from '../../Support/getUserData'
 import isEmpty from "../../Support/isEmpty";
+import { useEffect, useState } from "react";
 
 
 //import { useState } from 'react';
@@ -13,11 +14,21 @@ import isEmpty from "../../Support/isEmpty";
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [userData,setUserData] = useState(null);
 
-  const user = JSON.parse(localStorage.getItem("facilityUser"));
-  const userData=getUserData()
-  if(isEmpty(userData)) navigate('./login')
-  const isAuthenticated = user && user.isAutheticate;
+ useEffect(()=>{
+  const fetchUserData= async ()=>{
+      const data =   await getUserData();
+      setUserData(data);
+  };
+  fetchUserData();
+ },[]);
+
+ if(isEmpty(userData)){
+  navigate('/login');
+  return null;
+ }
+  const isAuthenticated = userData && userData.isAutheticate;
 
   const showAuthLinks =
     location.pathname === "/login" ||
@@ -44,7 +55,7 @@ const Navbar = () => {
                 </Link> */}
                 
 
-      <Link to="/landpage" style={{ textDecoration: "none" }}>
+      <Link to="/" style={{ textDecoration: "none" }}>
         <h2 style={{ color: "yellow" }}> UNIVERSITY OF RUHUNA</h2>
         <h4 style={{ color: "white" }}>
           Physical Education Unit<br></br>

@@ -1,13 +1,27 @@
 import getUserData from '../../Support/getUserData';
 import TopNav_css from './TopNav.module.css';
+import { useEffect, useState } from "react";
 import { Link,useNavigate } from 'react-router-dom';
+import isEmpty from "../../Support/isEmpty";
 
 
 const TopNav = () => {
     const navigate=useNavigate()
+    const [userData,setUserData] = useState(null);
     const user = getUserData()
-    if(user==='Unauthorized') navigate(' ./login')
-    const userType = user.userType;
+    useEffect(()=>{
+        const fetchUserData= async ()=>{
+            const data =   await getUserData();
+            setUserData(data);
+        };
+        fetchUserData();
+       },[]);
+      
+       if(isEmpty(userData)){
+        navigate('/login');
+        return null;
+       }
+    const userType = userData.userType;
 
     return (
         <div>

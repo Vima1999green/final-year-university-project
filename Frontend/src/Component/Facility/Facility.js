@@ -16,16 +16,17 @@ import TopNav from '../TopNav/TopNav';
 import getUserData from "../../Support/getUserData";
 
 const Facility = () => {
-    const navigate=useNavigate()
-    const userData= getUserData()
-    if(isEmpty(userData)) navigate('./login')
-    const userType = userData.userType;
+    
+    
+    
     console.log('facility component renders')
     const fileInputRef = useRef(null);
 
 
     const { facilityId } = useParams();
     console.log(facilityId)
+    const navigate = useNavigate();
+    const [userData,setUserData] = useState(null);
     const [data, setData] = useState({
 
         name: "",
@@ -38,19 +39,12 @@ const Facility = () => {
         images: [],
     });
 
+
+
     const [editable, setEditable] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState(null)
 
-
-
-
-
-
-    useEffect(() => {
-        // Fetch data from the database
-
-
-
+    const getFacilityData= async ()=>{
         console.log('facility component use effect')
         axios.get(`http://localhost:4000/api/facility/getFacility/${facilityId}`)
 
@@ -63,7 +57,42 @@ const Facility = () => {
             .catch(err => {
                 alert(err.response.data)
             })
-    }, [facilityId]);
+    }
+
+    
+    useEffect(()=>{
+        const fetchUserData= async ()=>{
+            const data =   await getUserData();
+            setUserData(data);
+        };
+        fetchUserData();
+        getFacilityData();
+        
+
+       },[]);
+    
+        
+      
+       if(isEmpty(userData)){
+        navigate('/login');
+        return null;
+       }
+    const userType = userData.userType;
+    
+
+
+
+
+
+
+    
+        // Fetch data from the database
+
+        
+
+
+       
+   
 
     const handleInputChange = (field, value) => {
 

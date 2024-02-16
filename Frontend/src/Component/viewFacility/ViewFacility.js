@@ -15,13 +15,12 @@ import TopNav from '../TopNav/TopNav';
 import getUserData from '../../Support/getUserData';
 
 const ViewFacility = () => {
+    
+  
+   
+
     const navigate = useNavigate();
-    const user = getUserData()
-    if(isEmpty(user)) navigate('./login')
-    const userRole = user.userType;
-
-
-
+    const [userData,setUserData] = useState(null);
     const [options, setOptions] = useState([]);//to fill  menu items in the select Box component
 
     const [open, setOpen] = useState(false);
@@ -43,6 +42,40 @@ const ViewFacility = () => {
         address: "",
         rules: ""
     })
+
+    const reloadPage = () => {
+        console.log('reloadPage')
+        axios.get('http://localhost:4000/api/facility/getAllFacilities')
+            .then(response => {
+                console.log(response.data)
+                setOptions(response.data)
+            }
+            )
+
+            .catch(error =>
+                console.error(error)
+            )
+    }
+    useEffect(()=>{
+        const fetchUserData= async ()=>{
+            const data =   await getUserData();
+            setUserData(data);
+        };
+        fetchUserData();
+        reloadPage();
+
+       },[]);
+    
+        
+      
+       if(isEmpty(userData)){
+        navigate('/login');
+        return null;
+       }
+    const userRole = userData.userType;
+    
+    // get AllFacilities from backend api endpoint
+   
 
 
     const handleInput = (event) => {
@@ -73,21 +106,7 @@ const ViewFacility = () => {
     };
 
 
-    const reloadPage = () => {
-        console.log('reloadPage')
-        axios.get('http://localhost:4000/api/facility/getAllFacilities')
-            .then(response => {
-                console.log(response.data)
-                setOptions(response.data)
-            }
-            )
-
-            .catch(error =>
-                console.error(error)
-            )
-    }
-    // get AllFacilities from backend api endpoint
-    useEffect(reloadPage, []);
+   
 
 
 
