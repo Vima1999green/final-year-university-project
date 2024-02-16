@@ -10,15 +10,17 @@ import DialogContent from '@mui/material/DialogContent';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import isEmpty from '../../isEmpty';
+import isEmpty from '../../Support/isEmpty';
 import TopNav from '../TopNav/TopNav';
+import getUserData from '../../Support/getUserData';
 
 const ViewFacility = () => {
-
-    const user = JSON.parse(localStorage.getItem('facilityUser'));
-    const userRole = user.userDetails.userType;
-
     const navigate = useNavigate();
+    const user = getUserData()
+    if(isEmpty(user)) navigate('./login')
+    const userRole = user.userType;
+
+
 
     const [options, setOptions] = useState([]);//to fill  menu items in the select Box component
 
@@ -278,7 +280,7 @@ const ViewFacility = () => {
                                 console.log('facility', facility)
                                 return (
                                     <Grid item xs={6} key={index}>
-                                        <Card sx={{ maxWidth: 550,maxHeight:400 }} className={viewFacility_css.card}>
+                                        <Card sx={{ maxWidth: 550, maxHeight: 400 }} className={viewFacility_css.card}>
                                             <Link to={`/facility/${facility._id}`} className={viewFacility_css.cardLink}>
                                                 <CardActionArea>
                                                     <CardMedia
@@ -286,7 +288,7 @@ const ViewFacility = () => {
                                                         component="img"
                                                         alt={facility.name}
                                                         image={facility.images[0]}
-                                                            style={{ height: '300px', width: '550px' }}
+                                                        style={{ height: '300px', width: '550px' }}
                                                     />
                                                     <CardContent>
                                                         <h2 className={viewFacility_css.cardText}>

@@ -1,7 +1,10 @@
 import logo from "../../Images/logo.png";
 import header_css from "./NavBar.module.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation,useNavigate } from "react-router-dom";
 import UserProfile from "./UserProfile";
+import getUserData from '../../Support/getUserData'
+import isEmpty from "../../Support/isEmpty";
+
 
 //import { useState } from 'react';
 //import { useNavigate } from "react-router-dom";
@@ -9,9 +12,11 @@ import UserProfile from "./UserProfile";
 
 const Navbar = () => {
   const location = useLocation();
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("facilityUser"));
+  const userData=getUserData()
+  if(isEmpty(userData)) navigate('./login')
   const isAuthenticated = user && user.isAutheticate;
 
   const showAuthLinks =

@@ -1,10 +1,13 @@
+import getUserData from '../../Support/getUserData';
 import TopNav_css from './TopNav.module.css';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 
 const TopNav = () => {
-    const user = JSON.parse(localStorage.getItem('facilityUser'));
-    const userType = user.userDetails.userType;
+    const navigate=useNavigate()
+    const user = getUserData()
+    if(user==='Unauthorized') navigate(' ./login')
+    const userType = user.userType;
 
     return (
         <div>
@@ -22,7 +25,7 @@ const TopNav = () => {
                                 </li>
                             </ul>
                         </li>
-                        <li><Link to="/profile" style={{ textDecoration: "none", color: "white" }}>Profile</Link></li>
+                        {/* <li><Link to="/profile" style={{ textDecoration: "none", color: "white" }}>Profile</Link></li> */}
                         <li><Link to="/history" style={{ textDecoration: "none", color: "white" }}>History</Link></li>
                         {
                             (userType === 'DVC' || userType === 'director') ?

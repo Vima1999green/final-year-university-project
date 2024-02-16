@@ -17,11 +17,13 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import TopNav from "../TopNav/TopNav";
 import axios from 'axios';
-import isEmpty from '../../isEmpty';
+import isEmpty from '../../Support/isEmpty';
 
 // import 'react-big-calendar/lib/css/react-big-calendar.css';
 // import { Calendar as BigCalendar, dayjsLocalizer } from 'react-big-calendar';
 import Calendar from '../Calendar/Calendar';
+import getUserData from "../../Support/getUserData";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -38,7 +40,7 @@ const Booking = () => {
   const [selectedLetter, setSelectedLetter] = useState(null);
   const [selectedFacilityID, setSelectedFacilityID] = useState('');
 
-
+const navigate=useNavigate()
 
 
 
@@ -108,11 +110,13 @@ const Booking = () => {
     const userData = JSON.parse(localStorage.getItem('facilityUser'))
     console.log(userData)
     console.log('===========');
+    const userDetails=getUserData()
+    if(isEmpty(userDetails)) navigate('./login')
     // console.log(applicantData);
     console.log('----------------------------------------')
     console.log(selectedFacility)
     const formData = {
-      userID: userData.userDetails.id,
+      userID: userDetails.id,
       facilityId: selectedFacilityID,
       facility: selectedFacility,
       organizationName: orgName,

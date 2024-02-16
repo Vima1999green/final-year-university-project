@@ -8,17 +8,19 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Button from "@mui/material/Button";
 import axios from 'axios';
 import { useParams, Link, useNavigate } from "react-router-dom";
-import isEmpty from '../../isEmpty';
+import isEmpty from '../../Support/isEmpty';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import IconButton from '@mui/material/IconButton';
 import ImageSlider from '../ImageSlider/ImageSlider';
 import TopNav from '../TopNav/TopNav';
+import getUserData from "../../Support/getUserData";
 
 const Facility = () => {
-    const userType = JSON.parse(localStorage.getItem('facilityUser')).userDetails.userType;
-    const navigate = useNavigate()
+    const navigate=useNavigate()
+    const userData= getUserData()
+    if(isEmpty(userData)) navigate('./login')
+    const userType = userData.userType;
     console.log('facility component renders')
-
     const fileInputRef = useRef(null);
 
 
