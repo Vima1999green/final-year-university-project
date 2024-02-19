@@ -1,7 +1,7 @@
 import logo from "../../Images/logo.png";
 import header_css from "./NavBar.module.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import UserProfile from "./UserProfile";
+import UserProfile from "./UserProfile";
 import getUserData from "../../Support/getUserData";
 import isEmpty from "../../Support/isEmpty";
 import { useEffect, useState } from "react";
@@ -16,48 +16,24 @@ const Navbar = () => {
   const [userData, setUserData] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     console.log("inside fetch navbar");
-  //     try {
-  //       const data = await getUserData();
-  //       console.log(data);
-  //       setUserData(data);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  //   console.log(userData);
-
-  //   if (isEmpty(userData)) {
-  //     navigate("/login");
-  //   }
-  //   console.log("---------");
-
-  //   setUserType(userData.userType);
-  //   setIsAuthenticated(true);
-  // }, []);
-
   useEffect(() => {
     const fetchData = async () => {
-      console.log("inside fetch navbar");
       try {
         const data = await getUserData();
-        console.log(data);
-        setUserData(data);
-        // if (isEmpty(data)) {
-        //   navigate("/login");
-        // }
-        console.log("---------");
+
+        if (data) {
+          setUserData(data);
+          setIsAuthenticated(true);
+        }
+
+        if (isEmpty(data) || data === "Unaurthorized") {
+          navigate("/login");
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
     fetchData();
-
-    setIsAuthenticated(true);
   });
 
   const showAuthLinks =
@@ -95,7 +71,7 @@ const Navbar = () => {
 
       {showUserProfile && (
         <div className={header_css.userProfileContainer}>
-          {/* <UserProfile /> */}
+          <UserProfile />
         </div>
       )}
 

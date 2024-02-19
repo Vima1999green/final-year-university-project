@@ -54,18 +54,21 @@ const ViewFacility = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const data = await getUserData();
-      setUserData(data);
-      //   if (isEmpty(userData)) {
-      //     console.log(userData);
-      //     navigate("/login");
-      //   }
-      console.log(userData);
+
+      if (data) {
+        setUserData(data);
+        setUserType(data.userType);
+      }
+      if (isEmpty(data) || data === "Unaurthorized") {
+        console.log(data);
+        console.log(isEmpty(data));
+        navigate("/login");
+      }
     };
     fetchUserData();
-    setUserType(userData.userType);
 
     reloadPage();
-  }, []);
+  });
 
   // get AllFacilities from backend api endpoint
 

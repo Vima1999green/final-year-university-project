@@ -16,7 +16,6 @@ import TopNav from "../TopNav/TopNav";
 import getUserData from "../../Support/getUserData";
 
 const Facility = () => {
-  console.log("facility component renders");
   const fileInputRef = useRef(null);
 
   const { facilityId } = useParams();
@@ -55,13 +54,16 @@ const Facility = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       const data = await getUserData();
-      setUserData(data);
-      //   if (isEmpty(userData)) {
-      //     navigate("/login");
-      //   }
+
+      if (data) {
+        setUserData(data);
+        setUserType(data.userType);
+      }
+      if (isEmpty(data) || data === "Unauthorized") {
+        navigate("/login");
+      }
     };
     fetchUserData();
-    setUserType(userData.userType);
 
     getFacilityData();
   }, []);

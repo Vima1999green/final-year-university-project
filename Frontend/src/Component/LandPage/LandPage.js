@@ -24,16 +24,33 @@ import calendar from "../../Images/calendar.jpeg";
 import Calendar from "../Calendar/Calendar";
 import axios from "axios";
 import getUserData from "../../Support/getUserData";
+import isEmpty from "../../Support/isEmpty";
+import { useNavigate } from "react-router-dom";
 
 const LandPage = () => {
+  const navigate = useNavigate();
   const [value, setValue] = useState(new Date());
   const [bookings, setBookings] = useState([]);
   const [clickedFacility, setClickedFacility] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   //useEffect to  fetch all the booking  data from backend server
   useEffect(() => {
+    fetchUserData();
     fetchBookings();
   }, []);
+
+  const fetchUserData = async () => {
+    const data = await getUserData();
+    console.log(data);
+    if (data) {
+      setUserData(data);
+    }
+    if (isEmpty(data) || data === "Unauthorized") {
+      console.log(isEmpty(data));
+      navigate("/login");
+    }
+  };
 
   const fetchBookings = async () => {
     await axios

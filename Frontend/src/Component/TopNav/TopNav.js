@@ -13,18 +13,20 @@ const TopNav = () => {
     const fetchData = async () => {
       try {
         const data = await getUserData();
-        setUserData(data);
-        console.log(data);
-        // if (isEmpty(userData)) {
-        //   navigate("/login");
-        // }
+
+        if (data) {
+          setUserData(data);
+          setUserType(data.userType);
+        }
+        if (isEmpty(data) || data === "Unaurthorized") {
+          navigate("/login");
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
 
     fetchData();
-    setUserType(userData.userType);
   }, []);
 
   return (

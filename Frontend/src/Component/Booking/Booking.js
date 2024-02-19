@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Route } from "react";
+import { useNavigate } from "react-router-dom";
 import Book_css from "./Booking.module.css";
 import TextField from "@mui/material/TextField";
 import Event_Img from "../../Images/booking_individual.jpg";
@@ -15,8 +16,10 @@ import isEmpty from "../../Support/isEmpty";
 import Calendar from "../Calendar/Calendar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import getUserData from "../../Support/getUserData";
 
 const Booking = () => {
+  const navigate = useNavigate();
   const [formType, setFormType] = useState("event");
   const [selectedFacility, setSelectedFacility] = useState("");
   const [facilities, setFacilities] = useState([]);
@@ -30,6 +33,8 @@ const Booking = () => {
   const [designation, setDesignation] = useState("");
   const [bookDescription, setBookDescription] = useState("");
   const [orgContact, setOrgContact] = useState("");
+  const [userData, setUserData] = useState(null);
+  const [userID, setUserID] = useState("");
   const [applicantData, setApplicantData] = useState({
     organizationName: "",
     organizationAddress: "",
@@ -99,7 +104,7 @@ const Booking = () => {
     console.log("----------------------------------------");
     console.log(selectedFacility);
     const formData = {
-      userID: userData.userDetails.id,
+      userID: userID,
       facilityId: selectedFacilityID,
       facility: selectedFacility,
       organizationName: orgName,
@@ -237,6 +242,20 @@ const Booking = () => {
           console.error("Error fetching booking data", error);
         });
     };
+
+    const fetchUserData = async () => {
+      const data = await getUserData();
+      console.log(data);
+      if (data) {
+        setUserData(data);
+        setUserID(data.id);
+      }
+      if (isEmpty(data) || data === "Unauthorized") {
+        console.log(isEmpty(data));
+        navigate("/login");
+      }
+    };
+    fetchUserData();
 
     fetchFacilities();
     fetchBookings();
