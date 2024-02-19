@@ -16,7 +16,19 @@
   position: absolute;
   width: 100%;
 }
-
+@keyframes slideIn {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.welcomeAnimation {
+  animation: slideIn 1s ease-in-out forwards;
+}
 .home p {
   position: relative;
   text-align: center;

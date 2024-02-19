@@ -22,43 +22,41 @@ import membership from "../../Images/membership.jpg";
 import notification from "../../Images/notification.jpg";
 import calendar from "../../Images/calendar.jpeg";
 import Calendar from "../Calendar/Calendar";
-import axios from 'axios';
-
+import axios from "axios";
+import getUserData from "../../Support/getUserData";
 
 const LandPage = () => {
   const [value, setValue] = useState(new Date());
-  const [bookings,setBookings] = useState([]);
-  const [clickedFacility,setClickedFacility] = useState(null);
+  const [bookings, setBookings] = useState([]);
+  const [clickedFacility, setClickedFacility] = useState(null);
 
   //useEffect to  fetch all the booking  data from backend server
-  useEffect(()=>{
+  useEffect(() => {
     fetchBookings();
-  },[]);
+  }, []);
 
-  const fetchBookings = async () =>{
-      await axios.get('http://localhost:4000/api/booking/getAllBookings')
-              .then((response)=>{
-                console.log(response.data)
-                
-                
-                  setBookings(response.data);
-              })
+  const fetchBookings = async () => {
+    await axios
+      .get("http://localhost:4000/api/booking/getAllBookings")
+      .then((response) => {
+        console.log(response.data);
 
-              .catch(error=>{
-                console.error('Error fetching booking data',error);
-              })
-  }
+        setBookings(response.data);
+      })
 
-  const filterBookings=(facility)=>{
-    if(facility===clickedFacility)return;
-      setClickedFacility(facility)
+      .catch((error) => {
+        console.error("Error fetching booking data", error);
+      });
   };
 
-  const filteredBookings = clickedFacility ? 
-      bookings.filter(booking=>booking.facility===clickedFacility):
-      bookings
+  const filterBookings = (facility) => {
+    if (facility === clickedFacility) return;
+    setClickedFacility(facility);
+  };
 
-
+  const filteredBookings = clickedFacility
+    ? bookings.filter((booking) => booking.facility === clickedFacility)
+    : bookings;
 
   return (
     <div>
@@ -70,48 +68,47 @@ const LandPage = () => {
             <Grid container spacing={2} direction="column">
               <Grid container spacing={0} direction="raw">
                 <Grid className={landPage_css.calendarContainer}>
-                    <Grid item xs={12} md={8} >
-                      <Calendar bookings={filteredBookings}/>
-
-                    </Grid>
-
+                  <Grid item xs={12} md={8}>
+                    <Calendar bookings={filteredBookings} />
+                  </Grid>
                 </Grid>
-               
 
                 <Grid className={landPage_css.buttonContainer} lg={3} md={6}>
-                  <Grid className={landPage_css.overAllCalendarbtnConatiner}>
-                    <Button
-                      className={landPage_css.overallBtn}
-                      variant="contained"
-                      size="large"
-                      fullWidth
-                      onClick={()=>filterBookings(null)}
-                    >
-                      Overall Calendar
-                    </Button>
-                  </Grid>
-                  <Grid className={landPage_css.playgroundbtnConatiner}>
-                    <Button
-                      className={landPage_css.playgroundBtn}
-                      variant="contained"
-                      size="large"
-                      fullWidth
-                      onClick={()=>filterBookings('playground')}
-                    >
-                      Playground
-                    </Button>
-                  </Grid>
-                  <Grid className={landPage_css.gymnasiumbtnConatiner}>
-                    <Button
-                      className={landPage_css.gymnasiumBtn}
-                      variant="contained"
-                      size="large"
-                      fullWidth
-                      onClick={()=>filterBookings('gymnasium')}
-                    >
-                      Gymnasium
-                    </Button>
-                  </Grid>
+                  <div className={landPage_css.scrollContainer}>
+                    <Grid className={landPage_css.overAllCalendarbtnConatiner}>
+                      <Button
+                        className={landPage_css.overallBtn}
+                        variant="contained"
+                        size="large"
+                        fullWidth
+                        onClick={() => filterBookings(null)}
+                      >
+                        Overall Calendar
+                      </Button>
+                    </Grid>
+                    <Grid className={landPage_css.playgroundbtnConatiner}>
+                      <Button
+                        className={landPage_css.playgroundBtn}
+                        variant="contained"
+                        size="large"
+                        fullWidth
+                        onClick={() => filterBookings("Playground")}
+                      >
+                        Playground
+                      </Button>
+                    </Grid>
+                    <Grid className={landPage_css.gymnasiumbtnConatiner}>
+                      <Button
+                        className={landPage_css.gymnasiumBtn}
+                        variant="contained"
+                        size="large"
+                        fullWidth
+                        onClick={() => filterBookings("gymnasium")}
+                      >
+                        Gymnasium
+                      </Button>
+                    </Grid>
+                  </div>
                 </Grid>
               </Grid>
               <Grid item xs={12} md={8}>
@@ -124,7 +121,6 @@ const LandPage = () => {
                     <ImageListItem
                       key={item.img}
                       className={landPage_css.ImageListItem}
-         
                     >
                       <img src={`${item.img}`} />
                     </ImageListItem>

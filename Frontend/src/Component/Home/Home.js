@@ -40,7 +40,7 @@ const Home = () => {
                         <table>
                             <tr>
                                 <td style={{ width: '75%' }} >
-                                    <p className={home_css.p}>Welcome!!!<br></br></p>
+                                    <p className={`${home_css.p} ${home_css.welcomeAnimation}`}>Welcome!!!<br></br></p>
 
                                 </td>
                                 <td style={{ width: '25%' }}>

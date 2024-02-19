@@ -56,18 +56,8 @@ const createBooking = async (req, res) => {
 const getAllBookings = async (req, res) => {
   await Booking.find()
     .then((bookings) => {
-      const bookingData = bookings.map(booking => ({
-        _id: booking._id,
-        date: booking.bookingDate,
-        status: booking.status,
-        facilityID: booking.facilityId,
-        facility: booking.facility,
-        organizationName:booking.organizationName,
-        organizationAddress:booking.organizationAddress,
-        Time:booking.Time,
-        description:booking.description
-      }));
-      res.send(bookingData);
+      
+      res.send(bookings);
     })
 
     .catch((error) => {

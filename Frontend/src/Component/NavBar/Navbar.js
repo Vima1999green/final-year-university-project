@@ -1,11 +1,10 @@
 import logo from "../../Images/logo.png";
 import header_css from "./NavBar.module.css";
-import { Link, useLocation,useNavigate } from "react-router-dom";
-import UserProfile from "./UserProfile";
-import getUserData from '../../Support/getUserData'
+import { Link, useLocation, useNavigate } from "react-router-dom";
+// import UserProfile from "./UserProfile";
+import getUserData from "../../Support/getUserData";
 import isEmpty from "../../Support/isEmpty";
 import { useEffect, useState } from "react";
-
 
 //import { useState } from 'react';
 //import { useNavigate } from "react-router-dom";
@@ -14,21 +13,52 @@ import { useEffect, useState } from "react";
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [userData,setUserData] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
- useEffect(()=>{
-  const fetchUserData= async ()=>{
-      const data =   await getUserData();
-      setUserData(data);
-  };
-  fetchUserData();
- },[]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     console.log("inside fetch navbar");
+  //     try {
+  //       const data = await getUserData();
+  //       console.log(data);
+  //       setUserData(data);
+  //     } catch (error) {
+  //       console.error("Error fetching user data:", error);
+  //     }
+  //   };
 
- if(isEmpty(userData)){
-  navigate('/login');
-  return null;
- }
-  const isAuthenticated = userData && userData.isAutheticate;
+  //   fetchData();
+  //   console.log(userData);
+
+  //   if (isEmpty(userData)) {
+  //     navigate("/login");
+  //   }
+  //   console.log("---------");
+
+  //   setUserType(userData.userType);
+  //   setIsAuthenticated(true);
+  // }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log("inside fetch navbar");
+      try {
+        const data = await getUserData();
+        console.log(data);
+        setUserData(data);
+        // if (isEmpty(data)) {
+        //   navigate("/login");
+        // }
+        console.log("---------");
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchData();
+
+    setIsAuthenticated(true);
+  });
 
   const showAuthLinks =
     location.pathname === "/login" ||
@@ -44,16 +74,16 @@ const Navbar = () => {
       <div>
         <img src={logo} alt="logopic" style={{ width: "140px" }}></img>
       </div>
+
       {/* <text> University of Ruhuna <br></br>
                 Physical Education Unit<br></br>
                 PlayGround and Gym Facility Scheduler
             </text> */}
-            
-                {/* <Link to='/landpage' style={{ textDecoration: 'none' }}><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
+
+      {/* <Link to='/landpage' style={{ textDecoration: 'none' }}><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
                     <h4 style={{ color: 'white' }}>Physical Education Unit<br></br>
                         SPORTS FACILITY SCHEDULER</h4>
                 </Link> */}
-                
 
       <Link to="/" style={{ textDecoration: "none" }}>
         <h2 style={{ color: "yellow" }}> UNIVERSITY OF RUHUNA</h2>
@@ -65,11 +95,11 @@ const Navbar = () => {
 
       {showUserProfile && (
         <div className={header_css.userProfileContainer}>
-          <UserProfile />
+          {/* <UserProfile /> */}
         </div>
       )}
 
-      { showAuthLinks && (
+      {showAuthLinks && (
         <div className={header_css.links}>
           <Link to="/login" className="btn btn-light">
             Login
