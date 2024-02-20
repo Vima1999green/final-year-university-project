@@ -40,7 +40,7 @@ const UserProfile = () => {
   return (
     <div>
       {/* Retrieve and display the user details from local storage */}
-      {localStorage.getItem("facilityUser") && (
+      {userEmail && (
         <div>
           {/* Display the user's avatar from local storage */}
           <Avatar

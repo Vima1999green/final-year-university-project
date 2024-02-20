@@ -123,11 +123,11 @@ const Booking = () => {
     };
     console.log(formData);
     let bookingID = "";
-
+    const token = JSON.parse(localStorage.getItem("facilityUser")).token;
     await axios
       .post("http://localhost:4000/api/booking/createBooking", formData, {
         headers: {
-          Authorization: userData.token,
+          Authorization: token,
         },
       })
       .then((response) => {
@@ -167,7 +167,7 @@ const Booking = () => {
   const uploadNIC = async (bookingID, imageFile) => {
     const formData = new FormData();
     formData.append("nicPhoto", imageFile);
-
+    const token = JSON.parse(localStorage.getItem("facilityUser")).token;
     await axios
       .post(
         `http://localhost:4000/api/booking/uploadNIC/${bookingID}`,
@@ -175,7 +175,7 @@ const Booking = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: userData.token,
+            Authorization: token,
           },
         }
       )
@@ -192,7 +192,7 @@ const Booking = () => {
   const uploadPermissionLetter = async (bookingID, imageFile) => {
     const formData = new FormData();
     formData.append("letter", imageFile);
-
+    const token = JSON.parse(localStorage.getItem("facilityUser")).token;
     await axios
       .post(
         `http://localhost:4000/api/booking/uploadLetter/${bookingID}`,
@@ -200,7 +200,7 @@ const Booking = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: userData.token,
+            Authorization: token,
           },
         }
       )
