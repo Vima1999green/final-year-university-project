@@ -33,6 +33,7 @@ const Booking = () => {
   const [designation, setDesignation] = useState("");
   const [bookDescription, setBookDescription] = useState("");
   const [orgContact, setOrgContact] = useState("");
+  const [applicantName, setApplicantName] = useState("");
   const [userData, setUserData] = useState(null);
   const [userID, setUserID] = useState("");
   const [applicantData, setApplicantData] = useState({
@@ -44,11 +45,10 @@ const Booking = () => {
     Time: "",
     description: "",
     contact: "",
-    name: "",
+    applicantName: "",
   });
 
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [name, setName] = useState("");
+  const [bookingDates, setBookingDates] = useState([]);
 
   //------------
 
@@ -76,21 +76,20 @@ const Booking = () => {
       [event.target.name]: event.target.value,
     });
     if (event.target.name === "organization") setOrgName(event.target.value);
-    if (event.target.name === "bookingDate")
-      setApplicantData({ ...applicantData, bookingDate: event.target.value });
     if (event.target.name === "address") setOrgAddress(event.target.value);
     if (event.target.name === "bookingTime") setValue(event.target.value);
     if (event.target.name === "designation") setDesignation(event.target.value);
     if (event.target.name === "description")
       setBookDescription(event.target.value);
     if (event.target.name === "contact") setBookDescription(event.target.value);
+    if (event.target.name === "name") setApplicantName(event.target.value);
   };
 
   const handleFileChange = (event) => {
     event.preventDefault();
     if (event.target.files.length === 1) {
-      setSelectedFile(event.target.files[0]);
-      setSelectedLetter(event.target.files[0]);
+      setSelectedFile(event.target.files);
+      setSelectedLetter(event.target.files);
     } else {
       console.log("File changed");
     }
@@ -103,6 +102,11 @@ const Booking = () => {
     console.log("===========");
     console.log("----------------------------------------");
     console.log(selectedFacility);
+
+    while (startDate <= endDate) {
+      bookingDates.push(new Date(startDate));
+      startDate.setDate(startDate.getDate() + 1);
+    }
     const formData = {
       userID: userID,
       facilityId: selectedFacilityID,
@@ -112,13 +116,14 @@ const Booking = () => {
       organizationAddress: orgAddress,
       designation: designation,
       description: bookDescription,
-      bookingDate: applicantData.bookingDate,
+      bookingDate: bookingDates.map((date) => date.toISOString()),
       Time: value,
-      Contact: applicantData.contact,
-      Name: userData.userDetails.firstname,
+      Contact: orgContact,
+      Name: applicantName,
     };
     console.log(formData);
     let bookingID = "";
+
     await axios
       .post("http://localhost:4000/api/booking/createBooking", formData, {
         headers: {
@@ -162,7 +167,7 @@ const Booking = () => {
   const uploadNIC = async (bookingID, imageFile) => {
     const formData = new FormData();
     formData.append("nicPhoto", imageFile);
-    const token = JSON.parse(localStorage.getItem("facilityUser")).token;
+
     await axios
       .post(
         `http://localhost:4000/api/booking/uploadNIC/${bookingID}`,
@@ -170,7 +175,7 @@ const Booking = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: token,
+            Authorization: userData.token,
           },
         }
       )
@@ -187,7 +192,7 @@ const Booking = () => {
   const uploadPermissionLetter = async (bookingID, imageFile) => {
     const formData = new FormData();
     formData.append("letter", imageFile);
-    const token = JSON.parse(localStorage.getItem("facilityUser")).token;
+
     await axios
       .post(
         `http://localhost:4000/api/booking/uploadLetter/${bookingID}`,
@@ -195,7 +200,7 @@ const Booking = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: token,
+            Authorization: userData.token,
           },
         }
       )
@@ -210,7 +215,6 @@ const Booking = () => {
   };
 
   const handleDateSelect = (date) => {
-    setSelectedDate(date);
     setApplicantData({
       ...applicantData,
       bookingDate: date.format("YYYY-MM-DD"),
@@ -480,8 +484,11 @@ const Booking = () => {
         </div>
       </form>
       <div className={Book_css.right_event}>
-        <h2 style={{ color: "red", fontSize: "24px", fontFamily: "inherit" }}>
-          Select your booking date from here!
+        <h2
+          className={Book_css.bookText}
+          style={{ color: "red", fontSize: "24px", fontFamily: "inherit" }}
+        >
+          Search for your booking date from here!
         </h2>
         <Calendar
           style={{ backgroundColor: "white" }}

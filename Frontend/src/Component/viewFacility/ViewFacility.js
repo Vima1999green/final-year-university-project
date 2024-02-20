@@ -68,7 +68,7 @@ const ViewFacility = () => {
     fetchUserData();
 
     reloadPage();
-  });
+  }, []);
 
   // get AllFacilities from backend api endpoint
 

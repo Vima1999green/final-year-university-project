@@ -34,7 +34,7 @@ const Navbar = () => {
       }
     };
     fetchData();
-  });
+  }, []);
 
   const showAuthLinks =
     location.pathname === "/login" ||
