@@ -1,49 +1,48 @@
-.im_bg{
-    background-color: #EEEBAD;
+.im_bg {
+  background-color: #eeebad;
 }
 .contentImage {
-    background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .body {
-    margin: 0;
-    padding: 0;
-    margin-left: 50px;
-    display: flex;
-    /* justify-content: center; 
+  margin: 0;
+  padding: 0;
+  margin-left: 50px;
+  display: flex;
+  /* justify-content: center; 
     align-items: center;*/
-    min-height: 100vh;
-    flex-direction: column;
+  min-height: 100vh;
+  flex-direction: column;
 }
-.userProfileContainer p{
-    margin-left: 30px;
-    color: black;
-    font-size: 20px;
-  }
+.userProfileContainer p {
+  margin-left: 30px;
+  color: black;
+  font-size: 20px;
+}
 
-
-  .avatar_container {
-    position: relative;
-    display: inline-block;
+.avatar_container {
+  position: relative;
+  display: inline-block;
 }
 
 .avatar_label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .avatar-image:hover + .avatar-label {
-    opacity: 1;
+  opacity: 1;
 }
 
-.user_details{
-margin-left: 400px;
+.user_details {
+  margin-left: 400px;
 }
 
-Typography{
-    color: black;
+Typography {
+  color: black;
 }
