@@ -16,43 +16,23 @@ const BookingCard = () => {
   const [userBookings, setUserBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
-  const [userType, setUserType] = useState("");
+  const [userID, setUserID] = useState("");
+  const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     let response;
-    //     if (
-    //       userType === "admin" ||
-    //       userType === "DVC" ||
-    //       userType === "Director"
-    //     ) {
-    //       response = await axios.get(
-    //         "http://localhost:4000/api/booking/getAllBookings"
-    //       );
-    //     } else if (userType === "university") {
-    //       response = await axios.get(
-    //         "http://localhost:4000/api/booking/getBooking/:userID"
-    //       );
-    //     }
-    //     console.log("res", response.data);
-    //     setBookings(response.data);
-    //     setLoading(false);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //     setLoading(false);
-    //   }
-    // };
-
     fetchUserData();
     fetchBookings();
-  }, []);
+  }, [userRole]);
 
   const fetchUserData = async () => {
     const data = await getUserData();
     console.log(data);
+
     if (data) {
       setUserData(data);
+      setUserID(data.id);
+      setUserRole(data.userType);
+      console.log(userRole);
     }
     if (isEmpty(data) || data === "Unauthorized") {
       console.log(isEmpty(data));
@@ -61,19 +41,32 @@ const BookingCard = () => {
   };
 
   const fetchBookings = async () => {
-    await axios
-      .get("http://localhost:4000/api/booking/getAllBookings")
-      .then((response) => {
-        console.log(response.data);
-        if (userType === "admin" || "director" || "dvc") {
+    if (userRole === "admin" || userRole === "director" || userRole === "dvc") {
+      await axios
+        .get("http://localhost:4000/api/booking/getAllBookings")
+        .then((response) => {
+          console.log(response.data);
           setBookings(response.data);
           setLoading(false);
-        }
-      })
+        })
+        .catch((error) => {
+          console.error("Error fetching booking data", error);
+        });
+    }
+    if (userRole === "Guest") {
+      await axios
+        .get(`http://localhost:4000/api/booking/getBooking/${userID}`)
 
-      .catch((error) => {
-        console.error("Error fetching booking data", error);
-      });
+        .then((response) => {
+          console.log(response.data);
+          setBookings(response.data);
+          setLoading(false);
+        })
+
+        .catch((error) => {
+          console.error("Error fetching booking data", error);
+        });
+    }
   };
 
   return (
