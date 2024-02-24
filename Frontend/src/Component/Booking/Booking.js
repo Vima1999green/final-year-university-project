@@ -55,6 +55,50 @@ const Booking = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
+  useEffect(() => {
+    fetchUserData();
+
+    fetchFacilities();
+    fetchBookings();
+  }, []);
+
+  const fetchUserData = async () => {
+    const data = await getUserData();
+    console.log(data);
+    if (isEmpty(data) || data === "Unauthorized") {
+      console.log(isEmpty(data));
+      navigate("/login");
+    }
+    if (data) {
+      setUserData(data);
+      setUserID(data.id);
+    }
+  };
+
+  const fetchFacilities = async () => {
+    await axios
+      .get("http://localhost:4000/api/facility/getAllFacilities")
+      .then((response) => {
+        console.log(response.data);
+        setFacilities(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const fetchBookings = async () => {
+    await axios
+      .get("http://localhost:4000/api/booking/getAllBookings")
+      .then((response) => {
+        console.log(response.data);
+        setBookings(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching booking data", error);
+      });
+  };
+
   function onChangeHandler(value) {
     setStartDate(value[0]);
     setEndDate(value[1]);
@@ -88,8 +132,8 @@ const Booking = () => {
   const handleFileChange = (event) => {
     event.preventDefault();
     if (event.target.files.length === 1) {
-      setSelectedFile(event.target.files);
-      setSelectedLetter(event.target.files);
+      setSelectedFile(event.target.files[0]);
+      setSelectedLetter(event.target.files[0]);
     } else {
       console.log("File changed");
     }
@@ -97,8 +141,7 @@ const Booking = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = JSON.parse(localStorage.getItem("facilityUser"));
-    console.log(userData);
+
     console.log("===========");
     console.log("----------------------------------------");
     console.log(selectedFacility);
@@ -109,6 +152,8 @@ const Booking = () => {
     }
     const formData = {
       userID: userID,
+      userNICImg: "",
+      permissionLetter: "",
       facilityId: selectedFacilityID,
       facility: selectedFacility,
       organizationName: orgName,
@@ -143,7 +188,8 @@ const Booking = () => {
           return;
         }
       });
-
+    console.log(selectedFile);
+    console.log(selectedLetter);
     if (!isEmpty(bookingID)) {
       try {
         await uploadNIC(bookingID, selectedFile);
@@ -165,9 +211,12 @@ const Booking = () => {
   };
 
   const uploadNIC = async (bookingID, imageFile) => {
+    console.log(imageFile);
+    console.log(bookingID);
     const formData = new FormData();
     formData.append("nicPhoto", imageFile);
     const token = JSON.parse(localStorage.getItem("facilityUser")).token;
+    console.log(token);
     await axios
       .post(
         `http://localhost:4000/api/booking/uploadNIC/${bookingID}`,
@@ -221,49 +270,6 @@ const Booking = () => {
     });
     console.log("Selected Date:", date.format("YYYY-MM-DD"));
   };
-
-  useEffect(() => {
-    const fetchFacilities = async () => {
-      await axios
-        .get("http://localhost:4000/api/facility/getAllFacilities")
-        .then((response) => {
-          console.log(response.data);
-          setFacilities(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
-
-    const fetchBookings = async () => {
-      await axios
-        .get("http://localhost:4000/api/booking/getAllBookings")
-        .then((response) => {
-          console.log(response.data);
-          setBookings(response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching booking data", error);
-        });
-    };
-
-    const fetchUserData = async () => {
-      const data = await getUserData();
-      console.log(data);
-      if (data) {
-        setUserData(data);
-        setUserID(data.id);
-      }
-      if (isEmpty(data) || data === "Unauthorized") {
-        console.log(isEmpty(data));
-        navigate("/login");
-      }
-    };
-    fetchUserData();
-
-    fetchFacilities();
-    fetchBookings();
-  }, []);
 
   const handleFacilitySelect = (event) => {
     facilities.forEach((facility) => {

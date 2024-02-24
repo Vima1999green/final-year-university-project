@@ -1,106 +1,107 @@
-import { Calendar as BigCalendar, dayjsLocalizer } from 'react-big-calendar';
-import dayjs from 'dayjs';
-import  './Calendar.css';
+import { Calendar as BigCalendar, dayjsLocalizer } from "react-big-calendar";
+import dayjs from "dayjs";
+import "./Calendar.css";
 
+const Calendar = ({ bookings }) => {
+  const events = bookings.map((booking) => ({
+    title: booking.description,
+    start: new Date(booking.bookingDate),
+    end: new Date(booking.bookingDate),
+    status: booking.status,
+  }));
+  const localizer = dayjsLocalizer(dayjs);
 
-const Calendar = ({bookings}) => {
-    console.log(bookings)
+  const currentYear = dayjs().year();
 
-  
-    const events = bookings.map(booking => ({
-       
-        title: booking.description, 
-        start: new Date(booking.bookingDate), 
-        end: new Date(booking.bookingDate), 
-        status: booking.status 
-      }));
-    const localizer = dayjsLocalizer(dayjs);
+  const handleNavigate = (newDate, view) => {
+    console.log("handle navigate");
+    const newYear = dayjs(newDate).year();
 
-    const currentYear =dayjs().year();
-
-    const handleNavigate = (newDate,view) => {
-        console.log('handle navigate');
-        const newYear = dayjs(newDate).year();
-
-        if(newYear!==currentYear){
-            console.log('year changed')
-            return false;
-        }
-      
-       return true;
+    if (newYear !== currentYear) {
+      console.log("year changed");
+      return false;
     }
 
-    const eventStyleGetter = (event)=>{
-        let backgroundColor;
-        switch(event.status){
-            case 'pending':
-                backgroundColor='yellow';
-                break;
-            case 'approved':
-                backgroundColor='green';
-                break;
-            case 'cancelled':
-                backgroundColor='red';
-                break;
-            case 'payment':
-                backgroundColor='purple';
-                break;
-            case 'postponed':
-                backgroundColor='grey';
-                break;
-        }
+    return true;
+  };
 
-        const style = {
-            backgroundColor: backgroundColor,
-            color: 'black',
-
-        };
-        return {
-            style: style
-        };
-
+  const eventStyleGetter = (event) => {
+    let backgroundColor;
+    switch (event.status) {
+      case "pending":
+        backgroundColor = "yellow";
+        break;
+      case "approved":
+        backgroundColor = "green";
+        break;
+      case "cancelled":
+        backgroundColor = "red";
+        break;
+      case "payment":
+        backgroundColor = "purple";
+        break;
+      case "postponed":
+        backgroundColor = "grey";
+        break;
     }
 
-  
-    
-    return ( 
-        <div>
-            <BigCalendar
-                
-                localizer={localizer}
-                onNavigate={handleNavigate}
-                events={events}
-                eventPropGetter={eventStyleGetter}
-                style={{height:500,margin:0,width:'100%'}}
-             
-            />
-             <div className="legend">
-                <div className="legend-item">
-                    <div className="legend-color" style={{ backgroundColor: 'yellow' }}></div>
-                    <div className="legend-label">Pending</div>
-                </div>
-                <div className="legend-item">
-                    <div className="legend-color" style={{ backgroundColor: 'green' }}></div>
-                    <div className="legend-label">Approved</div>
-                </div>
-                <div className="legend-item">
-                    <div className="legend-color" style={{ backgroundColor: 'red' }}></div>
-                    <div className="legend-label">Cancelled</div>
-                </div>
-                <div className="legend-item">
-                    <div className="legend-color" style={{ backgroundColor: 'purple' }}></div>
-                    <div className="legend-label">Payment</div>
-                </div>
-                <div className="legend-item">
-                    <div className="legend-color" style={{ backgroundColor: 'grey' }}></div>
-                    <div className="legend-label">Postponed</div>
-                </div>
-            </div>
+    const style = {
+      backgroundColor: backgroundColor,
+      color: "black",
+    };
+    return {
+      style: style,
+    };
+  };
 
-           
-
+  return (
+    <div>
+      <BigCalendar
+        localizer={localizer}
+        onNavigate={handleNavigate}
+        events={events}
+        eventPropGetter={eventStyleGetter}
+        style={{ height: 500, margin: 0, width: "100%" }}
+      />
+      <div className="legend">
+        <div className="legend-item">
+          <div
+            className="legend-color"
+            style={{ backgroundColor: "yellow" }}
+          ></div>
+          <div className="legend-label">Pending</div>
         </div>
-     );
-}
- 
+        <div className="legend-item">
+          <div
+            className="legend-color"
+            style={{ backgroundColor: "green" }}
+          ></div>
+          <div className="legend-label">Approved</div>
+        </div>
+        <div className="legend-item">
+          <div
+            className="legend-color"
+            style={{ backgroundColor: "red" }}
+          ></div>
+          <div className="legend-label">Cancelled</div>
+        </div>
+        <div className="legend-item">
+          <div
+            className="legend-color"
+            style={{ backgroundColor: "purple" }}
+          ></div>
+          <div className="legend-label">Payment</div>
+        </div>
+        <div className="legend-item">
+          <div
+            className="legend-color"
+            style={{ backgroundColor: "grey" }}
+          ></div>
+          <div className="legend-label">Postponed</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default Calendar;
