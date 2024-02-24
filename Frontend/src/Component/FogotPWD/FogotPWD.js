@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import Login_css from '../Login/Login.module.css'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom';
-import isEmpty from "../../isEmpty";
+import isEmpty from '../../Support/isEmpty';
 
 function FogotPWD() {
 

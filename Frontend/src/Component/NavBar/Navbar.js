@@ -1,7 +1,10 @@
 import logo from "../../Images/logo.png";
 import header_css from "./NavBar.module.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import UserProfile from "./UserProfile";
+import getUserData from "../../Support/getUserData";
+import isEmpty from "../../Support/isEmpty";
+import { useEffect, useState } from "react";
 
 //import { useState } from 'react';
 //import { useNavigate } from "react-router-dom";
@@ -9,10 +12,29 @@ import UserProfile from "./UserProfile";
 
 const Navbar = () => {
   const location = useLocation();
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("facilityUser"));
-  const isAuthenticated = user && user.isAutheticate;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getUserData();
+
+        if (data) {
+          setUserData(data);
+          setIsAuthenticated(true);
+        }
+
+        if (isEmpty(data) || data === "Unaurthorized") {
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const showAuthLinks =
     location.pathname === "/login" ||
@@ -28,18 +50,18 @@ const Navbar = () => {
       <div>
         <img src={logo} alt="logopic" style={{ width: "140px" }}></img>
       </div>
+
       {/* <text> University of Ruhuna <br></br>
                 Physical Education Unit<br></br>
                 PlayGround and Gym Facility Scheduler
             </text> */}
-            
-                {/* <Link to='/landpage' style={{ textDecoration: 'none' }}><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
+
+      {/* <Link to='/landpage' style={{ textDecoration: 'none' }}><h2 style={{ color: 'yellow' }}> UNIVERSITY OF RUHUNA</h2>
                     <h4 style={{ color: 'white' }}>Physical Education Unit<br></br>
                         SPORTS FACILITY SCHEDULER</h4>
                 </Link> */}
-                
 
-      <Link to="/landpage" style={{ textDecoration: "none" }}>
+      <Link to="/" style={{ textDecoration: "none" }}>
         <h2 style={{ color: "yellow" }}> UNIVERSITY OF RUHUNA</h2>
         <h4 style={{ color: "white" }}>
           Physical Education Unit<br></br>
@@ -53,7 +75,7 @@ const Navbar = () => {
         </div>
       )}
 
-      { showAuthLinks && (
+      {showAuthLinks && (
         <div className={header_css.links}>
           <Link to="/login" className="btn btn-light">
             Login

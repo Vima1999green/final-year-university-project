@@ -7,7 +7,7 @@ const {
   deleteBooking,
   uploadNIC,
   uploadLetter,
-  getBooking
+  getBooking,
 } = require("../../controllers/bookingController");
 
 const router = express.Router();
@@ -16,57 +16,60 @@ const router = express.Router();
 //@desc Add booking to database
 //@access private
 //@developer Lahiru Srimal
-router.post('/createBooking', createBooking);
-
+router.post("/createBooking", createBooking);
 
 //@route GET api/booking/
 //@desc Get all bookings from database
 //@access private
 //@developer Malitha Chamikara
 
-router.get('/getAllBookings', getAllBookings);
+router.get("/getAllBookings", getAllBookings);
 
 //@route PUT api/booking/
 //@desc update a booking in the database
 //@access private
 //@developer Malitha Chamikara
-router.put('/updateBooking/:bookingID',
+router.put(
+  "/updateBooking/:bookingID",
   passport.authenticate("jwt", { session: false }),
-  updateBooking)
+  updateBooking
+);
 
 //@route DELETE api/booking/
 //@desc delete a booking from the database
 //@access private
 //@developer Malitha Chamikara
 
-router.delete('/deleteBooking/:bookingId',
+router.delete(
+  "/deleteBooking/:bookingId",
   passport.authenticate("jwt", { session: false }),
-  deleteBooking)
+  deleteBooking
+);
 
 //@route POST api/booking/
 //@desc upload NIC to the database
 //@access private
 //@developer Malitha Chamikara
-router.post('/uploadNIC/:bookingID',
+router.post(
+  "/uploadNIC/:bookingID",
   passport.authenticate("jwt", { session: false }),
   uploadNIC
-)
+);
 
 //@route POST api/booking/uploadLetter/:bookingID
 //@desc upload permission letter to the database
 //@access private
 //@developer Lahiru Srimal
-router.post('/uploadLetter/:bookingID',
+router.post(
+  "/uploadLetter/:bookingID",
   passport.authenticate("jwt", { session: false }),
   uploadLetter
-)
+);
 
 //@route POST api/booking/getBooking/:userID
 //@desc get all bookings according to userId
 //@access public
 //@developer Lahiru Srimal
-router.post('/getBooking/:userID',
-  getBooking
-)
+router.get("/getBooking/:userID", getBooking);
 
 module.exports = router;
