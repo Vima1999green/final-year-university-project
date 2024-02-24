@@ -15,6 +15,7 @@ import Facility from "./Component/Facility/Facility";
 import UserHistory from "./Component/History/UserHistory";
 import Profile from "./Component/UserProfile/Profile";
 import Booking from "./Component/Booking/Booking";
+import YearPlan from "./Component/YearPlan/YearPlan";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/userProfile" element={<UserProfile />} />
             <Route path="/bookingForm" element={<Booking />} />
+            <Route path="/YearPlan" element={<YearPlan />} />
 
             {/* Add more routes as needed */}
           </Routes>

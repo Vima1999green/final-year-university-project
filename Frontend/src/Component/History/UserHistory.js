@@ -34,15 +34,14 @@ const UserHistory = () => {
     const data = await getUserData();
     console.log(data);
 
-    if (data) {
+    if (isEmpty(data) || data === "Unauthorized") {
+      console.log(isEmpty(data));
+      navigate("/login");
+    } else {
       setUserData(data);
       setUserID(data.id);
       setUserRole(data.userType);
       console.log(userRole);
-    }
-    if (isEmpty(data) || data === "Unauthorized") {
-      console.log(isEmpty(data));
-      navigate("/login");
     }
   };
 

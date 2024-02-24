@@ -99,10 +99,10 @@ const Booking = () => {
       });
   };
 
-  function onChangeHandler(value) {
+  const onChangeHandler = (value) => {
     setStartDate(value[0]);
     setEndDate(value[1]);
-  }
+  };
   //-------------
   // const fetchUserData = async () => {
   //   try {
@@ -125,6 +125,7 @@ const Booking = () => {
     if (event.target.name === "designation") setDesignation(event.target.value);
     if (event.target.name === "description")
       setBookDescription(event.target.value);
+
     if (event.target.name === "contact") setBookDescription(event.target.value);
     if (event.target.name === "name") setApplicantName(event.target.value);
   };

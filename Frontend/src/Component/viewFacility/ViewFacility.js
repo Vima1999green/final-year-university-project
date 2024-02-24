@@ -18,7 +18,7 @@ const ViewFacility = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [options, setOptions] = useState([]); //to fill  menu items in the select Box component
-  const [userType, setUserType] = useState("");
+  const [userRole, setUserRole] = useState("");
 
   const [open, setOpen] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -57,7 +57,7 @@ const ViewFacility = () => {
 
       if (data) {
         setUserData(data);
-        setUserType(data.userType);
+        setUserRole(data.userType);
       }
       if (isEmpty(data) || data === "Unaurthorized") {
         console.log(data);
@@ -236,16 +236,18 @@ const ViewFacility = () => {
         <div className={viewFacility_css.contentImage}>
           <div className={viewFacility_css.body}>
             <Grid item xs={12} lg={6}>
-              {userType === "admin" ? (
+              {userRole === "admin" ? (
                 <Button
                   variant="contained"
                   sx={{ width: "100%" }}
                   className={viewFacility_css.button}
                   onClick={handleClickOpen}
                 >
-                  Add Facility{" "}
+                  Add Facility
                 </Button>
-              ) : null}
+              ) : (
+                <div></div>
+              )}
             </Grid>
 
             <Grid container spacing={2} sx={{ margin: 0, padding: 0 }}>
