@@ -247,6 +247,8 @@ const currentUser = (req, res) => {
     id: req.user.id,
     email: req.user.email,
     userType: req.user.userType,
+    fisrtName: req.user.fisrtName,
+    lastName: req.user.lastName,
   });
 };
 
