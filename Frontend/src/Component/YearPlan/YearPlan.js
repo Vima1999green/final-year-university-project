@@ -19,7 +19,7 @@ const YearPlan = () => {
   const navigate = useNavigate();
   const [eventName, setEventName] = useState("");
   const [eventDesc, setEventDesc] = useState("");
-  const [eventLocation, setEventLocation] = useState("");
+  const [facility, setFacility] = useState("");
   const [eventStatus, setEventStatus] = useState("");
   const [userData, setUserData] = useState(null);
   const [userRole, setUserRole] = useState("");
@@ -31,7 +31,7 @@ const YearPlan = () => {
   const [values, setValues] = useState({
     eventName: "",
     description: "",
-    location: "",
+    facility: "",
     status: "not started",
   });
 
@@ -71,7 +71,7 @@ const YearPlan = () => {
     if (event.target.name === "eventName") setEventName(event.target.value);
     if (event.target.name === "description") setEventDesc(event.target.value);
 
-    if (event.target.name === "location") setEventLocation(event.target.value);
+    if (event.target.name === "facility") setFacility(event.target.value);
 
     if (event.target.name === "status") setEventStatus(event.target.value);
   };
@@ -90,7 +90,7 @@ const YearPlan = () => {
     console.log("handleClear");
     setEventName("");
     setEventDesc("");
-    setEventLocation("");
+    setFacility("");
     setEventStatus("");
     setEventDates([]);
   };
@@ -179,11 +179,11 @@ const YearPlan = () => {
                     <label>Location : </label>
                     <TextField
                       fullWidth
-                      name="location"
+                      name="facility"
                       label=""
                       variant="filled"
                       color="primary"
-                      value={values.eventLocation}
+                      value={values.facility}
                       onChange={handleInput}
                     />
                   </div>
