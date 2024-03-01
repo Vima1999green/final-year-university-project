@@ -38,9 +38,10 @@ const validateBookingData = (data) => {
   if (validator.isEmpty(data.facility))
     errors.facility = "Facility is required";
 
-  //validate bookingDate
-  // if (validator.isEmpty(data.bookingDate))
-  //     errors.bookingDate = 'Booking Date is required';
+  if (!Array.isArray(data.bookingDate) || data.bookingDate.length === 0) {
+    errors.bookingDate =
+      "Event Dates is required and must be an array with at least one date";
+  }
   //validate time
   if (validator.isEmpty(data.Time)) errors.Time = "Booking time is required";
   else {
@@ -65,7 +66,7 @@ const validateBookingData = (data) => {
   if (validator.isEmpty(data.facilityId))
     errors.facilityId = "Facility Id is required";
   else if (!mongoose.Types.ObjectId.isValid(data.facilityId)) {
-    errors.facilityId = "Invalid User Id";
+    errors.facilityId = "Invalid facility Id";
   }
 
   return {

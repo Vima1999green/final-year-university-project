@@ -22,10 +22,6 @@ const universityEventSchema = new Schema(
       type: String,
       required: [true, "Status is required"],
     },
-    facilityId: {
-      type: mongoose.ObjectId,
-      required: [true, "Facility Id is required"],
-    },
   },
   { timestamps: true }
 );

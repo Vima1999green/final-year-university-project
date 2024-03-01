@@ -2,13 +2,22 @@ import { Calendar as BigCalendar, dayjsLocalizer } from "react-big-calendar";
 import dayjs from "dayjs";
 import "./Calendar.css";
 
-const Calendar = ({ bookings }) => {
-  const events = bookings.map((booking) => ({
+const Calendar = ({ bookings, universityEvents }) => {
+  const bookingEvents = bookings.map((booking) => ({
     title: booking.description,
-    start: new Date(booking.bookingDate),
-    end: new Date(booking.bookingDate),
+    start: new Date(booking.bookingDate[0]),
+    end: new Date(booking.bookingDate[booking.bookingDate.length - 1]),
     status: booking.status,
   }));
+
+  const universityEvent = universityEvents.map((event) => ({
+    title: event.eventName,
+    start: new Date(event.eventDates[0]),
+    end: new Date(event.eventDates[event.eventDates.length - 1]),
+    status: event.eventStatus,
+  }));
+
+  const events = [...bookingEvents, ...universityEvent];
   const localizer = dayjsLocalizer(dayjs);
 
   const currentYear = dayjs().year();
@@ -43,11 +52,16 @@ const Calendar = ({ bookings }) => {
       case "postponed":
         backgroundColor = "grey";
         break;
+
+      case "not started":
+        backgroundColor = "orange";
+        break;
     }
 
     const style = {
       backgroundColor: backgroundColor,
       color: "black",
+      height: "100%",
     };
     return {
       style: style,

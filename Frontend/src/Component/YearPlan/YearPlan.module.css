@@ -23,3 +23,23 @@
 .calendarContainer {
   width: 80%;
 }
+
+.buttonContainer {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.tableContainer {
+  margin-top: 40px;
+  width: 80%;
+}
+.tableHead {
+  background-color: #8a1538;
+}
+
+.tableBody {
+  background-color: rgb(228, 206, 174);
+}
+.tableCell {
+  font-size: 18px;
+  color: white;
+}

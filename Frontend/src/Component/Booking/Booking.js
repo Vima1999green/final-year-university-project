@@ -24,6 +24,7 @@ const Booking = () => {
   const [selectedFacility, setSelectedFacility] = useState("");
   const [facilities, setFacilities] = useState([]);
   const [bookings, setBookings] = useState([]);
+  const [universityEvents, setUniversityEvents] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedLetter, setSelectedLetter] = useState(null);
   const [selectedFacilityID, setSelectedFacilityID] = useState("");
@@ -60,6 +61,7 @@ const Booking = () => {
 
     fetchFacilities();
     fetchBookings();
+    fetchUniversityEvents();
   }, []);
 
   const fetchUserData = async () => {
@@ -96,6 +98,17 @@ const Booking = () => {
       })
       .catch((error) => {
         console.error("Error fetching booking data", error);
+      });
+  };
+  const fetchUniversityEvents = async () => {
+    await axios
+      .get("http://localhost:4000/api/universityEvent/getAllEvents")
+      .then((response) => {
+        console.log(response.data);
+        setUniversityEvents(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching Events data", error);
       });
   };
 
@@ -500,6 +513,7 @@ const Booking = () => {
         <Calendar
           style={{ backgroundColor: "white" }}
           bookings={filteredBookings}
+          universityEvents={universityEvents}
           onSelectDate={handleDateSelect}
           date={dayjs("2023-12-19T12:00:00").toDate()}
         />

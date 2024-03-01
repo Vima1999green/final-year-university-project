@@ -1,5 +1,3 @@
-
-
 .content {
   padding: 30px;
   background-image: url("../../Images/home.jpg");
@@ -23,7 +21,6 @@
   flex-direction: column;
 }
 
-
 .tableHead {
   background-color: #8a1538;
 }
@@ -31,9 +28,7 @@
 .tableBody {
   background-color: rgb(228, 206, 174);
 }
-.tableCell{
-
+.tableCell {
   font-size: 18px;
   color: white;
 }
-

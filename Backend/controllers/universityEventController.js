@@ -1,11 +1,23 @@
 const UniversityEvent = require("../model/universityEventModel");
 const isEmpty = require("../validation/isEmpty");
+const validateEventData = require("../validation/universityEventRouteValidation/createEvent");
+const validateUpdateEventData = require("../validation/universityEventRouteValidation/updateEvent");
 
 //controller createEvent()
 //description add event to database
 //developer Malitha Chamikara
 
 const createEvent = async (req, res) => {
+  //validate Event data
+  const { errors, isValid } = await validateEventData(req.body);
+  if (!isValid) {
+    var errorMsg = "";
+    Object.values(errors).forEach((error) => {
+      errorMsg += error + "\r\n";
+    });
+    errorMsg = errorMsg.trim();
+    return res.status(400).send(errorMsg);
+  }
   //create Event in the database
   if (req.user.userType === "director") {
     await UniversityEvent.create(req.body)
@@ -61,19 +73,29 @@ const updateEvent = async (req, res) => {
   if (req.user.userType === "director") {
     let eventData = req.body;
 
-    try {
-      const uniEvent = await UniversityEvent.findOneAndUpdate(
-        { _id: req.params.eventID },
-        eventData,
-        { new: true }
-      );
-      if (uniEvent) {
-        console.log("Event updated");
-        return res.send(uniEvent);
+    const { errors, isValid } = await validateUpdateEventData(req.body);
+    if (!isValid) {
+      var errorMsg = "";
+      Object.values(errors).forEach((error) => {
+        errorMsg += error + "\r\n";
+      });
+      errorMsg = errorMsg.trim();
+      res.status(400).send(errorMsg);
+    } else {
+      try {
+        const uniEvent = await UniversityEvent.findOneAndUpdate(
+          { _id: req.params.eventID },
+          eventData,
+          { new: true }
+        );
+        if (uniEvent) {
+          console.log("Event updated");
+          return res.send(uniEvent);
+        }
+      } catch (error) {
+        console.error("Error updating an event", error);
+        return res.status(500).send("Error  updating an event");
       }
-    } catch (error) {
-      console.error("Error updating an event", error);
-      return res.status(500).send("Error  updating an event");
     }
   } else {
     return res.status(401).send("You are not authorized to update this event");

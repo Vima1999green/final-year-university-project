@@ -31,6 +31,7 @@ const LandPage = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState(new Date());
   const [bookings, setBookings] = useState([]);
+  const [universityEvents, setUniversityEvents] = useState([]);
   const [clickedFacility, setClickedFacility] = useState(null);
   const [userData, setUserData] = useState(null);
 
@@ -38,6 +39,7 @@ const LandPage = () => {
   useEffect(() => {
     fetchUserData();
     fetchBookings();
+    fetchUniversityEvents();
   }, []);
 
   const fetchUserData = async () => {
@@ -66,6 +68,18 @@ const LandPage = () => {
       });
   };
 
+  const fetchUniversityEvents = async () => {
+    await axios
+      .get("http://localhost:4000/api/universityEvent/getAllEvents")
+      .then((response) => {
+        console.log(response.data);
+        setUniversityEvents(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching Events data", error);
+      });
+  };
+
   const filterBookings = (facility) => {
     if (facility === clickedFacility) return;
     setClickedFacility(facility);
@@ -86,7 +100,10 @@ const LandPage = () => {
               <Grid container spacing={0} direction="raw">
                 <Grid className={landPage_css.calendarContainer}>
                   <Grid item xs={12} md={8}>
-                    <Calendar bookings={filteredBookings} />
+                    <Calendar
+                      bookings={filteredBookings}
+                      universityEvents={universityEvents}
+                    />
                   </Grid>
                 </Grid>
 
