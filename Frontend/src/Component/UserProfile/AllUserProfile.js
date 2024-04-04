@@ -52,7 +52,9 @@ const AllUserProfile = () => {
         <div className="col-lg-6 col-md-4 col-8">
           {userData ? (
             <Card key={userID}>
-              {/* Name : {user.firstName} {user.lastName} */}
+              first Name : {userData.firstName}
+              <br />
+              lastName: {userData.lastName}
               <br />
               Email : {userData.email}
               <br />

@@ -16,6 +16,7 @@ import UserHistory from "./Component/History/UserHistory";
 import Profile from "./Component/UserProfile/Profile";
 import Booking from "./Component/Booking/Booking";
 import YearPlan from "./Component/YearPlan/YearPlan";
+import ManageUsers from "./Component/ManageUsers/ManageUsers";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             <Route path="/userProfile" element={<UserProfile />} />
             <Route path="/bookingForm" element={<Booking />} />
             <Route path="/YearPlan" element={<YearPlan />} />
+            <Route path="/ManageUsers" element={<ManageUsers />} />
 
             {/* Add more routes as needed */}
           </Routes>

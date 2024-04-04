@@ -53,7 +53,7 @@ const BookingCard = () => {
           console.error("Error fetching booking data", error);
         });
     }
-    if (userRole === "Guest") {
+    if (userRole === "Guest" || userRole === "university") {
       await axios
         .get(`http://localhost:4000/api/booking/getBooking/${userID}`)
 

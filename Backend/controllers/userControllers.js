@@ -183,14 +183,24 @@ const loginUser = async (req, res) => {
 //description delete user from the database
 //developer Malitha Chamikara
 const deleteUser = async (req, res) => {
-  if (req.user.id === req.params.id || req.user.userType === "admin") {
-    await User.findByIdAndDelete({ _id: req.params.id })
-      .then((user) => res.send("User deleted sucessfully"))
-      .catch((error) => res.status(500).send(error.message));
-  } else {
-    return res
-      .status(401)
-      .send("You are not autherized to delete this account");
+  try {
+    // Check if the authenticated user is authorized to delete the user
+    if (req.user.id !== req.params.id || req.user.userType === "admin") {
+      // Delete the user
+      const user = await User.findByIdAndDelete(req.params.id);
+      if (user) {
+        return res.send("User deleted successfully");
+      } else {
+        return res.status(404).send("User not found");
+      }
+    } else {
+      return res
+        .status(401)
+        .send("You are not authorized to delete this account");
+    }
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return res.status(500).send(error.message);
   }
 };
 //controller updateUser()
@@ -247,6 +257,8 @@ const currentUser = (req, res) => {
     id: req.user.id,
     email: req.user.email,
     userType: req.user.userType,
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
   });
 };
 

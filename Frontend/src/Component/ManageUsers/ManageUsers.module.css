@@ -1,0 +1,25 @@
+.content {
+  padding: 30px;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  margin-left: 0;
+}
+
+.body {
+  margin: 0;
+  padding: 0;
+  margin-left: 50px;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+  width: 90%;
+}
+
+.list {
+  min-width: 200;
+}
+.card {
+  flex: 1;
+}
