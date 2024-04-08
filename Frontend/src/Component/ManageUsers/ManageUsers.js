@@ -27,6 +27,7 @@ const ManageUsers = () => {
   const [userType, setUserType] = useState("admin");
   const [searchEmail, setSearchEmail] = useState("");
   const [selectedOption, setSelectedOption] = useState("create");
+  const [sports, setSports] = useState([]);
 
   useEffect(() => {
     fetchUserData();
@@ -84,6 +85,11 @@ const ManageUsers = () => {
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
     handleClear();
+  };
+
+  const handleSportsChange = (event) => {
+    const selectedSports = event.target.value.split(",");
+    setSports(selectedSports);
   };
 
   const searchUserByEmail = async (event) => {
@@ -392,6 +398,9 @@ const ManageUsers = () => {
                       <option value="dvc" style={{ color: "black" }}>
                         Dvc
                       </option>
+                      <option value="instructor" style={{ color: "black" }}>
+                        Instructor
+                      </option>
                     </select>
                     <br />
                   </label>
@@ -445,6 +454,18 @@ const ManageUsers = () => {
                     onChange={handleUniversityEmailChange}
                     autoComplete="false"
                   />
+
+                  {userType === "instructor" && (
+                    <TextField
+                      label="Sports"
+                      fullWidth
+                      className={ManageUsers_css.text}
+                      style={{ marginTop: "20px" }}
+                      value={sports.join(",")}
+                      onChange={handleSportsChange}
+                    />
+                  )}
+
                   {selectedOption !== "delete" ? (
                     <>
                       <TextField

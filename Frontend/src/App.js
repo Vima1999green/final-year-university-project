@@ -17,6 +17,7 @@ import Profile from "./Component/UserProfile/Profile";
 import Booking from "./Component/Booking/Booking";
 import YearPlan from "./Component/YearPlan/YearPlan";
 import ManageUsers from "./Component/ManageUsers/ManageUsers";
+import Panel from "./Component/AdminPanel/Panel";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
             <Route path="/bookingForm" element={<Booking />} />
             <Route path="/YearPlan" element={<YearPlan />} />
             <Route path="/ManageUsers" element={<ManageUsers />} />
+            <Route path="/AdminPanel" element={<Panel />} />
 
             {/* Add more routes as needed */}
           </Routes>
