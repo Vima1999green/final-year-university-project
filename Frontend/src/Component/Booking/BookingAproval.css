@@ -1,0 +1,67 @@
+.ant-table {
+  background-color: black;
+}
+
+.ant-table-container {
+  background-color: #ffff0000;
+}
+
+.ant-table-cell {
+  background-color: rgb(228, 206, 174) !important;
+  color: black !important;
+  text-align: left;
+}
+
+.ant-btn {
+  color: black !important;
+  background-color: rgb(148, 16, 16) !important;
+}
+
+.ant-modal-body {
+  background-color: rgb(228, 206, 174) !important;
+  padding: auto;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.model-pharagraph {
+  color: black;
+  padding: auto;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+.add-comment {
+  color: black;
+  margin: 20px;
+  justify-content: center;
+  width: 90%;
+  height: 100px;
+}
+
+.ant-modal-close-icon {
+  background-color: rgb(148, 16, 16);
+  padding: 4px 2px;
+  margin-left: 33px;
+  margin-bottom: 15px;
+  margin-top: 3px;
+}
+
+.admin-dashboard-header {
+  background-color: #ffff0091;
+  margin: 10px 0px;
+  color: black;
+  text-align: center;
+  font-weight: bold;
+}
+
+.ant-modal-title {
+  color: black !important;
+  background-color: #8a1538c0 !important;
+  padding: 0px 20px;
+}
+
+.ant-modal-content {
+  background-color: rgba(255, 255, 0, 0.52) !important;
+  width: 100%;
+}

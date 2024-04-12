@@ -52,14 +52,31 @@ const createBooking = async (req, res) => {
 //developer Malitha Chamikara
 
 const getAllBookings = async (req, res) => {
-  await Booking.find()
-    .then((bookings) => {
-      res.send(bookings);
-    })
-
-    .catch((error) => {
-      res.status(400).send(error);
+  try {
+    const bookings = await Booking.find();
+    const bookingsWithImages = bookings.map((booking) => {
+      return {
+        _id: booking._id,
+        userID: booking.userID,
+        userNICImg: booking.userNICImg,
+        organizationName: booking.organizationName,
+        organizationAddress: booking.organizationAddress,
+        designation: booking.designation,
+        facility: booking.facility,
+        bookingDate: booking.bookingDate,
+        Time: booking.Time,
+        status: booking.status,
+        description: booking.description,
+        facilityId: booking.facilityId,
+        deleteRequested: booking.deleteRequested,
+        postponeRequested: booking.postponeRequested,
+        permissionLetter: booking.permissionLetter,
+      };
     });
+    res.send(bookingsWithImages);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 };
 
 //controller updateBooking()

@@ -18,6 +18,7 @@ import Booking from "./Component/Booking/Booking";
 import YearPlan from "./Component/YearPlan/YearPlan";
 import ManageUsers from "./Component/ManageUsers/ManageUsers";
 import Panel from "./Component/AdminPanel/Panel";
+import BookingApproval from "./Component/Booking/BookingApproval";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/userProfile" element={<UserProfile />} />
             <Route path="/bookingForm" element={<Booking />} />
+            <Route path="/requests" element={<BookingApproval />} />
             <Route path="/YearPlan" element={<YearPlan />} />
             <Route path="/ManageUsers" element={<ManageUsers />} />
             <Route path="/AdminPanel" element={<Panel />} />
