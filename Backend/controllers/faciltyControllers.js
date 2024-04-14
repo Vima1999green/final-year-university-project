@@ -1,18 +1,17 @@
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const Facility = require("../model/facilityModel");
 const validateFacilityData = require("../validation/facitityRouteValidation/validateFacilityRegisterData");
-const createMulterInstance = require('./createMulterInstance')
-const checkFileType = require('../validation/facitityRouteValidation/checkPhotoType');
-const isEmpty = require('../validation/isEmpty');
-const validateFacilityUpdate = require('../validation/facitityRouteValidation/updateFacility')
+const createMulterInstance = require("./createMulterInstance");
+const checkFileType = require("../validation/facitityRouteValidation/checkPhotoType");
+const isEmpty = require("../validation/isEmpty");
+const validateFacilityUpdate = require("../validation/facitityRouteValidation/updateFacility");
 
 //controller addFacilty()
 //description add facility to database
 //developer Lahiru Srimal
 const addFacility = async (req, res) => {
-
-
   if (req.user.userType !== "admin") {
     console.log(req.user.userType);
     console.log("user is not admin");
@@ -43,43 +42,48 @@ const addFacility = async (req, res) => {
 //developer Lahiru Srimal
 
 const uploadPhotos = async (req, res, next) => {
-
   if (req.user.userType !== "admin") {
     console.log(req.user.userType);
     console.log("user is not admin");
     return res.status(401).send("Unauthorized");
   }
   //update images array in the database
-  const facilityId = req.params.facilityId
-  const uploadPhotosInstance = createMulterInstance(checkFileType, 'FacilityPhotos')
-  if (!isEmpty(uploadPhotosInstance.array('photos', 6))) {
-    const uploadPhotoData = uploadPhotosInstance.array('photos', 6);
+  const facilityId = req.params.facilityId;
+  const uploadPhotosInstance = createMulterInstance(
+    checkFileType,
+    "FacilityPhotos"
+  );
+  if (!isEmpty(uploadPhotosInstance.array("photos", 6))) {
+    const uploadPhotoData = uploadPhotosInstance.array("photos", 6);
     uploadPhotoData(req, res, (err) => {
       if (err instanceof multer.MulterError) {
-        return res.status(400).send('Multer error: ' + err);
+        return res.status(400).send("Multer error: " + err);
       } else if (err) {
-        return res.status(500).send('Internal server error: ' + err);
+        return res.status(500).send("Internal server error: " + err);
       }
-      const imageArray = req.files.map(file => file.filename)
+      const imageArray = req.files.map((file) => file.filename);
       const facility = Facility.findOneAndUpdate(
         { _id: facilityId },
         { images: imageArray },
         { new: true }
-      ).then(res => {
-        console.log('Database updated')
-      }).catch(error => {
-        return res.status(500).send('Error updating facility: ', error.response.data);
-      })
+      )
+        .then((res) => {
+          console.log("Database updated");
+        })
+        .catch((error) => {
+          return res
+            .status(500)
+            .send("Error updating facility: ", error.response.data);
+        });
       // Files were successfully uploaded
-      console.log('Files uploaded');
-      res.status(200).send('Files uploaded');
+      console.log("Files uploaded");
+      res.status(200).send("Files uploaded");
       // next();
     });
   } else {
-    res.status(200).send('No files to upload');
+    res.status(200).send("No files to upload");
   }
-}
-
+};
 
 //controller getSingleFacility()
 //description get facility data in the database based on id
@@ -87,14 +91,12 @@ const uploadPhotos = async (req, res, next) => {
 const getSingleFacilty = (req, res) => {
   Facility.findById(req.params.id)
     .then((facility) => {
-
-      const baseUrl = 'http://localhost:4000/uploads/FacilityPhotos/';
+      const baseUrl = "http://localhost:4000/uploads/FacilityPhotos/";
 
       const imagesWithUrls = facility.images.map((image) => baseUrl + image);
       // console.log({ ...facility._doc, images: imagesWithUrls })
       const result = { ...facility._doc, images: imagesWithUrls };
-      res.send(result)
-
+      res.send(result);
     })
 
     .catch((error) => {
@@ -109,7 +111,7 @@ const getAllfacilities = (req, res) => {
   Facility.find()
     .then((facilities) => {
       // console.log(facilities)
-      const baseUrl = 'http://localhost:4000/uploads/FacilityPhotos/';
+      const baseUrl = "http://localhost:4000/uploads/FacilityPhotos/";
       const facilitiesWithUrls = facilities.map((facility) => {
         const imagesWithUrls = facility.images.map((image) => baseUrl + image);
         // console.log({ ...facility._doc, images: imagesWithUrls })
@@ -133,16 +135,36 @@ const deleteSingleFacility = async (req, res) => {
     if (req.user.userType !== "admin") {
       console.log(req.user.userType);
       console.log("user is not admin");
-      return res.status(401).send("Unauthrized");
+      return res.status(401).send("Unauthorized");
     }
 
-    const faciltyId = req.params.id;
-    const deletedFacility = await Facility.findByIdAndDelete(faciltyId);
+    const facilityId = req.params.id;
+    const deletedFacility = await Facility.findByIdAndDelete(facilityId);
 
     if (!deletedFacility) {
       return res.status(404).send("Facility not Found");
-    } else
-      return res.send('Facility deleted sucessfully');
+    }
+
+    // Delete image file from the 'uploads/FacilityPhotos' folder
+    const imagePath = path.join(
+      __dirname,
+      `../uploads/FacilityPhotos/${deletedFacility.images}`
+    );
+
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        if (err.code === "ENOENT") {
+          console.log("File not found, might have been deleted already");
+        } else {
+          console.error("Error deleting image:", err);
+          return res.status(500).send("Error deleting image");
+        }
+      } else {
+        console.log("Image deleted successfully");
+      }
+    });
+
+    return res.send("Facility and image deleted successfully");
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server Error");
@@ -154,24 +176,27 @@ const deleteSingleFacility = async (req, res) => {
 //developer primalsha chamodi
 
 const updateFacility = async (req, res) => {
-  if (req.user.userType === 'admin') {
-    let faciltyData = req.body
-    faciltyData.id = req.params.id
+  if (req.user.userType === "admin") {
+    let faciltyData = req.body;
+    faciltyData.id = req.params.id;
     const { errors, isValid } = await validateFacilityUpdate(faciltyData);
     if (!isValid) {
-      var errorMsg = ''
-      Object.values(errors).forEach(error => {
-        errorMsg += error + '\r\n'
-      })
-      errorMsg = errorMsg.trim()
+      var errorMsg = "";
+      Object.values(errors).forEach((error) => {
+        errorMsg += error + "\r\n";
+      });
+      errorMsg = errorMsg.trim();
       res.status(400).send(errorMsg);
-    }
-    else {
+    } else {
       try {
-        const facility = await Facility.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+        const facility = await Facility.findOneAndUpdate(
+          { _id: req.params.id },
+          req.body,
+          { new: true }
+        );
         if (facility) {
-          console.log('Facility updated')
-          return res.send(facility)
+          console.log("Facility updated");
+          return res.send(facility);
         }
       } catch (error) {
         console.error("Error updating or finding facility:", error);
@@ -179,7 +204,9 @@ const updateFacility = async (req, res) => {
       }
     }
   } else {
-    return res.status(401).send('You are not authorized to update facility data')
+    return res
+      .status(401)
+      .send("You are not authorized to update facility data");
   }
 };
 
@@ -189,5 +216,5 @@ module.exports = {
   getAllfacilities,
   deleteSingleFacility,
   updateFacility,
-  uploadPhotos
+  uploadPhotos,
 };
