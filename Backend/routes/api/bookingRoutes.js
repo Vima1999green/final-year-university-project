@@ -8,6 +8,8 @@ const {
   uploadNIC,
   uploadLetter,
   getBooking,
+  approveBooking,
+  rejectBooking,
 } = require("../../controllers/bookingController");
 
 const router = express.Router();
@@ -71,5 +73,9 @@ router.post(
 //@access public
 //@developer Lahiru Srimal
 router.get("/getBooking/:userID", getBooking);
+
+router.put("/approve/:id", approveBooking);
+
+router.put("/reject/:id", rejectBooking);
 
 module.exports = router;

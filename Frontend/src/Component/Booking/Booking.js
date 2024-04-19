@@ -37,6 +37,7 @@ const Booking = () => {
   const [applicantName, setApplicantName] = useState("");
   const [userData, setUserData] = useState(null);
   const [userID, setUserID] = useState("");
+  const [email, setEmail] = useState("");
   const [applicantData, setApplicantData] = useState({
     organizationName: "",
     organizationAddress: "",
@@ -132,6 +133,7 @@ const Booking = () => {
       ...applicantData,
       [event.target.name]: event.target.value,
     });
+    if (event.target.name === "email") setEmail(event.target.value);
     if (event.target.name === "organization") setOrgName(event.target.value);
     if (event.target.name === "address") setOrgAddress(event.target.value);
     if (event.target.name === "bookingTime") setValue(event.target.value);
@@ -165,6 +167,7 @@ const Booking = () => {
       startDate.setDate(startDate.getDate() + 1);
     }
     const formData = {
+      email: email,
       userID: userID,
       userNICImg: "",
       permissionLetter: "",
@@ -398,6 +401,7 @@ const Booking = () => {
             />{" "}
             <br />
           </label>
+
           <label>
             Name of Organization:
             <TextField

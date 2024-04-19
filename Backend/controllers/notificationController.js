@@ -1,10 +1,10 @@
 const nodemailer = require("nodemailer");
 //Real implementation
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
-    user: 'malithachamikara27@gmail.com',
-    pass: 'squa dixe kxjm fgte',
+    user: "vimukthinuwanbro@gmail.com",
+    pass: "jusa olkh hcrw syat",
   },
 });
 //Using mailtrap for testing
@@ -19,11 +19,12 @@ const transporter = nodemailer.createTransport({
 
 // Sending email
 const sendEmail = async (to, subject, heading, content) => {
+  console.log("sendEmail function called");
   try {
     const mailOptions = {
-      from: 'malithachamikara27@gmail.com', // sender address
+      from: "vimukthinuwanbro@gmail.com", // sender address
       to: to, // list of receivers
-      subject: subject,// Subject line
+      subject: subject, // Subject line
       html: `    
             <div className="container" 
             style="
@@ -36,15 +37,14 @@ const sendEmail = async (to, subject, heading, content) => {
                 ${content}
               </div>
              
-            </div> ` // html body
-    }
+            </div> `, // html body
+    };
     // send mail with defined transport object
     const message = await transporter.sendMail(mailOptions);
-    return { mailStatus: true }
-
+    return { mailStatus: true };
   } catch (error) {
-    return { mailStatus: false, error }
+    return { mailStatus: false, error };
   }
-}
+};
 
-module.exports = sendEmail;
+module.exports = { sendEmail };

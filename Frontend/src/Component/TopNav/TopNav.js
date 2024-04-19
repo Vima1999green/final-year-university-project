@@ -81,7 +81,9 @@ const TopNav = () => {
                 History
               </Link>
             </li>
-            {userType === "DVC" || userType === "director" ? (
+            {userType === "DVC" ||
+            userType === "director" ||
+            userType === "admin" ? (
               <li>
                 <Link
                   to="/requests"

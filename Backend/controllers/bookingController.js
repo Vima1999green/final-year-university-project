@@ -6,7 +6,7 @@ const checkFileType = require("../validation/facitityRouteValidation/checkPhotoT
 const checkLetterType = require("../validation/bookingRouteValidation/checkLetterType");
 const isEmpty = require("../validation/isEmpty");
 const validateBookingData = require("../validation/bookingRouteValidation/createBooking");
-const sendEmail = require("./notificationController");
+const { sendEmail } = require("./notificationController");
 const validateUpdateBookingData = require("../validation/bookingRouteValidation/updateBooking");
 
 //controller createBooking()
@@ -336,6 +336,39 @@ const getBooking = async (req, res) => {
     });
 };
 
+const approveBooking = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const booking = await Booking.findById(id);
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not Found" });
+    }
+    booking.status = "approved";
+    await booking.save();
+    res.status(200).json({ message: "Booking approved" });
+  } catch (error) {
+    console.error("Error approving booking", error);
+    res.status(500).json({ error: "Failed to Approve Booking" });
+  }
+};
+
+const rejectBooking = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const booking = await Booking.findById(id);
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
+
+    booking.status = "rejected";
+    await booking.save();
+    res.status(200).json({ message: "Booking rejected" });
+  } catch (error) {
+    console.error("Error rejecting booking", error);
+    res.status(500).json({ error: "Failed to reject booking" });
+  }
+};
+
 module.exports = {
   createBooking,
   getAllBookings,
@@ -344,4 +377,6 @@ module.exports = {
   uploadNIC,
   uploadLetter,
   getBooking,
+  approveBooking,
+  rejectBooking,
 };

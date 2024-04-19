@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Input } from "antd";
+import TopNav from "../TopNav/TopNav";
 import axios from "axios";
 import "./BookingAproval.css";
 import moment from "moment";
+import userType from "../../Support/getUserData";
 
 const BookingApproval = ({ bookingDate, Time }) => {
   const [selectedBooking, setSelectedBooking] = useState(null);
@@ -41,6 +43,7 @@ const BookingApproval = ({ bookingDate, Time }) => {
     } catch (error) {
       console.error("Error fetching booking data", error);
     }
+    setComment("");
   };
 
   const columns = [
@@ -83,21 +86,79 @@ const BookingApproval = ({ bookingDate, Time }) => {
   ];
 
   const handleViewDetails = (booking) => {
-    // setSelectedBooking(mockBookingWithImages);
     setSelectedBooking(booking);
-    setIsModalVisible(true); // Open the modal
+    setIsModalVisible(true);
+    setModalVisible(true); // Open the modal
   };
 
-  const handleApprove = () => {
-    // approve logic
+  const handleApprove = async () => {
+    if (selectedBooking) {
+      try {
+        // Fetch user data using userID to get the email address
+        const userResponse = await axios.get(
+          `http://localhost:4000/api/users/getUserById/${selectedBooking.userID}`
+        );
+
+        const userEmail = userResponse.data.email;
+
+        // Send approval email to the user
+        await axios.post("http://localhost:4000/api/sendEmail", {
+          to: userEmail,
+          subject: "Booking Approved",
+          heading: "Booking Approved",
+          content: `Your booking request has been approved. Please upload your payment slip to the system. Comment: ${comment}`,
+        });
+
+        // Update booking status and comment in the database
+        await axios.put(
+          `http://localhost:4000/api/booking/approve/${selectedBooking._id}`,
+          { comment }
+        );
+
+        // Fetch updated bookings data
+        fetchBookings();
+
+        // Close the modal
+        setIsModalVisible(false);
+      } catch (error) {
+        console.error("Error approving booking", error);
+      }
+    }
   };
 
-  const handleReject = () => {
-    // reject logic
+  const handleReject = async () => {
+    if (selectedBooking) {
+      try {
+        const userResponse = await axios.get(
+          `http://localhost:4000/api/users/getUserById/${selectedBooking.userID}`
+        );
+
+        const userEmail = userResponse.data.email;
+        await axios.put(
+          `http://localhost:4000/api/booking/reject/${selectedBooking._id}`,
+          { comment }
+        );
+        await axios.post("http://localhost:4000/api/sendEmail", {
+          to: userEmail,
+          subject: "Booking Rejected",
+          heading: "Booking Rejected",
+
+          content:
+            userType === "admin"
+              ? `Your booking request has been rejected......Comment from Admin: ${comment}`
+              : `Your booking request has been rejected by Director.`,
+        });
+        fetchBookings();
+        setIsModalVisible(false);
+      } catch (error) {
+        console.error("Error rejecting booking", error);
+      }
+    }
   };
 
   return (
     <div>
+      <TopNav />
       <h1 className="admin-dashboard-header">Booking Request Details</h1>
       <Table
         className="ant-table-container"
@@ -124,6 +185,10 @@ const BookingApproval = ({ bookingDate, Time }) => {
         {selectedBooking && (
           <>
             <hr></hr>
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Booking ID:</strong>{" "}
+              {selectedBooking._id}
+            </p>
             <p className="model-pharagraph">
               <strong className="model-pharagraph">Organization Name:</strong>{" "}
               {selectedBooking.organizationName}
@@ -161,14 +226,17 @@ const BookingApproval = ({ bookingDate, Time }) => {
             <p className="model-pharagraph">
               <strong className="model-pharagraph">Permission Letter:</strong>{" "}
               {selectedBooking.permissionLetter ? (
-                <a
-                  href={`http://localhost:4000/uploads/PermissionLetters/${selectedBooking.permissionLetter}`}
+                <button
+                  style={{ color: "#8a1538c0" }}
                   onClick={() =>
-                    setSelectedImage(selectedBooking.permissionLetter)
+                    window.open(
+                      `http://localhost:4000/uploads/PermissionLetters/${selectedBooking.permissionLetter}`,
+                      "_blank"
+                    )
                   }
                 >
                   View Permission Letter
-                </a>
+                </button>
               ) : (
                 "Not Uploaded"
               )}
@@ -176,22 +244,29 @@ const BookingApproval = ({ bookingDate, Time }) => {
             <p className="model-pharagraph">
               <strong className="model-pharagraph">NIC Image:</strong>{" "}
               {selectedBooking.userNICImg ? (
-                <a
-                  href={`http://localhost:4000/uploads/NIC/${selectedBooking.userNICImg}`}
+                <button
+                  style={{ color: "#8a1538c0" }}
+                  onClick={() =>
+                    window.open(
+                      `http://localhost:4000/uploads/NIC/${selectedBooking.userNICImg}`,
+                      "_blank"
+                    )
+                  }
                 >
                   View NIC Image
-                </a>
+                </button>
               ) : (
                 "Not Uploaded"
               )}
             </p>
-            <Input.TextArea
-              className="add-comment"
-              placeholder="Add a comment"
-              value={comment}
-              autoSize={{ minRows: 2, maxRows: 8 }}
-              onChange={(e) => setComment(e.target.value)}
-            />
+
+            {userType === "admin" && (
+              <Input.TextArea
+                placeholder="Add a comment"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+            )}
           </>
         )}
       </Modal>
@@ -206,7 +281,7 @@ const BookingApproval = ({ bookingDate, Time }) => {
           <img
             src={`http://localhost:4000/uploads/${selectedImage}`}
             alt="Uploaded"
-            style={{ width: "100%" }}
+            style={{ width: "50%" }}
           />
         </Modal>
       )}

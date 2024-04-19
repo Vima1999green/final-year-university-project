@@ -11,6 +11,7 @@ const {
   reconfirmationEmail,
   resetPwd,
   logoutUser,
+  getUserById,
 } = require("../../controllers/userControllers");
 
 const router = express.Router();
@@ -90,5 +91,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   logoutUser
 );
+
+router.get("/getUserById/:id", getUserById);
 
 module.exports = router;
