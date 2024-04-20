@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, Upload, message } from "antd";
 import TopNav from "../TopNav/TopNav";
 import axios from "axios";
 import "./userHistory.css";
@@ -8,7 +8,7 @@ import getUserData from "../../Support/getUserData";
 import isEmpty from "../../Support/isEmpty";
 import { useNavigate } from "react-router-dom";
 
-const UserHistory = ({ bookingDate, Time }) => {
+const UserHistory = ({ bookingDate = [], Time }) => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [bookings, setBookings] = useState([]);
@@ -18,8 +18,9 @@ const UserHistory = ({ bookingDate, Time }) => {
   const [userData, setUserData] = useState(null);
   const [userID, setUserID] = useState("");
   const [userRole, setUserRole] = useState("");
+  const [approvalStatus, setApprovalStatus] = useState("");
+  const [showPaymentSlipUploader, setShowPaymentSlipUploader] = useState(false);
 
-  const dateOnly = moment(bookingDate).format("YYYY-MM-DD");
   const timeOnly = moment(Time).format("HH:mm");
 
   useEffect(() => {
@@ -30,8 +31,6 @@ const UserHistory = ({ bookingDate, Time }) => {
   const fetchUserData = async () => {
     try {
       const data = await getUserData();
-      console.log(data);
-
       if (isEmpty(data) || data === "Unauthorized") {
         navigate("/login");
       } else {
@@ -63,7 +62,7 @@ const UserHistory = ({ bookingDate, Time }) => {
       }
 
       if (response && response.data) {
-        setBookings(response.data); // Update the bookings state
+        setBookings(response.data);
       }
     } catch (error) {
       console.error("Error fetching booking data", error);
@@ -90,8 +89,15 @@ const UserHistory = ({ bookingDate, Time }) => {
       title: "Booking Date",
       dataIndex: "bookingDate",
       key: "bookingDate",
-      render: (text, record) => moment(text).format("YYYY-MM-DD"),
+      render: (text, record) => (
+        <ul>
+          {record.bookingDate.map((date) => (
+            <li key={date}>{moment(date).format("YYYY-MM-DD")}</li>
+          ))}
+        </ul>
+      ),
     },
+
     {
       title: "Status",
       dataIndex: "status",
@@ -111,13 +117,56 @@ const UserHistory = ({ bookingDate, Time }) => {
   const handleViewDetails = (booking) => {
     setSelectedBooking(booking);
     setIsModalVisible(true);
-    setModalVisible(true); // Open the modal
+    setModalVisible(true);
+
+    if (booking.status === "approved") {
+      setApprovalStatus("approved");
+      setShowPaymentSlipUploader(true);
+    } else {
+      setApprovalStatus("");
+      setShowPaymentSlipUploader(false);
+    }
+  };
+
+  const handlePaymentSlipUpload = async (paymentSlip) => {
+    try {
+      const formData = new FormData();
+      formData.append("PaymentSlip", paymentSlip.file);
+
+      await axios.post(
+        `http://localhost:4000/api/booking/paymentSlip/${selectedBooking._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      alert("Payment slip uploaded successfully");
+
+      // Fetch updated booking details to get the new PaymentSlip information
+      await fetchBookings(userRole);
+
+      // Update selectedBooking with the new PaymentSlip information
+      const updatedSelectedBooking = bookings.find(
+        (booking) => booking._id === selectedBooking._id
+      );
+      setSelectedBooking(updatedSelectedBooking);
+
+      // Close and reopen the modal to force re-render
+      setIsModalVisible(false);
+      setTimeout(() => setIsModalVisible(true), 0); // Re-open the modal in the next event loop
+    } catch (error) {
+      console.error("Error uploading payment slip", error);
+      alert("Error uploading payment slip");
+    }
   };
 
   return (
     <div>
       <TopNav />
-      <h1 className="admin-dashboard-header">Booking Hisitory</h1>
+      <h1 className="admin-dashboard-header">Booking History</h1>
       <Table
         className="ant-table-container"
         dataSource={bookings}
@@ -130,11 +179,11 @@ const UserHistory = ({ bookingDate, Time }) => {
         title="Booking Details"
         visible={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
+        footer={null} // Hides the default footer buttons
         style={{ margin: "auto" }}
       >
         {selectedBooking && (
           <>
-            <hr />
             <p className="model-pharagraph">
               <strong className="model-pharagraph">Booking ID:</strong>{" "}
               {selectedBooking._id}
@@ -155,11 +204,16 @@ const UserHistory = ({ bookingDate, Time }) => {
             </p>
             <p className="model-pharagraph">
               <strong className="model-pharagraph">Booking Date:</strong>{" "}
-              {moment(selectedBooking.bookingDate).format("YYYY-MM-DD")}
+              {selectedBooking.bookingDate.map((date) => (
+                <li className="date-List" key={date}>
+                  {moment(date).format("YYYY-MM-DD")}
+                </li>
+              ))}
             </p>
+
             <p className="model-pharagraph">
               <strong className="model-pharagraph">Booking Time:</strong>{" "}
-              {moment(selectedBooking.Time).format("HH:mm")}
+              {timeOnly}
             </p>
             <p className="model-pharagraph">
               <strong className="model-pharagraph">Designation:</strong>{" "}
@@ -174,25 +228,7 @@ const UserHistory = ({ bookingDate, Time }) => {
               {selectedBooking.status}
             </p>
             <p className="model-pharagraph">
-              <strong className="model-pharagraph">Permission Letter:</strong>{" "}
-              {selectedBooking.permissionLetter ? (
-                <button
-                  style={{ color: "#8a1538c0" }}
-                  onClick={() =>
-                    window.open(
-                      `http://localhost:4000/uploads/PermissionLetters/${selectedBooking.permissionLetter}`,
-                      "_blank"
-                    )
-                  }
-                >
-                  View Permission Letter
-                </button>
-              ) : (
-                "Not Uploaded"
-              )}
-            </p>
-            <p className="model-pharagraph">
-              <strong className="model-pharagraph">NIC Image:</strong>{" "}
+              <strong className="model-pharagraph">NIC:</strong>{" "}
               {selectedBooking.userNICImg ? (
                 <button
                   style={{ color: "#8a1538c0" }}
@@ -203,30 +239,68 @@ const UserHistory = ({ bookingDate, Time }) => {
                     )
                   }
                 >
-                  View NIC Image
+                  View NIC image
                 </button>
               ) : (
                 "Not Uploaded"
               )}
             </p>
+
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Permission Letter:</strong>{" "}
+              {selectedBooking.permissionLetter ? (
+                <button
+                  style={{ color: "#8a1538c0" }}
+                  onClick={() =>
+                    window.open(
+                      `http://localhost:4000/uploads//${selectedBooking.permissionLetter}`,
+                      "_blank"
+                    )
+                  }
+                >
+                  View Permission Letter
+                </button>
+              ) : (
+                "Not Uploaded"
+              )}
+            </p>
+
+            <p className="model-pharagraph">
+              <strong className="model-pharagraph">Payment Slip:</strong>{" "}
+              {selectedBooking.PaymentSlip ? (
+                <button
+                  style={{ color: "#8a1538c0" }}
+                  onClick={() =>
+                    window.open(
+                      `http://localhost:4000/uploads/PaymentSlips/${selectedBooking.PaymentSlip}`,
+                      "_blank"
+                    )
+                  }
+                >
+                  View Payment Slip
+                </button>
+              ) : (
+                "Not Uploaded yet"
+              )}
+            </p>
+            {/* Other details of the selected booking */}
+            {approvalStatus === "approved" &&
+              userRole === "Guest" &&
+              showPaymentSlipUploader && (
+                <div>
+                  <Upload
+                    beforeUpload={() => false}
+                    onChange={handlePaymentSlipUpload}
+                    maxCount={1}
+                    accept=".pdf.jpg,.jpeg,.png"
+                  >
+                    <Button>Upload Payment Slip</Button>
+                  </Upload>
+                </div>
+              )}
           </>
         )}
       </Modal>
-
-      {selectedImage && (
-        <Modal
-          title="Image"
-          visible={modalVisible}
-          onCancel={() => setSelectedImage(null)}
-          footer={null}
-        >
-          <img
-            src={`http://localhost:4000/uploads/${selectedImage}`}
-            alt="Uploaded"
-            style={{ width: "50%" }}
-          />
-        </Modal>
-      )}
     </div>
   );
 };

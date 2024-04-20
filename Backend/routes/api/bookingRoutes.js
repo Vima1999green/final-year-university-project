@@ -1,5 +1,6 @@
 const express = require("express");
 const passport = require("passport");
+
 const {
   createBooking,
   getAllBookings,
@@ -10,6 +11,7 @@ const {
   getBooking,
   approveBooking,
   rejectBooking,
+  uploadPaymentSlip,
 } = require("../../controllers/bookingController");
 
 const router = express.Router();
@@ -77,5 +79,7 @@ router.get("/getBooking/:userID", getBooking);
 router.put("/approve/:id", approveBooking);
 
 router.put("/reject/:id", rejectBooking);
+
+router.post("/paymentSlip/:id", uploadPaymentSlip);
 
 module.exports = router;

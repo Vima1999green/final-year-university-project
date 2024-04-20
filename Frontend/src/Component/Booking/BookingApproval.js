@@ -13,7 +13,7 @@ const BookingApproval = ({ bookingDate, Time }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [comment, setComment] = useState("");
-  const dateOnly = moment(bookingDate).format("YYYY-MM-DD");
+
   const timeOnly = moment(Time).format("HH:mm");
 
   // const mockBookingWithImages = {
@@ -66,7 +66,13 @@ const BookingApproval = ({ bookingDate, Time }) => {
       title: "Booking Date",
       dataIndex: "bookingDate",
       key: "bookingDate",
-      render: (text, record) => dateOnly,
+      render: (text, record) => (
+        <ul>
+          {record.bookingDate.map((date) => (
+            <li key={date}>{moment(date).format("YYYY-MM-DD")}</li>
+          ))}
+        </ul>
+      ),
     },
 
     {
@@ -106,8 +112,10 @@ const BookingApproval = ({ bookingDate, Time }) => {
           to: userEmail,
           subject: "Booking Approved",
           heading: "Booking Approved",
-          content: `Your booking request has been approved. Please upload your payment slip to the system. Comment: ${comment}`,
+          content: `Your booking request has been approved. Please upload your payment slip to the system (log in to the System -> go to History -> Click View details -> Click Upload Payment Slip ). Comment: ${comment}`,
         });
+
+        alert("Approved Email Sends to the User");
 
         // Update booking status and comment in the database
         await axios.put(
@@ -143,11 +151,11 @@ const BookingApproval = ({ bookingDate, Time }) => {
           subject: "Booking Rejected",
           heading: "Booking Rejected",
 
-          content:
-            userType === "admin"
-              ? `Your booking request has been rejected......Comment from Admin: ${comment}`
-              : `Your booking request has been rejected by Director.`,
+          content: `Your booking request has been rejected......
+          Comment: ${comment}`,
         });
+        alert("Rejected Email Sends to the User");
+
         fetchBookings();
         setIsModalVisible(false);
       } catch (error) {
@@ -205,7 +213,11 @@ const BookingApproval = ({ bookingDate, Time }) => {
             </p>
             <p className="model-pharagraph">
               <strong className="model-pharagraph">Booking Date:</strong>{" "}
-              {dateOnly}
+              {selectedBooking.bookingDate.map((date) => (
+                <li className="date-List" key={date}>
+                  {moment(date).format("YYYY-MM-DD")}
+                </li>
+              ))}
             </p>
             <p className="model-pharagraph">
               <strong className="model-pharagraph">Booking Time:</strong>{" "}
@@ -260,13 +272,11 @@ const BookingApproval = ({ bookingDate, Time }) => {
               )}
             </p>
 
-            {userType === "admin" && (
-              <Input.TextArea
-                placeholder="Add a comment"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-              />
-            )}
+            <Input.TextArea
+              placeholder="Add a comment"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
           </>
         )}
       </Modal>

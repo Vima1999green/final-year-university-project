@@ -71,6 +71,7 @@ const getAllBookings = async (req, res) => {
         deleteRequested: booking.deleteRequested,
         postponeRequested: booking.postponeRequested,
         permissionLetter: booking.permissionLetter,
+        PaymentSlip: booking.PaymentSlip,
       };
     });
     res.send(bookingsWithImages);
@@ -369,6 +370,41 @@ const rejectBooking = async (req, res) => {
   }
 };
 
+const uploadPaymentSlip = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    console.log("Creating Multer instance...");
+    const multerInstance = createMulterInstance(checkFileType, "PaymentSlips");
+    console.log("Multer instance created.");
+
+    console.log("Uploading payment slip...");
+    multerInstance.single("PaymentSlip")(req, res, async (err) => {
+      if (err) {
+        console.error("Error uploading payment slip:", err);
+        return res.status(400).json({ message: err.message });
+      }
+
+      const paymentSlip = req.file.filename;
+
+      const booking = await Booking.findById(id);
+      if (!booking) {
+        return res.status(404).json({ message: "Booking not found" });
+      }
+
+      booking.PaymentSlip = paymentSlip;
+      await booking.save();
+
+      return res
+        .status(200)
+        .json({ message: "Payment slip uploaded successfully" });
+    });
+  } catch (error) {
+    console.error("Error in uploadPaymentSlip:", error);
+    return res.status(500).json({ message: "Failed to upload payment slip" });
+  }
+};
+
 module.exports = {
   createBooking,
   getAllBookings,
@@ -379,4 +415,5 @@ module.exports = {
   getBooking,
   approveBooking,
   rejectBooking,
+  uploadPaymentSlip,
 };

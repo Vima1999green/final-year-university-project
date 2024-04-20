@@ -1,6 +1,7 @@
 const multer = require("multer");
-
 // Set up storage for Multer
+
+// Create the Multer instance
 const createMulterInstance = (checkFileType, filepath) => {
   const fullFilePath = "./uploads/" + filepath;
   const storage = multer.diskStorage({

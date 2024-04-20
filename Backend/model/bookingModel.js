@@ -62,6 +62,9 @@ const bookingSchema = new Schema(
     permissionLetter: {
       type: String,
     },
+    PaymentSlip: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
